@@ -1,23 +1,175 @@
-<section class="form-antrian">
-  <h3>Form Pendaftaran Antrian Online</h3>
-  <form action="#" method="post">
-    <label for="nama">Nama Lengkap:</label>
-    <input type="text" id="nama" name="nama" required>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puskesmas Sehat Bersama - Antrian Online</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8fafc; color: #1e293b; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+    
+    header { background: white; box-shadow: 0 1px 3px #0001; position: sticky; top: 0; z-index: 10; }
+    .nav { display: flex; justify-content: space-between; align-items: center; height: 70px; }
+    .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #047857; }
+    .nav-links { display: flex; gap: 25px; align-items: center; }
+    .nav-links a { text-decoration: none; color: #475569; font-weight: 500; }
+    .nav-links a.active { color: #047857; border-bottom: 2px solid #047857; padding-bottom: 22px; }
+    .btn-primary { background: #1d4ed8; color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; }
 
-    <label for="nik">NIK:</label>
-    <input type="text" id="nik" name="nik" required>
+    .hero { background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 50px 0; }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    .hero h1 { font-size: 2.5rem; color: #1e3a8a; margin-bottom: 12px; }
+    .hero p { color: #475569; font-size: 1.1rem; margin-bottom: 25px; }
+    .btn-hero { background: #047857; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; }
+    .hero-img { text-align: center; }
+    .hero-img img { max-width: 350px; width: 100%; }
 
-    <label for="layanan">Pilih Layanan:</label>
-    <select id="layanan" name="layanan" required>
-      <option value="umum">Pemeriksaan Umum</option>
-      <option value="gigi">Pemeriksaan Gigi</option>
-      <option value="anak">Pemeriksaan Anak</option>
-      <option value="imunisasi">Imunisasi</option>
-    </select>
+    .features { background: white; padding: 20px 0; margin: -30px 0 40px 0; position: relative; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px #0001; }
+    .feature { display: flex; align-items: center; gap: 12px; }
+    .feature-icon { width: 40px; height: 40px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #059669; }
 
-    <label for="tanggal">Tanggal Kunjungan:</label>
-    <input type="date" id="tanggal" name="tanggal" required>
+    .section-title { font-size: 1.5rem; color: #1e3a8a; margin-bottom: 20px; font-weight: 700; }
+    .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+    .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 6px #0001; text-align: center; }
+    .stat-card b { font-size: 2rem; color: #1d4ed8; display: block; margin-top: 8px; }
+    .stat-card span { font-size: 0.9rem; color: #64748b; }
 
-    <button type="submit" class="btn">Kirim Pendaftaran</button>
-  </form>
-</section>
+    .current-q { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 6px #0001; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; margin-bottom: 40px; }
+    .q-box { background: #1d4ed8; color: white; padding: 25px; border-radius: 12px; text-align: center; }
+    .q-box h2 { font-size: 3rem; margin: 10px 0; }
+    .q-box .btn-q { background: #047857; color: white; padding: 10px 20px; border-radius: 8px; border: none; margin-top: 15px; font-weight: 600; }
+    .q-info p { margin: 8px 0; color: #475569; }
+    .q-info b { color: #1e293b; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+    .info-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 6px #0001; }
+    .info-card h3 { margin-bottom: 15px; color: #1e3a8a; }
+    .info-card ul { list-style: none; }
+    .info-card li { margin: 8px 0; color: #475569; }
+    .info-card li:before { content: "•"; color: #10b981; font-weight: bold; margin-right: 8px; }
+
+    footer { background: #f1f5f9; padding: 30px 0; margin-top: 40px; }
+    .footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; font-size: 0.9rem; color: #64748b; margin-bottom: 20px; }
+    .copyright { text-align: center; font-size: 0.85rem; color: #94a3b8; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+
+    @media (max-width: 768px) {
+      .hero-grid, .current-q, .info-grid { grid-template-columns: 1fr; }
+      .status-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <img src="logo.png" alt="Logo PKM" style="width:40px;height:40px;object-fit:contain;">
+        <div>PUSKESMAS<br><span style="font-size:0.7rem;font-weight:500;">SEHAT BERSAMA</span></div>
+      </div>
+      <nav class="nav-links">
+        <a href="#" class="active">Beranda</a>
+        <a href="#layanan">Layanan</a>
+        <a href="#info">Info Kesehatan</a>
+        <a href="dashboard.html">Transparansi</a>
+        <a href="daftar.html" class="btn-primary">Rajan / Daftar</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <h1>Puskesmas Sehat Bersama</h1>
+        <p>Layanan Mudah, Cepat, & Transparan</p>
+        <a href="daftar.html" class="btn-hero">Daftar Antrian Online</a>
+        <p style="font-size:0.9rem;margin-top:12px;">Pesan Antrian dari Rumah, Hemat Waktu Anda!</p>
+      </div>
+      <div class="hero-img">
+        <img src="https://i.ibb.co.com/6RJ8Y5q/doctor-family.png" alt="Dokter">
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container features-grid">
+      <a href="daftar.html" style="text-decoration:none;color:inherit;"><div class="feature"><div class="feature-icon">📱</div><b>Daftar Online Mudah</b></div></a>
+      <a href="cek.html" style="text-decoration:none;color:inherit;"><div class="feature"><div class="feature-icon">💬</div><b>Cek Status Antrian</b></div></a>
+      <div class="feature"><div class="feature-icon">🔔</div><b>Notifikasi Pengingat</b></div>
+    </div>
+  </section>
+
+  <main class="container">
+    <h2 class="section-title">Status Antrian Saat Ini</h2>
+    <div class="status-grid">
+      <div class="stat-card"><span>Pasien Menunggu Saat Ini</span><b id="menunggu">0</b><span>Orang</span></div>
+      <div class="stat-card"><span>Nomor Sedang Dipanggil</span><b id="dipanggil">-</b></div>
+      <div class="stat-card"><span>Perkiraan Waktu</span><b id="waktu">0</b><span>Menit Lagi</span></div>
+      <div class="stat-card"><span>Dokter Tersedia</span><b id="dokter">0</b><span>Dokter</span></div>
+    </div>
+
+    <div class="current-q">
+      <div class="q-box">
+        <p>Antrian Sekarang</p>
+        <h2 id="q-now">-</h2>
+        <p>Sedang Dilayani</p>
+        <button class="btn-q">Perkiraan Waktu : <span id="q-time">0</span> Menit</button>
+        <div style="margin-top:15px;"><a href="antrian.html" style="color:white;text-decoration:none;">Lihat Jadwal Dokter</a></div>
+      </div>
+      <div class="q-info">
+        <img src="https://i.ibb.co.com/8Y8QqYJ/doctor-patient.png" style="width:100%;max-width:300px;margin-bottom:15px;">
+        <p>Antrian Selanjutnya: <b id="q-next">-</b></p>
+      </div>
+    </div>
+
+    <div class="info-grid" id="info">
+      <div class="info-card">
+        <h3>Informasi & Transparansi</h3>
+        <ul>
+          <li>Laporan Kinerja</li>
+          <li>Data Kunjungan</li>
+          <li>Ketersediaan Obat</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>Akses Rekam Medis</h3>
+        <p style="margin-bottom:15px;color:#475569;">Akses Rekam Medis Anda dengan Mudah & Aman</p>
+        <a href="#" class="btn-hero" style="background:#059669;">Login Rekam Medis</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>🔒 Privasi Terlindungi</div>
+        <div>⚡ Pelayanan Cepat</div>
+        <div>🌐 Akses Dimana Saja</div>
+      </div>
+      <div class="copyright">© 2024 Puskesmas Sehat Bersama | Kebijakan Privasi | Hubungi Kami</div>
+    </div>
+  </footer>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbzsOdyzO13CMcrBNru_CpVxKqX1OJh81TdLeFHDoF3d7AU8f_jxibQ1rmiUHqqopb6fEQ/exec?action=getPublic";
+async function loadStatus() {
+  try {
+    const r = await fetch(API);
+    const d = await r.json();
+    if(d.status !== 'ok') return;
+    document.getElementById('menunggu').textContent = d.totalHariIni || 0;
+    document.getElementById('dipanggil').textContent = d.dipanggil ? d.dipanggil.No_Antrian : '-';
+    document.getElementById('waktu').textContent = d.rataMenit || 0;
+    document.getElementById('dokter').textContent = d.dokterTersedia || 3;
+    document.getElementById('q-now').textContent = d.dipanggil ? d.dipanggil.No_Antrian : '-';
+    document.getElementById('q-time').textContent = d.rataMenit || 0;
+    document.getElementById('q-next').textContent = d.selanjutnya ? d.selanjutnya.No_Antrian : '-';
+  } catch(e) { console.log(e); }
+}
+loadStatus();
+setInterval(loadStatus, 10000);
+</script>
+</body>
+</html>
