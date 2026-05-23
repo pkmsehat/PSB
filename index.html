@@ -9,26 +9,33 @@
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8fafc; color: #1e293b; }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
     
+    /* Running Text */
+    .marquee { background: #047857; color: white; padding: 8px 0; font-size: 0.9rem; overflow: hidden; }
+    .marquee p { animation: scroll 25s linear infinite; white-space: nowrap; }
+    @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    
     header { background: white; box-shadow: 0 1px 3px #0001; position: sticky; top: 0; z-index: 10; }
     .nav { display: flex; justify-content: space-between; align-items: center; height: 70px; }
-    .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #047857; }
+    .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #047857; text-decoration: none; }
+    .logo img { width: 40px; height: 40px; object-fit: contain; }
     .nav-links { display: flex; gap: 25px; align-items: center; }
     .nav-links a { text-decoration: none; color: #475569; font-weight: 500; }
     .nav-links a.active { color: #047857; border-bottom: 2px solid #047857; padding-bottom: 22px; }
     .btn-primary { background: #1d4ed8; color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; }
 
-    .hero { background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 50px 0; }
+    .hero { background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 60px 0 80px 0; }
     .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-    .hero h1 { font-size: 2.5rem; color: #1e3a8a; margin-bottom: 12px; }
+    .hero h1 { font-size: 2.8rem; color: #1e3a8a; margin-bottom: 12px; font-weight: 800; }
     .hero p { color: #475569; font-size: 1.1rem; margin-bottom: 25px; }
-    .btn-hero { background: #047857; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; }
-    .hero-img { text-align: center; }
-    .hero-img img { max-width: 350px; width: 100%; }
+    .btn-hero { background: #047857; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; transition: 0.2s; }
+    .btn-hero:hover { background: #065f46; transform: translateY(-2px); }
+    .hero-img img { max-width: 380px; width: 100%; }
 
-    .features { background: white; padding: 20px 0; margin: -30px 0 40px 0; position: relative; }
+    .features { margin: -50px 0 40px 0; position: relative; z-index: 5; }
     .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px #0001; }
     .feature { display: flex; align-items: center; gap: 12px; }
-    .feature-icon { width: 40px; height: 40px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #059669; }
+    .feature-icon { width: 40px; height: 40px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .feature b { color: #1e293b; }
 
     .section-title { font-size: 1.5rem; color: #1e3a8a; margin-bottom: 20px; font-weight: 700; }
     .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
@@ -40,39 +47,52 @@
     .q-box { background: #1d4ed8; color: white; padding: 25px; border-radius: 12px; text-align: center; }
     .q-box h2 { font-size: 3rem; margin: 10px 0; }
     .q-box .btn-q { background: #047857; color: white; padding: 10px 20px; border-radius: 8px; border: none; margin-top: 15px; font-weight: 600; }
-    .q-info p { margin: 8px 0; color: #475569; }
-    .q-info b { color: #1e293b; }
+    
+    /* Profil + Maps */
+    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+    .profile-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 6px #0001; }
+    .profile-card h3 { margin-bottom: 15px; color: #1e3a8a; }
+    .profile-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+    .maps { width: 100%; height: 200px; border: 0; border-radius: 8px; }
+    .btn-maps { background: #1d4ed8; color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 10px; }
 
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
     .info-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 6px #0001; }
     .info-card h3 { margin-bottom: 15px; color: #1e3a8a; }
     .info-card ul { list-style: none; }
     .info-card li { margin: 8px 0; color: #475569; }
-    .info-card li:before { content: "•"; color: #10b981; font-weight: bold; margin-right: 8px; }
+    .info-card li:before { content: "✓"; color: #10b981; font-weight: bold; margin-right: 8px; }
 
     footer { background: #f1f5f9; padding: 30px 0; margin-top: 40px; }
     .footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; font-size: 0.9rem; color: #64748b; margin-bottom: 20px; }
     .copyright { text-align: center; font-size: 0.85rem; color: #94a3b8; padding-top: 20px; border-top: 1px solid #e2e8f0; }
 
     @media (max-width: 768px) {
-      .hero-grid, .current-q, .info-grid { grid-template-columns: 1fr; }
+      .hero-grid, .current-q, .info-grid, .profile-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero h1 { font-size: 2rem; }
       .status-grid { grid-template-columns: repeat(2, 1fr); }
       .features-grid { grid-template-columns: 1fr; }
       .nav-links { display: none; }
+      .hero-img { order: -1; margin-bottom: 20px; }
     }
   </style>
 </head>
 <body>
+  <!-- Running Text -->
+  <div class="marquee">
+    <p>Selamat Datang di Website Puskesmas Sehat Bersama • Pendaftaran Online Buka 24 Jam • Jam Pelayanan 07:30 - 14:00 WIB • Layanan Cepat, Mudah, & Transparan untuk Anda</p>
+  </div>
+
   <header>
     <div class="container nav">
-      <div class="logo">
-        <img src="logo.png" alt="Logo PKM" style="width:40px;height:40px;object-fit:contain;">
+      <a href="#" class="logo">
+        <img src="logo.png" alt="Logo Puskesmas Sehat Bersama">
         <div>PUSKESMAS<br><span style="font-size:0.7rem;font-weight:500;">SEHAT BERSAMA</span></div>
-      </div>
+      </a>
       <nav class="nav-links">
         <a href="#" class="active">Beranda</a>
         <a href="#layanan">Layanan</a>
-        <a href="#info">Info Kesehatan</a>
+        <a href="#profil">Profil</a>
         <a href="dashboard.html">Transparansi</a>
         <a href="daftar.html" class="btn-primary">Rajan / Daftar</a>
       </nav>
@@ -85,10 +105,10 @@
         <h1>Puskesmas Sehat Bersama</h1>
         <p>Layanan Mudah, Cepat, & Transparan</p>
         <a href="daftar.html" class="btn-hero">Daftar Antrian Online</a>
-        <p style="font-size:0.9rem;margin-top:12px;">Pesan Antrian dari Rumah, Hemat Waktu Anda!</p>
+        <p style="font-size:0.9rem;margin-top:12px;color:#64748b;">Pesan Antrian dari Rumah, Hemat Waktu Anda!</p>
       </div>
       <div class="hero-img">
-        <img src="https://i.ibb.co.com/6RJ8Y5q/doctor-family.png" alt="Dokter">
+        <img src="https://i.ibb.co.com/6RJ8Y5q/doctor-family.png" alt="Dokter Keluarga">
       </div>
     </div>
   </section>
@@ -101,13 +121,13 @@
     </div>
   </section>
 
-  <main class="container">
+  <main class="container" id="layanan">
     <h2 class="section-title">Status Antrian Saat Ini</h2>
     <div class="status-grid">
-      <div class="stat-card"><span>Pasien Menunggu Saat Ini</span><b id="menunggu">0</b><span>Orang</span></div>
-      <div class="stat-card"><span>Nomor Sedang Dipanggil</span><b id="dipanggil">-</b></div>
-      <div class="stat-card"><span>Perkiraan Waktu</span><b id="waktu">0</b><span>Menit Lagi</span></div>
-      <div class="stat-card"><span>Dokter Tersedia</span><b id="dokter">0</b><span>Dokter</span></div>
+      <div class="stat-card"><span>Pasien Menunggu</span><b id="menunggu">0</b><span>Orang</span></div>
+      <div class="stat-card"><span>Sedang Dipanggil</span><b id="dipanggil">-</b></div>
+      <div class="stat-card"><span>Estimasi Waktu</span><b id="waktu">0</b><span>Menit</span></div>
+      <div class="stat-card"><span>Dokter Praktik</span><b id="dokter">0</b><span>Dokter</span></div>
     </div>
 
     <div class="current-q">
@@ -115,28 +135,46 @@
         <p>Antrian Sekarang</p>
         <h2 id="q-now">-</h2>
         <p>Sedang Dilayani</p>
-        <button class="btn-q">Perkiraan Waktu : <span id="q-time">0</span> Menit</button>
-        <div style="margin-top:15px;"><a href="antrian.html" style="color:white;text-decoration:none;">Lihat Jadwal Dokter</a></div>
+        <button class="btn-q">Perkiraan : <span id="q-time">0</span> Menit</button>
+        <div style="margin-top:15px;"><a href="antrian.html" style="color:white;text-decoration:none;font-size:0.9rem;">Lihat Display Antrian →</a></div>
       </div>
       <div class="q-info">
-        <img src="https://i.ibb.co.com/8Y8QqYJ/doctor-patient.png" style="width:100%;max-width:300px;margin-bottom:15px;">
+        <h3 style="color:#1e3a8a;margin-bottom:15px;">Informasi Pelayanan</h3>
         <p>Antrian Selanjutnya: <b id="q-next">-</b></p>
+        <p>Jam Operasional: <b>07:30 - 14:00 WIB</b></p>
+        <p>Poli Umum, Gigi, KIA, Lansia</p>
       </div>
     </div>
 
-    <div class="info-grid" id="info">
+    <!-- PROFIL + MAPS BARU -->
+    <h2 class="section-title" id="profil">Profil & Lokasi Puskesmas</h2>
+    <div class="profile-grid">
+      <div class="profile-card">
+        <h3>Gedung Puskesmas</h3>
+        <img src="gedung.jpg" alt="Gedung Puskesmas Sehat Bersama">
+        <p style="color:#475569;">Jl. Kesehatan No. 123, Kecamatan Sehat, Kota Bahagia. Kami siap melayani dengan sepenuh hati.</p>
+      </div>
+      <div class="profile-card">
+        <h3>Lokasi Kami</h3>
+        <iframe class="maps" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.5!2d110.4!3d-7.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwNDgnMDAuMCJTIDExMMKwMjQnMDAuMCJF!5e0!3m2!1sid!2sid!4v1234567890" allowfullscreen="" loading="lazy"></iframe>
+        <a href="LINK_GOOGLE_MAPS" target="_blank" class="btn-maps">Buka di Google Maps →</a>
+      </div>
+    </div>
+
+    <div class="info-grid">
       <div class="info-card">
-        <h3>Informasi & Transparansi</h3>
+        <h3>Transparansi Publik</h3>
         <ul>
-          <li>Laporan Kinerja</li>
-          <li>Data Kunjungan</li>
-          <li>Ketersediaan Obat</li>
+          <li>Laporan Kinerja Bulanan</li>
+          <li>Data Kunjungan Harian</li>
+          <li>Ketersediaan Obat Esensial</li>
+          <li>Survei Kepuasan Pasien</li>
         </ul>
       </div>
       <div class="info-card">
         <h3>Akses Rekam Medis</h3>
-        <p style="margin-bottom:15px;color:#475569;">Akses Rekam Medis Anda dengan Mudah & Aman</p>
-        <a href="#" class="btn-hero" style="background:#059669;">Login Rekam Medis</a>
+        <p style="margin-bottom:15px;color:#475569;">Cek riwayat kunjungan & hasil lab Anda dengan aman melalui SatuSehat</p>
+        <a href="#" class="btn-hero" style="background:#059669;">Login SatuSehat</a>
       </div>
     </div>
   </main>
@@ -144,16 +182,16 @@
   <footer>
     <div class="container">
       <div class="footer-grid">
-        <div>🔒 Privasi Terlindungi</div>
-        <div>⚡ Pelayanan Cepat</div>
-        <div>🌐 Akses Dimana Saja</div>
+        <div>🔒 Data Privasi Terlindungi</div>
+        <div>⚡ Pelayanan Cepat & Akurat</div>
+        <div>🌐 Akses 24 Jam Online</div>
       </div>
-      <div class="copyright">© 2024 Puskesmas Sehat Bersama | Kebijakan Privasi | Hubungi Kami</div>
+      <div class="copyright">© 2026 Puskesmas Sehat Bersama | Inovasi Pelayanan Prima</div>
     </div>
   </footer>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbzsOdyzO13CMcrBNru_CpVxKqX1OJh81TdLeFHDoF3d7AU8f_jxibQ1rmiUHqqopb6fEQ/exec?action=getPublic";
+const API = "PASTE_URL_APPS_SCRIPT?action=getPublic";
 async function loadStatus() {
   try {
     const r = await fetch(API);
