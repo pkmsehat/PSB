@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ambil Nomor Antrian - PKM Sehat Bersama</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>body{font-family:'Poppins',sans-serif}</style>
+</head><body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+<div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl">
+  <h1 class="text-3xl font-black text-blue-600 text-center mb-2">Ambil Nomor Antrian</h1>
+  <p class="text-center text-gray-500 mb-6">Isi data, langsung dapat nomor</p>
+
+  <form id="formDaftar">
+    <label class="block font-semibold mb-1">Nama Lengkap</label>
+    <input id="nama" type="text" required class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-lg">
+
+    <label class="block font-semibold mb-1">Pilih Poli</label>
+    <select id="poli" required class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-lg">
+      <option value="">-- Pilih Poli --</option>
+      <option>Poli Umum</option>
+      <option>Poli Gigi</option>
+      <option>KIA / KB</option>
+      <option>Laboratorium</option>
+    </select>
+
+    <label class="block font-semibold mb-1">No. HP WhatsApp</label>
+    <input id="hp" type="tel" placeholder="0812xxxx" required class="w-full p-3 border-2 border-gray-200 rounded-xl mb-6 text-lg">
+
+    <button type="submit" class="w-full bg-blue-600 text-white p-4 rounded-xl font-bold text-lg">Ambil Nomor Sekarang</button>
+  </form>
+
+  <div id="hasil" class="hidden text-center">
+    <p class="text-gray-600">Nomor Antrian Anda:</p>
+    <div id="nomor" class="text-7xl font-black text-green-600 my-3">A01</div>
+    <p class="font-semibold">Estimasi dipanggil: <span id="estimasi" class="text-blue-600">10:30</span></p>
+    <div id="qrcode" class="flex justify-center my-5"></div>
+    <p class="text-sm text-gray-500">Screenshot halaman ini.<br>Cek posisi: <a id="linkCek" class="text-blue-600 underline"></a></p>
+    <a href="index.html" class="block mt-6 text-blue-600 font-semibold">← Kembali ke Beranda</a>
+  </div>
+</div>
+
+<script>
+const API = "PASTE_URL_APPS_SCRIPT?action=";
+document.getElementById('formDaftar').onsubmit = async (e) => {
+  e.preventDefault();
+  const nama = document.getElementById('nama').value;
+  const poli = document.getElementById('poli').value;
+  const hp = document.getElementById('hp').value;
+
+  const res = await fetch(`${API}daftar&nama=${encodeURIComponent(nama)}&poli=${encodeURIComponent(poli)}&hp=${hp}`);
+  const data = await res.json();
+
+  if(data.status === 'ok') {
+    document.getElementById('formDaftar').classList.add('hidden');
+    document.getElementById('hasil').classList.remove('hidden');
+    document.getElementById('nomor').textContent = data.nomor;
+    document.getElementById('estimasi').textContent = data.estimasi;
+
+    const cekUrl = `${location.origin}/cek.html?no=${data.nomor}`;
+    document.getElementById('linkCek').href = cekUrl;
+    document.getElementById('linkCek').textContent = cekUrl;
+    new QRCode(document.getElementById('qrcode'), { text: cekUrl, width: 180, height: 180 });
+  } else {
+    alert('Gagal ambil nomor. Coba lagi.');
+  }
+}
+</script></body></html>
