@@ -6,14 +6,12 @@
   <title>Puskesmas Sehat Bersama - Antrian Online</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- AOS Animation Library -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8fafc; color: #1e293b; scroll-behavior: smooth; }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
     
-    /* Running Text + Fade */
     .marquee { background: #047857; color: white; padding: 8px 0; font-size: 0.9rem; overflow: hidden; position: relative; z-index: 1; }
     .marquee p { animation: scroll 25s linear infinite, fadeIn 1s ease; white-space: nowrap; pointer-events: none; }
     @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
@@ -100,82 +98,23 @@
       .hero-img { order: -1; margin-bottom: 20px; }
     }
     
-    /* FIX NAVBAR - Anti Ilang + Kecil */
-    .nav-links a, .dropdown-btn {
-      font-size: 0.875rem !important;
-      font-weight: 500;
-    }
-    .dropdown-btn {
-      background: none;
-      border: none;
-      color: #475569;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-family: inherit;
-      padding: 0;
-    }
-    .dropdown {
-      position: relative;
-      padding-bottom: 20px;
-      margin-bottom: -20px;
-    }
-    .dropdown-content { 
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white; 
-      min-width: 180px;
-      box-shadow: 0 8px 16px #0002;
-      border-radius: 8px; 
-      z-index: 10000;
-      padding: 8px 0;
-      margin-top: 0;
-    }
-    .dropdown-content a { 
-      color: #475569;
-      padding: 8px 16px;
-      text-decoration: none;
-      display: block;
-      font-size: 0.8125rem !important;
-      font-weight: 400;
-    }
-    .dropdown-content a:hover {
-      background: #f1f5f9;
-      color: #047857;
-    }
-    .dropdown:hover .dropdown-content,
-    .dropdown-content:hover {
-      display: block;
-    }
-    .dropdown-btn:hover {
-      color: #047857;
-    }
+    /* FIX NAVBAR */
+    .nav-links a, .dropdown-btn { font-size: 0.875rem !important; font-weight: 500; }
+    .dropdown-btn { background: none; border: none; color: #475569; cursor: pointer; display: flex; align-items: center; gap: 4px; font-family: inherit; padding: 0; }
+    .dropdown { position: relative; padding-bottom: 20px; margin-bottom: -20px; }
+    .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 180px; box-shadow: 0 8px 16px #0002; border-radius: 8px; z-index: 10000; padding: 8px 0; margin-top: 0; }
+    .dropdown-content a { color: #475569; padding: 8px 16px; text-decoration: none; display: block; font-size: 0.8125rem !important; font-weight: 400; }
+    .dropdown-content a:hover { background: #f1f5f9; color: #047857; }
+    .dropdown:hover .dropdown-content, .dropdown-content:hover { display: block; }
+    .dropdown-btn:hover { color: #047857; }
     
-    .nav-links a[href="login.html"], 
-    .nav-links a[href="register.html"] {
-      font-size: 0.875rem !important;
-      padding: 8px 14px !important;
-      transition: 0.3s;
-    }
-    .nav-links a[href="login.html"]:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px #86efac80;
-    }
-    .nav-links a[href="register.html"]:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px #04785780;
-    }
+    .nav-links a[href="login.html"], .nav-links a[href="register.html"] { font-size: 0.875rem !important; padding: 8px 14px !important; transition: 0.3s; }
+    .nav-links a[href="login.html"]:hover { transform: translateY(-2px); box-shadow: 0 4px 12px #86efac80; }
+    .nav-links a[href="register.html"]:hover { transform: translateY(-2px); box-shadow: 0 4px 12px #04785780; }
 
     .mobile-btn { display: none; background: none; border: none; font-size: 1.5rem; }
     @media (max-width: 768px) {
-      .nav-links { 
-        display: none; position: absolute; top: 70px; left: 0; right: 0; 
-        background: white; flex-direction: column; padding: 20px; 
-        box-shadow: 0 4px 6px #0001; gap: 15px; align-items: start;
-      }
+      .nav-links { display: none; position: absolute; top: 70px; left: 0; right: 0; background: white; flex-direction: column; padding: 20px; box-shadow: 0 4px 6px #0001; gap: 15px; align-items: start; }
       .nav-links.show { display: flex; animation: slideDown 0.3s ease; }
       .mobile-btn { display: block; }
       .dropdown-content { position: static; box-shadow: none; padding-left: 15px; }
@@ -190,7 +129,6 @@
   </style>
 </head>
 <body>
-  <!-- Running Text -->
   <div class="marquee">
     <p>Selamat Datang di Website Puskesmas Sehat Bersama • Pendaftaran Online Buka 24 Jam • Jam Pelayanan 07:30 - 14:00 WIB • Layanan Cepat, Mudah, & Transparan untuk Anda</p>
   </div>
@@ -204,7 +142,6 @@
     
     <nav class="nav-links" id="nav-menu">
       <a href="index.html" class="active">Home</a>
-      
       <div class="dropdown">
         <button class="dropdown-btn">Profil </button>
         <div class="dropdown-content">
@@ -213,7 +150,6 @@
           <a href="struktur.html">Struktur Organisasi</a>
         </div>
       </div>
-
       <div class="dropdown">
         <button class="dropdown-btn">Publikasi </button>
         <div class="dropdown-content">
@@ -222,7 +158,6 @@
           <a href="dashboard.html">Transparansi</a>
         </div>
       </div>
-
       <div class="dropdown">
         <button class="dropdown-btn">Layanan </button>
         <div class="dropdown-content">
@@ -231,8 +166,6 @@
           <a href="kia.html">KIA/KB</a>
           <a href="daftar.html" style="color:#047857;font-weight:600;">Daftar Online</a>
         </div>
-      </div>
-
       <div class="dropdown">
         <button class="dropdown-btn">Kontak Kami </button>
         <div class="dropdown-content">
@@ -240,7 +173,6 @@
           <a href="#survey">Survey Kepuasan</a>
         </div>
       </div>
-      
       <a href="login.html" style="background:#86efac;color:#065f46;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:600;margin-left:10px;">Login</a>
       <a href="register.html" style="background:#047857;color:white;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:600;margin-left:10px;">Register</a>
     </nav>
@@ -327,7 +259,6 @@
     </div>
   </main>
 
-  <!-- SECTION KRITIK SARAN -->
   <section id="kritik-saran" class="py-16 bg-white">
     <div class="max-w-2xl mx-auto px-4" data-aos="fade-up">
       <div class="text-center mb-8">
@@ -335,7 +266,6 @@
         <h2 class="text-3xl font-bold text-teal-700">Kritik & Saran</h2>
         <p class="text-gray-500 mt-2">Masukan Anda membantu kami menjadi lebih baik</p>
       </div>
-
       <form id="formKritik" class="bg-gray-50 p-8 rounded-3xl shadow-lg space-y-4">
         <div class="grid grid-cols-2 gap-4">
           <input type="text" id="namaKritik" placeholder="Nama" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none transition">
@@ -363,13 +293,11 @@
         <h2 class="text-3xl font-bold text-teal-700">Survey Kepuasan Pasien</h2>
         <p class="text-gray-500 mt-2">Beri nilai 1-5 untuk pelayanan kami</p>
       </div>
-
       <form id="formSurvey" class="bg-white p-8 rounded-3xl shadow-lg space-y-6">
         <div class="grid grid-cols-2 gap-4">
           <input type="text" id="namaSurvey" placeholder="Nama - boleh dikosongkan" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none transition">
           <input type="tel" id="hpSurvey" placeholder="No. HP - boleh dikosongkan" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none transition">
         </div>
-        
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">1. Keramahan Petugas *</label>
           <div class="rating">
@@ -380,7 +308,6 @@
             <input type="radio" id="pelayanan1" name="pelayanan" value="1"><label for="pelayanan1">★</label>
           </div>
         </div>
-
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">2. Kebersihan Puskesmas *</label>
           <div class="rating">
@@ -391,7 +318,6 @@
             <input type="radio" id="kebersihan1" name="kebersihan" value="1"><label for="kebersihan1">★</label>
           </div>
         </div>
-
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">3. Kecepatan Pelayanan *</label>
           <div class="rating">
@@ -402,9 +328,7 @@
             <input type="radio" id="kecepatan1" name="kecepatan" value="1"><label for="kecepatan1">★</label>
           </div>
         </div>
-
         <textarea id="saranSurvey" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none transition" placeholder="Saran untuk Puskesmas..."></textarea>
-        
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Rating Keseluruhan *</label>
           <div class="rating">
@@ -415,7 +339,6 @@
             <input type="radio" id="rating1" name="rating" value="1"><label for="rating1">★</label>
           </div>
         </div>
-        
         <button type="submit" id="btnSurvey" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-xl transition hover:shadow-lg hover:-translate-y-0.5">
           <i class="fa-solid fa-paper-plane mr-2"></i>Kirim Survey
         </button>
@@ -434,15 +357,9 @@
     </div>
   </footer>
 
-<!-- AOS Script -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-// Init AOS
-AOS.init({
-  duration: 800,
-  once: true,
-  offset: 100
-});
+AOS.init({ duration: 800, once: true, offset: 100 });
 
 // Menu HP
 document.getElementById('mobile-btn').addEventListener('click', function() {
@@ -453,12 +370,10 @@ document.getElementById('mobile-btn').addEventListener('click', function() {
 document.querySelectorAll('.dropdown').forEach(drop => {
   let timer;
   const content = drop.querySelector('.dropdown-content');
-  
   drop.addEventListener('mouseenter', () => {
     clearTimeout(timer);
     content.style.display = 'block';
   });
-  
   drop.addEventListener('mouseleave', () => {
     timer = setTimeout(() => {
       content.style.display = 'none';
@@ -491,7 +406,6 @@ document.getElementById('formKritik').addEventListener('submit', async (e) => {
   const btn = document.getElementById('btnKritik');
   btn.disabled = true;
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Mengirim...';
-
   const data = {
     action: 'kritikSaran',
     nama: document.getElementById('namaKritik').value,
@@ -499,3 +413,15 @@ document.getElementById('formKritik').addEventListener('submit', async (e) => {
     jenis: document.getElementById('jenisKritik').value,
     pesan: document.getElementById('pesanKritik').value
   };
+  try {
+    const res = await fetch(API, {method: 'POST', body: JSON.stringify(data)});
+    const hasil = await res.json();
+    if(hasil.status === 'ok') {
+      alert('✅ Terima kasih! Masukan Anda sudah kami terima.');
+      document.getElementById('formKritik').reset();
+    } else alert('❌ ' + hasil.message);
+  } catch(err) {
+    alert('❌ Koneksi error. Coba lagi.');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i
