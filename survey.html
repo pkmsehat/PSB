@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survey Kepuasan - Puskesmas Sehat Bersama</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  body{font-family:'Poppins',sans-serif}
+  .rating input{display:none}
+  .rating label{font-size:28px;color:#ddd;cursor:pointer}
+  .rating input:checked ~ label{color:#fbbf24}
+  .rating label:hover,.rating label:hover ~ label{color:#fbbf24}
+  .rating{display:flex;flex-direction:row-reverse;justify-content:left}
+</style>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen p-4">
+
+<div class="max-w-2xl mx-auto">
+  <a href="index.html" class="inline-block mb-6 text-teal-600 hover:text-teal-700">
+    <i class="fa-solid fa-arrow-left mr-2"></i>Kembali ke Beranda
+  </a>
+
+  <div class="bg-white p-8 rounded-3xl shadow-2xl">
+    <div class="text-center mb-6">
+      <i class="fa-solid fa-clipboard-check text-4xl text-teal-600 mb-3"></i>
+      <h1 class="text-2xl font-bold text-teal-700">Survey Kepuasan Pasien</h1>
+      <p class="text-gray-500 text-sm mt-1">Beri nilai 1-5 untuk pelayanan kami hari ini</p>
+    </div>
+
+    <form id="formSurvey" class="space-y-6">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">Nama</label>
+          <input type="text" id="nama" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none" placeholder="Boleh dikosongkan">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">No. HP</label>
+          <input type="tel" id="hp" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none" placeholder="Boleh dikosongkan">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">1. Keramahan Petugas *</label>
+        <div class="rating">
+          <input type="radio" id="pelayanan5" name="pelayanan" value="5" required><label for="pelayanan5">★</label>
+          <input type="radio" id="pelayanan4" name="pelayanan" value="4"><label for="pelayanan4">★</label>
+          <input type="radio" id="pelayanan3" name="pelayanan" value="3"><label for="pelayanan3">★</label>
+          <input type="radio" id="pelayanan2" name="pelayanan" value="2"><label for="pelayanan2">★</label>
+          <input type="radio" id="pelayanan1" name="pelayanan" value="1"><label for="pelayanan1">★</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">2. Kebersihan Puskesmas *</label>
+        <div class="rating">
+          <input type="radio" id="kebersihan5" name="kebersihan" value="5" required><label for="kebersihan5">★</label>
+          <input type="radio" id="kebersihan4" name="kebersihan" value="4"><label for="kebersihan4">★</label>
+          <input type="radio" id="kebersihan3" name="kebersihan" value="3"><label for="kebersihan3">★</label>
+          <input type="radio" id="kebersihan2" name="kebersihan" value="2"><label for="kebersihan2">★</label>
+          <input type="radio" id="kebersihan1" name="kebersihan" value="1"><label for="kebersihan1">★</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">3. Kecepatan Pelayanan *</label>
+        <div class="rating">
+          <input type="radio" id="kecepatan5" name="kecepatan" value="5" required><label for="kecepatan5">★</label>
+          <input type="radio" id="kecepatan4" name="kecepatan" value="4"><label for="kecepatan4">★</label>
+          <input type="radio" id="kecepatan3" name="kecepatan" value="3"><label for="kecepatan3">★</label>
+          <input type="radio" id="kecepatan2" name="kecepatan" value="2"><label for="kecepatan2">★</label>
+          <input type="radio" id="kecepatan1" name="kecepatan" value="1"><label for="kecepatan1">★</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Saran untuk Puskesmas</label>
+        <textarea id="saran" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none" placeholder="Tulis saran Anda di sini..."></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Rating Keseluruhan *</label>
+        <div class="rating">
+          <input type="radio" id="rating5" name="rating" value="5" required><label for="rating5">★</label>
+          <input type="radio" id="rating4" name="rating" value="4"><label for="rating4">★</label>
+          <input type="radio" id="rating3" name="rating" value="3"><label for="rating3">★</label>
+          <input type="radio" id="rating2" name="rating" value="2"><label for="rating2">★</label>
+          <input type="radio" id="rating1" name="rating" value="1"><label for="rating1">★</label>
+        </div>
+      </div>
+
+      <button type="submit" id="btnSurvey" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-xl transition duration-300">
+        <i class="fa-solid fa-paper-plane mr-2"></i>Kirim Survey
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbzsOdyzO13CMcrBNru_CpVxKqX1OJh81TdLeFHDoF3d7AU8f_jxibQ1rmiUHqqopb6fEQ/exec";
+
+document.getElementById('formSurvey').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('btnSurvey');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Mengirim...';
+
+  const data = {
+    action: 'survey',
+    nama: document.getElementById('nama').value || 'Anonim',
+    hp: document.getElementById('hp').value || '-',
+    pelayanan: document.querySelector('input[name="pelayanan"]:checked').value,
+    kebersihan: document.querySelector('input[name="kebersihan"]:checked').value,
+    kecepatan: document.querySelector('input[name="kecepatan"]:checked').value,
+    saran: document.getElementById('saran').value,
+    rating: document.querySelector('input[name="rating"]:checked').value
+  };
+
+  try {
+    const res = await fetch(API, {method: 'POST', body: JSON.stringify(data)});
+    const hasil = await res.json();
+    if(hasil.status === 'ok') {
+      alert('✅ Terima kasih atas penilaian Anda!');
+      document.getElementById('formSurvey').reset();
+      window.location.href = 'index.html';
+    } else {
+      alert('❌ ' + hasil.message);
+    }
+  } catch(err) {
+    alert('❌ Koneksi error. Coba lagi.');
+  }
+  
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i>Kirim Survey';
+});
+</script>
+</body>
+</html>
