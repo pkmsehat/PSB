@@ -142,6 +142,7 @@
     
     <nav class="nav-links" id="nav-menu">
       <a href="index.html" class="active">Home</a>
+      
       <div class="dropdown">
         <button class="dropdown-btn">Profil </button>
         <div class="dropdown-content">
@@ -150,6 +151,7 @@
           <a href="struktur.html">Struktur Organisasi</a>
         </div>
       </div>
+
       <div class="dropdown">
         <button class="dropdown-btn">Publikasi </button>
         <div class="dropdown-content">
@@ -158,6 +160,7 @@
           <a href="dashboard.html">Transparansi</a>
         </div>
       </div>
+
       <div class="dropdown">
         <button class="dropdown-btn">Layanan </button>
         <div class="dropdown-content">
@@ -166,6 +169,8 @@
           <a href="kia.html">KIA/KB</a>
           <a href="daftar.html" style="color:#047857;font-weight:600;">Daftar Online</a>
         </div>
+      </div>
+
       <div class="dropdown">
         <button class="dropdown-btn">Kontak Kami </button>
         <div class="dropdown-content">
@@ -173,6 +178,7 @@
           <a href="#survey">Survey Kepuasan</a>
         </div>
       </div>
+      
       <a href="login.html" style="background:#86efac;color:#065f46;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:600;margin-left:10px;">Login</a>
       <a href="register.html" style="background:#047857;color:white;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:600;margin-left:10px;">Register</a>
     </nav>
@@ -285,7 +291,6 @@
     </div>
   </section>
 
-  <!-- SECTION SURVEY - UDAH ADA HP + RATING BINTANG -->
   <section id="survey" class="py-16 bg-gradient-to-br from-green-50 to-blue-50">
     <div class="max-w-2xl mx-auto px-4" data-aos="fade-up">
       <div class="text-center mb-8">
@@ -307,7 +312,6 @@
             <input type="radio" id="pelayanan2" name="pelayanan" value="2"><label for="pelayanan2">★</label>
             <input type="radio" id="pelayanan1" name="pelayanan" value="1"><label for="pelayanan1">★</label>
           </div>
-        </div>
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">2. Kebersihan Puskesmas *</label>
           <div class="rating">
@@ -317,7 +321,6 @@
             <input type="radio" id="kebersihan2" name="kebersihan" value="2"><label for="kebersihan2">★</label>
             <input type="radio" id="kebersihan1" name="kebersihan" value="1"><label for="kebersihan1">★</label>
           </div>
-        </div>
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">3. Kecepatan Pelayanan *</label>
           <div class="rating">
@@ -338,7 +341,6 @@
             <input type="radio" id="rating2" name="rating" value="2"><label for="rating2">★</label>
             <input type="radio" id="rating1" name="rating" value="1"><label for="rating1">★</label>
           </div>
-        </div>
         <button type="submit" id="btnSurvey" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-xl transition hover:shadow-lg hover:-translate-y-0.5">
           <i class="fa-solid fa-paper-plane mr-2"></i>Kirim Survey
         </button>
@@ -361,12 +363,10 @@
 <script>
 AOS.init({ duration: 800, once: true, offset: 100 });
 
-// Menu HP
 document.getElementById('mobile-btn').addEventListener('click', function() {
   document.getElementById('nav-menu').classList.toggle('show');
 });
 
-// Fix dropdown anti ilang
 document.querySelectorAll('.dropdown').forEach(drop => {
   let timer;
   const content = drop.querySelector('.dropdown-content');
@@ -381,7 +381,6 @@ document.querySelectorAll('.dropdown').forEach(drop => {
   });
 });
 
-// Data antrian
 const API = "https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec?action=getPublic";
 async function loadStatus() {
   try {
@@ -400,7 +399,6 @@ async function loadStatus() {
 loadStatus();
 setInterval(loadStatus, 10000);
 
-// FORM KRITIK
 document.getElementById('formKritik').addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = document.getElementById('btnKritik');
@@ -424,4 +422,39 @@ document.getElementById('formKritik').addEventListener('submit', async (e) => {
     alert('❌ Koneksi error. Coba lagi.');
   }
   btn.disabled = false;
-  btn.innerHTML = '<i
+  btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i>Kirim Masukan';
+});
+
+document.getElementById('formSurvey').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('btnSurvey');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Mengirim...';
+
+  const data = {
+    action: 'survey',
+    nama: document.getElementById('namaSurvey').value || 'Anonim',
+    hp: document.getElementById('hpSurvey').value || '-', 
+    pelayanan: document.querySelector('input[name="pelayanan"]:checked').value,
+    kebersihan: document.querySelector('input[name="kebersihan"]:checked').value,
+    kecepatan: document.querySelector('input[name="kecepatan"]:checked').value,
+    saran: document.getElementById('saranSurvey').value,
+    rating: document.querySelector('input[name="rating"]:checked').value
+  };
+
+  try {
+    const res = await fetch(API, {method: 'POST', body: JSON.stringify(data)});
+    const hasil = await res.json();
+    if(hasil.status === 'ok') {
+      alert('✅ Terima kasih atas penilaian Anda!');
+      document.getElementById('formSurvey').reset();
+    } else alert('❌ ' + hasil.message);
+  } catch(err) {
+    alert('❌ Koneksi error. Coba lagi.');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i>Kirim Survey';
+});
+</script>
+</body>
+</html>
