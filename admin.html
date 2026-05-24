@@ -1,58 +1,178 @@
-<!DOCTYPE html><html lang="id"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Antrian</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-<style>body{font-family:'Poppins',sans-serif}</style>
-</head><body class="bg-gray-100 p-4">
-<div id="login" class="max-w-sm mx-auto mt-20 bg-white p-8 rounded-2xl shadow-lg">
-  <h1 class="text-2xl font-bold text-center text-blue-600 mb-6">Login Petugas</h1>
-  <input id="pass" type="password" placeholder="Password Admin" class="w-full p-3 border-2 rounded-lg mb-3">
-  <input id="petugas" type="text" placeholder="Nama Anda" class="w-full p-3 border-2 rounded-lg mb-4">
-  <button onclick="login()" class="w-full bg-blue-600 text-white p-3 rounded-lg font-bold">Masuk</button>
-</div>
+const SHEET_ID = '1l6jD8ot6R7jHxGIUAzHoEZwUQvCUBvsofZ_2ondj-CM'; // Ganti ID
+const SHEET_USERS = 'Users';
+const SHEET_ANTRIAN = 'Antrian';
 
-<div id="panel" class="hidden max-w-2xl mx-auto">
-  <div class="bg-white p-6 rounded-2xl shadow-lg mb-4">
-    <h1 class="text-2xl font-bold text-blue-600">Panel Loket 1</h1>
-    <p id="info" class="mt-2 text-gray-600">Memuat...</p>
-    <button onclick="panggil()" class="w-full bg-green-600 text-white p-4 rounded-xl font-bold text-lg mt-4">📢 PANGGIL BERIKUTNYA</button>
-  </div>
-  <div class="bg-white p-6 rounded-2xl shadow-lg">
-    <h2 class="font-bold mb-3">5 Antrian Berikutnya</h2>
-    <table class="w-full text-sm"><tbody id="list"></tbody></table>
-  </div>
-</div>
+function doPost(e) {
+  const data = JSON.parse(e.postData.contents);
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheetUsers = ss.getSheetByName(SHEET_USERS);
+  const sheetAntrian = ss.getSheetByName(SHEET_ANTRIAN);
 
-<script>
-const API = "https://script.google.com/macros/s/AKfycbzM6D735ryPazkudEqGZO0lF7mx-gotvyiiQ7neMMH52s3wtVm7yodTz_-WNHCvdWyVhQ/exec?action=";
-let PASS = '', PETUGAS = '';
+  let result = { status: 'error', message: 'Action tidak dikenal' };
 
-async function login() {
-  PASS = document.getElementById('pass').value;
-  PETUGAS = document.getElementById('petugas').value;
-  if(!PASS||!PETUGAS) return alert('Isi semua');
-  const r = await fetch(`${API}panggil&pass=${PASS}&test=1`);
-  const t = await r.text();
-  if(t.includes('salah')) return alert('Password salah');
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('panel').classList.remove('hidden');
-  load(); setInterval(load, 3000);
+  try {
+    // REGISTER
+    if(data.action == 'register') {
+      const cekNIK = sheetUsers.createTextFinder(data.nik).matchEntireCell(true).findNext();
+      if(cekNIK) {
+        result = {status:'error', message:'NIK sudah terdaftar'};
+      } else {
+        sheetUsers.appendRow([
+          data.nik, data.nama, data.hp, data.tgl_lahir, data.alamat,
+          Utilities.base64Encode(data.password), 'user', new Date()
+        ]);
+        result = {status:'ok'};
+      }
+    }
+
+    // LOGIN
+    else if(data.action == 'login') {
+      const row = sheetUsers.createTextFinder(data.nik).matchEntireCell(true).findNext();
+      if(!row) {
+        result = {status:'error', message:'NIK tidak ditemukan'};
+      } else {
+        const rowNum = row.getRow();
+        const userData = sheetUsers.getRange(rowNum, 1, 1, 8).getValues()[0];
+        const passDB = userData[5];
+        const roleDB = userData[6];
+
+        if(roleDB!== data.role) {
+          result = {status:'error', message:'Role tidak sesuai'};
+        } else if(passDB == Utilities.base64Encode(data.password)) {
+          result = {
+            status:'ok',
+            user: {nik:userData[0], nama:userData[1], hp:userData[2], role:userData[6]}
+          };
+        } else {
+          result = {status:'error', message:'Password salah'};
+        }
+      }
+    }
+
+    // DAFTAR ANTRIAN
+    else if(data.action == 'daftarAntrian') {
+      const lastRow = sheetAntrian.getLastRow();
+      const today = Utilities.formatDate(new Date(), 'GMT+7', 'dd/MM/yyyy');
+      let noUrut = 1;
+
+      // Cari nomor urut hari ini
+      if(lastRow > 1) {
+        const dataAntrian = sheetAntrian.getRange(2, 1, lastRow-1, 3).getValues();
+        const todayRows = dataAntrian.filter(r => Utilities.formatDate(new Date(r[0]), 'GMT+7', 'dd/MM/yyyy') == today);
+        noUrut = todayRows.length + 1;
+      }
+
+      const noAntrian = 'A' + String(noUrut).padStart(3, '0');
+      const estimasi = new Date(Date.now() + noUrut * 10 * 60000); // +10 menit per antrian
+
+      sheetAntrian.appendRow([
+        new Date(), // A: Timestamp
+        noUrut, // B: No
+        noAntrian, // C: No_Antrian
+        data.nama, // D: Nama
+        data.poli, // E: Poli
+        data.hp, // F: No_HP
+        'Menunggu', // G: Status
+        '', // H: Loket
+        '', // I: Dipanggil_Jam
+        '' // J: Petugas
+      ]);
+
+      result = {
+        status:'ok',
+        nomor: noAntrian,
+        estimasi: Utilities.formatDate(estimasi, 'GMT+7', 'HH:mm')
+      };
+    }
+
+    // GET DATA ADMIN
+    else if(data.action == 'getAdminData') {
+      const today = Utilities.formatDate(new Date(), 'GMT+7', 'dd/MM/yyyy');
+      const allData = sheetAntrian.getDataRange().getValues();
+      const headers = allData[0];
+      const rows = allData.slice(1);
+
+      const todayRows = rows.filter(r => Utilities.formatDate(new Date(r[0]), 'GMT+7', 'dd/MM/yyyy') == today);
+      const dipanggil = todayRows.find(r => r[6] == 'Dipanggil'); // Status = Dipanggil
+      const menunggu = todayRows.filter(r => r[6] == 'Menunggu').slice(0, 10); // 10 antrian berikutnya
+      const selesai = todayRows.filter(r => r[6] == 'Selesai');
+
+      result = {
+        status: 'ok',
+        totalHariIni: todayRows.length,
+        totalMenunggu: todayRows.filter(r => r[6] == 'Menunggu').length,
+        totalSelesai: selesai.length,
+        dipanggil: dipanggil? {
+          No_Antrian: dipanggil[2], Nama: dipanggil[3], Poli: dipanggil[4], Loket: dipanggil[7]
+        } : null,
+        antrian: menunggu.map(r => ({
+          Timestamp: r[0], No_Antrian: r[2], Nama: r[3], Poli: r[4], No_HP: r[5]
+        }))
+      };
+    }
+
+    // PANGGIL BERIKUTNYA
+    else if(data.action == 'panggilBerikutnya') {
+      const today = Utilities.formatDate(new Date(), 'GMT+7', 'dd/MM/yyyy');
+      const allData = sheetAntrian.getDataRange().getValues();
+      const rows = allData.slice(1);
+
+      // Kembalikan yg lagi dipanggil ke Menunggu dulu
+      for(let i = 0; i < rows.length; i++) {
+        if(rows[i][6] == 'Dipanggil') {
+          sheetAntrian.getRange(i+2, 7).setValue('Menunggu'); // Status
+          sheetAntrian.getRange(i+2, 8).setValue(''); // Loket
+          sheetAntrian.getRange(i+2, 9).setValue(''); // Dipanggil_Jam
+          sheetAntrian.getRange(i+2, 10).setValue(''); // Petugas
+        }
+      }
+
+      // Cari antrian Menunggu paling atas hari ini
+      const todayRows = rows.map((r, idx) => ({data: r, row: idx+2}))
+       .filter(r => Utilities.formatDate(new Date(r.data[0]), 'GMT+7', 'dd/MM/yyyy') == today && r.data[6] == 'Menunggu');
+
+      if(todayRows.length > 0) {
+        const targetRow = todayRows[0].row;
+        sheetAntrian.getRange(targetRow, 7).setValue('Dipanggil'); // Status
+        sheetAntrian.getRange(targetRow, 8).setValue(data.loket); // Loket
+        sheetAntrian.getRange(targetRow, 9).setValue(new Date()); // Dipanggil_Jam
+        sheetAntrian.getRange(targetRow, 10).setValue(data.petugas); // Petugas
+        result = {status: 'ok'};
+      } else {
+        result = {status: 'error', message: 'Tidak ada antrian menunggu'};
+      }
+    }
+
+    // PANGGIL SPESIFIK
+    else if(data.action == 'panggilSpesifik') {
+      const finder = sheetAntrian.createTextFinder(data.noAntrian).matchEntireCell(true).findNext();
+      if(finder) {
+        const row = finder.getRow();
+        sheetAntrian.getRange(row, 7).setValue('Dipanggil');
+        sheetAntrian.getRange(row, 8).setValue(data.loket);
+        sheetAntrian.getRange(row, 9).setValue(new Date());
+        sheetAntrian.getRange(row, 10).setValue(data.petugas);
+        result = {status: 'ok'};
+      } else {
+        result = {status: 'error', message: 'Nomor antrian tidak ditemukan'};
+      }
+    }
+
+    // SELESAI ANTRIAN
+    else if(data.action == 'selesaiAntrian') {
+      const finder = sheetAntrian.createTextFinder(data.noAntrian).matchEntireCell(true).findNext();
+      if(finder) {
+        const row = finder.getRow();
+        sheetAntrian.getRange(row, 7).setValue('Selesai');
+        result = {status: 'ok'};
+      } else {
+        result = {status: 'error', message: 'Nomor antrian tidak ditemukan'};
+      }
+    }
+
+  } catch(err) {
+    result = {status: 'error', message: err.toString()};
+  }
+
+  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
 }
-
-async function load() {
-  const r = await fetch(API + 'getPublic');
-  const d = await r.json();
-  document.getElementById('info').innerHTML = d.dipanggil
-   ? `Sedang dipanggil: <b>${d.dipanggil.No_Antrian} - ${d.dipanggil.Nama}</b> | Total hari ini: ${d.totalHariIni}`
-    : `Belum ada yang dipanggil | Total hari ini: ${d.totalHariIni}`;
-  document.getElementById('list').innerHTML = d.antrian.map(x =>
-    `<tr class="border-b"><td class="py-2 font-bold">${x.No_Antrian}</td><td>${x.Nama}</td><td>${x.Poli}</td></tr>`
-  ).join('');
-}
-
-async function panggil() {
-  await fetch(`${API}panggil&pass=${PASS}&petugas=${PETUGAS}&loket=Loket 1`);
-  load();
-}
-</script></body></html>
