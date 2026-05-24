@@ -34,6 +34,16 @@
       .nav-links.show { display: flex; }
       .mobile-btn { display: block; }
     }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #e5e7eb;
+    }
   </style>
 </head>
 <body>
@@ -49,8 +59,8 @@
         <div class="dropdown">
           <button class="dropdown-btn" style="color:#047857;font-weight:600;">Profil </button>
           <div class="dropdown-content">
-            <a href="visi-misi.html" style="color:#047857;font-weight:600;">Visi & Misi</a>
-            <a href="sejarah.html">Sejarah</a>
+            <a href="visi-misi.html">Visi & Misi</a>
+            <a href="sejarah.html" style="color:#047857;font-weight:600;">Sejarah</a>
             <a href="struktur.html">Struktur Organisasi</a>
           </div>
         </div>
@@ -72,63 +82,88 @@
   <main class="container py-12">
     <div data-aos="fade-up">
       <div class="flex items-center gap-3 mb-6">
-        <i class="fa-solid fa-bullseye text-4xl text-teal-600"></i>
-        <h1 class="text-3xl font-bold text-teal-700">Sejarah Puskesmas Sehat Bersama</h1>
+        <i class="fa-solid fa-landmark text-4xl text-teal-600"></i>
+        <h1 class="text-3xl font-bold text-teal-700">Sejarah Puskesmas</h1>
       </div>
-      <p class="text-gray-600 mb-8 max-w-2xl">.</p>
+      <p class="text-gray-600 mb-10 max-w-3xl">Perjalanan panjang Puskesmas Sehat Bersama dalam melayani kesehatan masyarakat sejak tahun 1985 hingga menjadi fasilitas kesehatan modern seperti sekarang.</p>
     </div>
 
-    <div class="bg-gradient-to-br from-teal-600 to-teal-700 p-10 rounded-xl shadow-lg text-white mb-12" data-aos="zoom-in">
-      <h2 class="text-sm font-semibold uppercase tracking-wider mb-3 opacity-90"></h2>
-      <p class="text-2xl md:text-3xl font-bold leading-relaxed">
-      </p>
-    </div>
-
-    <div data-aos="fade-up">
-      <h2 class="text-2xl font-bold mb-8 text-teal-700"></h2>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300">
-          <div class="flex gap-4">
-            <div class="bg-teal-100 text-teal-700 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-xl flex-shrink-0"></div>
-            <div>
-              <h3 class="font-bold text-lg mb-2"></h3>
-              <p class="text-gray-600 text-sm">.</p>
-            </div>
-          </div>
-        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300">
-          <div class="flex gap-4">
-            <div class="bg-teal-100 text-teal-700 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-xl flex-shrink-0"></div>
-            <div>
-              <h3 class="font-bold text-lg mb-2"></h3>
-              <p class="text-gray-600 text-sm"></p>
-            </div>
-          </div>
+    <div class="relative timeline">
+      <div class="mb-10 ml-12" data-aos="fade-up">
+        <div class="absolute w-10 h-10 bg-teal-600 rounded-full -left-5 flex items-center justify-center text-white">
+          <i class="fa-solid fa-flag"></i>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300">
-          <div class="flex gap-4">
-            <div class="bg-teal-100 text-teal-700 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-xl flex-shrink-0"></div>
-            <div>
-              <h3 class="font-bold text-lg mb-2"></h3>
-              <p class="text-gray-600 text-sm"></p>
-            </div>
-          </div>
-        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300">
-          <div class="flex gap-4">
-            <div class="bg-teal-100 text-teal-700 w-12 h-12 rounded-lg flex items-center justify-center font-bold text-xl flex-shrink-0"></div>
-            <div>
-              <h3 class="font-bold text-lg mb-2"></h3>
-              <p class="text-gray-600 text-sm"></p>
-            </div>
-          </div>
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+          <span class="text-teal-600 font-bold">Tahun 1985</span>
+          <h3 class="text-xl font-bold mt-1 mb-2">Awal Berdiri - Puskesmas Pembantu</h3>
+          <p class="text-gray-600 text-sm">Diresmikan sebagai Puskesmas Pembantu dengan 1 dokter, 2 perawat, dan 1 bidan. Melayani di gedung sederhana ukuran 6x8 meter di Jl. Mawar No. 1. Fokus utama: KIA, imunisasi, dan pengobatan dasar.</p>
         </div>
       </div>
+
+      <div class="mb-10 ml-12" data-aos="fade-up" data-aos-delay="100">
+        <div class="absolute w-10 h-10 bg-teal-600 rounded-full -left-5 flex items-center justify-center text-white">
+          <i class="fa-solid fa-arrow-up"></i>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+          <span class="text-teal-600 font-bold">Tahun 1998</span>
+          <h3 class="text-xl font-bold mt-1 mb-2">Naik Status Jadi Puskesmas Induk</h3>
+          <p class="text-gray-600 text-sm">Seiring pertumbuhan penduduk, status ditingkatkan menjadi Puskesmas Induk. Gedung diperluas, ditambah Poli Gigi dan UGD 24 jam. Tenaga kesehatan bertambah menjadi 15 orang.</p>
+        </div>
+      </div>
+
+      <div class="mb-10 ml-12" data-aos="fade-up" data-aos-delay="200">
+        <div class="absolute w-10 h-10 bg-teal-600 rounded-full -left-5 flex items-center justify-center text-white">
+          <i class="fa-solid fa-award"></i>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+          <span class="text-teal-600 font-bold">Tahun 2012</span>
+          <h3 class="text-xl font-bold mt-1 mb-2">Akreditasi Perdana - Madya</h3>
+          <p class="text-gray-600 text-sm">Berhasil meraih Akreditasi Madya dari Kemenkes RI. Standar pelayanan, SDM, dan sarana prasarana dinyatakan layak. Mulai menerapkan rekam medis dan manajemen puskesmas modern.</p>
+        </div>
+      </div>
+
+      <div class="mb-10 ml-12" data-aos="fade-up" data-aos-delay="300">
+        <div class="absolute w-10 h-10 bg-teal-600 rounded-full -left-5 flex items-center justify-center text-white">
+          <i class="fa-solid fa-building"></i>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
+          <span class="text-teal-600 font-bold">Tahun 2019</span>
+          <h3 class="text-xl font-bold mt-1 mb-2">Gedung Baru & BLUD</h3>
+          <p class="text-gray-600 text-sm">Pindah ke gedung baru 2 lantai yang lebih representatif. Ditetapkan sebagai Puskesmas BLUD, memberikan fleksibilitas keuangan untuk peningkatan mutu. Laboratorium & farmasi diperluas.</p>
+        </div>
+      </div>
+
+      <div class="ml-12" data-aos="fade-up" data-aos-delay="400">
+        <div class="absolute w-10 h-10 bg-gradient-to-br from-teal-600 to-teal-700 rounded-full -left-5 flex items-center justify-center text-white">
+          <i class="fa-solid fa-rocket"></i>
+        </div>
+        <div class="bg-gradient-to-br from-teal-600 to-teal-700 p-6 rounded-xl shadow-lg text-white">
+          <span class="font-bold opacity-90">Tahun 2024 - Sekarang</span>
+          <h3 class="text-xl font-bold mt-1 mb-2">Akreditasi Paripurna & Digitalisasi</h3>
+          <p class="text-sm opacity-90">Meraih Akreditasi Paripurna - predikat tertinggi. Launching sistem antrian online, rekam medis elektronik, dan telemedicine. Melayani 80-120 pasien per hari dengan 35 tenaga kesehatan profesional.</p>
+        </div>
+      </div>
     </div>
 
+    <div class="grid md:grid-cols-3 gap-6 mt-16">
+      <div class="bg-white p-6 rounded-xl shadow-md text-center" data-aos="zoom-in">
+        <div class="text-4xl font-bold text-teal-600">39+</div>
+        <p class="text-gray-600 text-sm mt-1">Tahun Mengabdi</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-md text-center" data-aos="zoom-in" data-aos-delay="100">
+        <div class="text-4xl font-bold text-teal-600">35</div>
+        <p class="text-gray-600 text-sm mt-1">Tenaga Kesehatan</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-md text-center" data-aos="zoom-in" data-aos-delay="200">
+        <div class="text-4xl font-bold text-teal-600">28rb+</div>
+        <p class="text-gray-600 text-sm mt-1">Warga Terlayani</p>
+      </div>
+    </div>
   </main>
 
   <footer class="bg-gray-100 py-8 mt-12">
     <div class="container text-center text-gray-600 text-sm">
-      <p>© 2026 Puskesmas Sehat Bersama | Sejarah </p>
+      <p>© 2026 Puskesmas Sehat Bersama | Sejarah</p>
     </div>
   </footer>
 
