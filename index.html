@@ -14,12 +14,12 @@
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
     
     /* Running Text + Fade */
-    .marquee { background: #047857; color: white; padding: 8px 0; font-size: 0.9rem; overflow: hidden; }
-    .marquee p { animation: scroll 25s linear infinite, fadeIn 1s ease; white-space: nowrap; }
+    .marquee { background: #047857; color: white; padding: 8px 0; font-size: 0.9rem; overflow: hidden; position: relative; z-index: 1; }
+    .marquee p { animation: scroll 25s linear infinite, fadeIn 1s ease; white-space: nowrap; pointer-events: none; }
     @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     
-    header { background: white; box-shadow: 0 1px 3px #0001; position: sticky; top: 0; z-index: 10; animation: slideDown 0.5s ease; }
+    header { background: white; box-shadow: 0 1px 3px #0001; position: sticky; top: 0; z-index: 9999; animation: slideDown 0.5s ease; }
     @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
     
     .nav { display: flex; justify-content: space-between; align-items: center; height: 70px; }
@@ -40,7 +40,7 @@
     .hero-img img { max-width: 380px; width: 100%; animation: float 3s ease-in-out infinite; }
     @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
 
-    .features { margin: -50px 0 40px 0; position: relative; z-index: 5; }
+    .features { margin: -50px 0 40px 0; position: relative; z-index: 1; }
     .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px #0001; transition: 0.3s; }
     .features-grid:hover { box-shadow: 0 8px 25px #0002; }
     .feature { display: flex; align-items: center; gap: 12px; transition: 0.3s; padding: 10px; border-radius: 8px; }
@@ -100,9 +100,9 @@
       .hero-img { order: -1; margin-bottom: 20px; }
     }
     
-    /* FIX NAVBAR - Kecilin font + rapihin dropdown */
+    /* FIX NAVBAR - Anti Ilang + Kecil */
     .nav-links a, .dropdown-btn {
-      font-size: 0.875rem !important; /* 14px */
+      font-size: 0.875rem !important;
       font-weight: 500;
     }
     .dropdown-btn {
@@ -118,40 +118,42 @@
     }
     .dropdown {
       position: relative;
+      padding-bottom: 20px;
+      margin-bottom: -20px;
     }
     .dropdown-content { 
       display: none;
       position: absolute;
-      top: 35px;
+      top: 100%;
       left: 0;
       background: white; 
       min-width: 180px;
       box-shadow: 0 8px 16px #0002;
       border-radius: 8px; 
-      z-index: 100;
+      z-index: 10000;
       padding: 8px 0;
-      animation: fadeIn 0.2s ease;
+      margin-top: 0;
     }
     .dropdown-content a { 
       color: #475569;
       padding: 8px 16px;
       text-decoration: none;
       display: block;
-      font-size: 0.8125rem !important; /* 13px */
+      font-size: 0.8125rem !important;
       font-weight: 400;
     }
     .dropdown-content a:hover {
       background: #f1f5f9;
       color: #047857;
     }
-    .dropdown:hover .dropdown-content {
+    .dropdown:hover .dropdown-content,
+    .dropdown-content:hover {
       display: block;
     }
     .dropdown-btn:hover {
       color: #047857;
     }
     
-    /* Tombol Login Register juga kecilin */
     .nav-links a[href="login.html"], 
     .nav-links a[href="register.html"] {
       font-size: 0.875rem !important;
@@ -167,7 +169,6 @@
       box-shadow: 0 4px 12px #04785780;
     }
 
-    /* Mobile Menu */
     .mobile-btn { display: none; background: none; border: none; font-size: 1.5rem; }
     @media (max-width: 768px) {
       .nav-links { 
@@ -430,6 +431,23 @@ AOS.init({
 // Menu HP
 document.getElementById('mobile-btn').addEventListener('click', function() {
   document.getElementById('nav-menu').classList.toggle('show');
+});
+
+// Fix dropdown anti ilang
+document.querySelectorAll('.dropdown').forEach(drop => {
+  let timer;
+  const content = drop.querySelector('.dropdown-content');
+  
+  drop.addEventListener('mouseenter', () => {
+    clearTimeout(timer);
+    content.style.display = 'block';
+  });
+  
+  drop.addEventListener('mouseleave', () => {
+    timer = setTimeout(() => {
+      content.style.display = 'none';
+    }, 300);
+  });
 });
 
 // Data antrian
