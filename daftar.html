@@ -1,67 +1,146 @@
-<!DOCTYPE html><html lang="id"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ambil Nomor Antrian - Puskesmas Sehat Bersama</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>body{font-family:'Poppins',sans-serif}</style>
-</head><body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
-<div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl">
-  <h1 class="text-3xl font-black text-blue-600 text-center mb-2">Ambil Nomor Antrian</h1>
-  <p class="text-center text-gray-500 mb-6">Isi data, langsung dapat nomor</p>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+<div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-xl relative">
+  
+  <!-- Tombol Back to Home Pake Icon -->
+  <a href="index.html" class="absolute top-4 left-4 text-gray-500 hover:text-blue-600 transition">
+    <i class="fa-solid fa-house text-xl"></i>
+  </a>
 
-  <form id="formDaftar">
-    <label class="block font-semibold mb-1">Nama Lengkap</label>
-    <input id="nama" type="text" required class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-lg">
+  <div id="not-login" class="hidden text-center">
+    <i class="fa-solid fa-lock text-5xl text-red-500 mb-4"></i>
+    <h1 class="text-2xl font-bold text-gray-800 mb-2">Login Dulu Ya</h1>
+    <p class="text-gray-500 mb-6">Kamu harus login dulu sebelum ambil antrian</p>
+    <a href="login.html" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl font-bold">Login Sekarang</a>
+  </div>
 
-    <label class="block font-semibold mb-1">Pilih Poli</label>
-    <select id="poli" required class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-lg">
-      <option value="">-- Pilih Poli --</option>
-      <option>Poli Umum</option>
-      <option>Poli Gigi</option>
-      <option>KIA / KB</option>
-      <option>Laboratorium</option>
-    </select>
+  <div id="content-login">
+    <h1 class="text-3xl font-black text-blue-600 text-center mb-1">Ambil Nomor Antrian</h1>
+    <p class="text-center text-gray-500 mb-2">Halo, <span id="nama-user" class="font-bold text-green-600"></span>!</p>
+    <p class="text-center text-gray-400 text-sm mb-6">NIK: <span id="nik-user"></span></p>
 
-    <label class="block font-semibold mb-1">No. HP WhatsApp</label>
-    <input id="hp" type="tel" placeholder="0812xxxx" required class="w-full p-3 border-2 border-gray-200 rounded-xl mb-6 text-lg">
+    <form id="formDaftar">
+      <input type="hidden" id="nama">
+      <input type="hidden" id="nik">
+      
+      <label class="block font-semibold mb-1">Pilih Poli</label>
+      <select id="poli" required class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-lg focus:border-blue-500 focus:outline-none">
+        <option value="">-- Pilih Poli --</option>
+        <option>Poli Umum</option>
+        <option>Poli Gigi</option>
+        <option>KIA / KB</option>
+        <option>Laboratorium</option>
+      </select>
 
-    <button type="submit" class="w-full bg-blue-600 text-white p-4 rounded-xl font-bold text-lg">Ambil Nomor Sekarang</button>
-  </form>
+      <label class="block font-semibold mb-1">No. HP WhatsApp</label>
+      <input id="hp" type="tel" placeholder="0812xxxx" required class="w-full p-3 border-2 border-gray-200 rounded-xl mb-6 text-lg focus:border-blue-500 focus:outline-none">
 
-  <div id="hasil" class="hidden text-center">
-    <p class="text-gray-600">Nomor Antrian Anda:</p>
-    <div id="nomor" class="text-7xl font-black text-green-600 my-3">A01</div>
-    <p class="font-semibold">Estimasi dipanggil: <span id="estimasi" class="text-blue-600">10:30</span></p>
-    <div id="qrcode" class="flex justify-center my-5"></div>
-    <p class="text-sm text-gray-500">Screenshot halaman ini.<br>Cek posisi: <a id="linkCek" class="text-blue-600 underline"></a></p>
-    <a href="index.html" class="block mt-6 text-blue-600 font-semibold">← Kembali ke Beranda</a>
+      <button type="submit" id="btn-submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl font-bold text-lg transition">
+        <i class="fa-solid fa-ticket mr-2"></i>Ambil Nomor Sekarang
+      </button>
+    </form>
+
+    <div id="hasil" class="hidden text-center">
+      <i class="fa-solid fa-circle-check text-5xl text-green-500 mb-3"></i>
+      <p class="text-gray-600">Nomor Antrian Anda:</p>
+      <div id="nomor" class="text-7xl font-black text-green-600 my-3">A01</div>
+      <p class="font-semibold">Estimasi dipanggil: <span id="estimasi" class="text-blue-600">10:30</span></p>
+      <p class="text-sm text-gray-500 mt-1">Poli: <span id="poli-hasil" class="font-semibold"></span></p>
+      <div id="qrcode" class="flex justify-center my-5"></div>
+      <p class="text-sm text-gray-500">Screenshot halaman ini.<br>Cek posisi: <a id="linkCek" class="text-blue-600 underline break-all"></a></p>
+      <a href="index.html" class="inline-block mt-6 bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2 rounded-xl font-semibold transition">
+        <i class="fa-solid fa-house mr-2"></i>Kembali ke Beranda
+      </a>
+    </div>
   </div>
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbzsOdyzO13CMcrBNru_CpVxKqX1OJh81TdLeFHDoF3d7AU8f_jxibQ1rmiUHqqopb6fEQ/exec?action=";
+const API = "https://script.google.com/macros/s/AKfycbzsOdyzO13CMcrBNru_CpVxKqX1OJh81TdLeFHDoF3d7AU8f_jxibQ1rmiUHqqopb6fEQ/exec";
+
+// 1. Cek Login Dulu
+const user = JSON.parse(localStorage.getItem('user'));
+if(!user) {
+  document.getElementById('content-login').classList.add('hidden');
+  document.getElementById('not-login').classList.remove('hidden');
+} else {
+  document.getElementById('nama-user').textContent = user.nama;
+  document.getElementById('nik-user').textContent = user.nik;
+  document.getElementById('nama').value = user.nama;
+  document.getElementById('nik').value = user.nik;
+  document.getElementById('hp').value = user.hp || '';
+}
+
+// 2. Submit Form Ambil Antrian
 document.getElementById('formDaftar').onsubmit = async (e) => {
   e.preventDefault();
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Memproses...';
+  
   const nama = document.getElementById('nama').value;
+  const nik = document.getElementById('nik').value;
   const poli = document.getElementById('poli').value;
   const hp = document.getElementById('hp').value;
 
-  const res = await fetch(`${API}daftar&nama=${encodeURIComponent(nama)}&poli=${encodeURIComponent(poli)}&hp=${hp}`);
-  const data = await res.json();
+  try {
+    const res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'daftarAntrian',
+        nama: nama,
+        nik: nik,
+        poli: poli,
+        hp: hp
+      })
+    });
+    const data = await res.json();
 
-  if(data.status === 'ok') {
-    document.getElementById('formDaftar').classList.add('hidden');
-    document.getElementById('hasil').classList.remove('hidden');
-    document.getElementById('nomor').textContent = data.nomor;
-    document.getElementById('estimasi').textContent = data.estimasi;
+    if(data.status === 'ok') {
+      document.getElementById('formDaftar').classList.add('hidden');
+      document.getElementById('hasil').classList.remove('hidden');
+      document.getElementById('nomor').textContent = data.nomor;
+      document.getElementById('estimasi').textContent = data.estimasi;
+      document.getElementById('poli-hasil').textContent = poli;
 
-    const cekUrl = `${location.origin}/cek.html?no=${data.nomor}`;
-    document.getElementById('linkCek').href = cekUrl;
-    document.getElementById('linkCek').textContent = cekUrl;
-    new QRCode(document.getElementById('qrcode'), { text: cekUrl, width: 180, height: 180 });
-  } else {
-    alert('Gagal ambil nomor. Coba lagi.');
+      const cekUrl = `${location.origin}/cek.html?no=${data.nomor}`;
+      document.getElementById('linkCek').href = cekUrl;
+      document.getElementById('linkCek').textContent = cekUrl;
+      new QRCode(document.getElementById('qrcode'), { 
+        text: cekUrl, 
+        width: 180, 
+        height: 180,
+        colorDark: "#047857",
+        colorLight: "#ffffff"
+      });
+    } else {
+      alert('Gagal ambil nomor: ' + data.message);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-ticket mr-2"></i>Ambil Nomor Sekarang';
+    }
+  } catch(err) {
+    alert('Gagal terhubung ke server');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-ticket mr-2"></i>Ambil Nomor Sekarang';
   }
 }
-</script></body></html>
+
+// 3. Tombol Logout
+function logout() {
+  localStorage.removeItem('user');
+  window.location.href = 'login.html';
+}
+</script>
+</body>
+</html>
