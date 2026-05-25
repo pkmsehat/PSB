@@ -160,8 +160,7 @@ allRoleRadios.forEach(radio => {
     }
   });
 });
-
-// Form submit dummy
+/ Form submit - udah aku benerin biar bisa pindah halaman
 document.getElementById('loginForm').addEventListener('submit', function(e) {
   e.preventDefault();
   const role = document.querySelector('input[name="role"]:checked').value;
@@ -171,10 +170,9 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
       alert('Kode Admin salah! Hubungi Kepala Puskesmas.');
       return;
     }
-      // window.location.href = 'dashboard-admin.html';
+    window.location.href = 'dashboard-admin.html'; // <- udah aktif
   } else {
-    alert('Login berhasil sebagai Masyarakat! Mengalihkan ke Ambil Antrian...');
-    // window.location.href = 'antrian.html';
+    window.location.href = 'antrian.html'; // <- ini juga aktif
   }
 });
 </script>
