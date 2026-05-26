@@ -82,15 +82,31 @@
       </div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="font-bold text-lg mb-2">Info Data</h3>
-      <div id="statusLoad" class="text-sm text-gray-500 mb-2">Terakhir update: -</div>
-      <p class="text-xs text-amber-600"><i class="fa-solid fa-triangle-exclamation"></i> Reset hanya mengosongkan tampilan dashboard. Data di Google Sheet tidak terhapus.</p>
+    <!-- MENU CEPAT UDAH BALIK SAYANGG -->
+    <div class="bg-white p-6 rounded-xl shadow mb-6">
+      <h3 class="font-bold text-lg mb-4">Menu Cepat</h3>
+      <div class="flex gap-3 flex-wrap mb-3">
+        <select id="pilihPoli" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+          <option value="Umum">Poli Umum</option>
+          <option value="Gigi">Poli Gigi</option>
+          <option value="KIA">KIA / Anak</option>
+        </select>
+        <button onclick="panggilAntrian()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm">
+          <i class="fa-solid fa-bullhorn"></i> Panggil Selanjutnya
+        </button>
+        <button onclick="cetakLaporan()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
+          <i class="fa-solid fa-print"></i> Cetak Laporan
+        </button>
+      </div>
+      <div id="statusLoad" class="text-sm text-gray-500">Terakhir update: -</div>
+      <p class="text-xs text-amber-600 mt-2"><i class="fa-solid fa-triangle-exclamation"></i> Reset hanya mengosongkan tampilan dashboard. Data di Google Sheet tidak terhapus.</p>
     </div>
   </main>
 
 <script>
-const SHEET_CSV_URL = 'PASTE_LINK_CSV_DISINI'; // <- GANTI INI
+const SHEET_CSV_URL = 'PASTE_LINK_CSV_DISINI'; // <- WAJIB GANTI INI BIAR GA GAGAL LOAD
+
+let semuaData = [];
 
 async function loadData() {
   document.getElementById('statusLoad').innerText = 'Mengambil data...';
@@ -98,27 +114,31 @@ async function loadData() {
     const res = await fetch(SHEET_CSV_URL);
     const csv = await res.text();
     const rows = csv.split('\n').slice(1);
+    semuaData = [];
 
     let data = { Umum: [], Gigi: [], KIA: [] };
     let dipanggil = { Umum: '-', Gigi: '-', KIA: '-' };
 
-    rows.forEach(row => {
+    rows.forEach((row, index) => {
       if (!row.trim()) return;
       const cols = row.split(',');
       const noAntrian = cols?.trim() || '';
       const poli = cols?.trim() || '';
       const status = cols?.trim().toLowerCase() || '';
+      const nama = cols?.trim() || '';
+
+      semuaData.push({ index, noAntrian, poli, status, nama });
 
       if (poli.includes('Umum')) {
-        data.Umum.push(status);
+        data.Umum.push({status, noAntrian});
         if (status === 'dipanggil') dipanggil.Umum = noAntrian;
       }
       else if (poli.includes('Gigi')) {
-        data.Gigi.push(status);
+        data.Gigi.push({status, noAntrian});
         if (status === 'dipanggil') dipanggil.Gigi = noAntrian;
       }
       else if (poli.includes('KIA') || poli.includes('KB') || poli.includes('Anak')) {
-        data.KIA.push(status);
+        data.KIA.push({status, noAntrian});
         if (status === 'dipanggil') dipanggil.KIA = noAntrian;
       }
     });
@@ -128,9 +148,9 @@ async function loadData() {
     document.getElementById('totalKIA').innerText = data.KIA.length;
     document.getElementById('totalSemua').innerText = data.Umum.length + data.Gigi.length + data.KIA.length;
 
-    document.getElementById('menungguUmum').innerText = data.Umum.filter(s => s === 'menunggu').length;
-    document.getElementById('menungguGigi').innerText = data.Gigi.filter(s => s === 'menunggu').length;
-    document.getElementById('menungguKIA').innerText = data.KIA.filter(s => s === 'menunggu').length;
+    document.getElementById('menungguUmum').innerText = data.Umum.filter(s => s.status === 'menunggu').length;
+    document.getElementById('menungguGigi').innerText = data.Gigi.filter(s => s.status === 'menunggu').length;
+    document.getElementById('menungguKIA').innerText = data.KIA.filter(s => s.status === 'menunggu').length;
 
     document.getElementById('dipanggilUmum').innerText = dipanggil.Umum;
     document.getElementById('dipanggilGigi').innerText = dipanggil.Gigi;
@@ -140,6 +160,25 @@ async function loadData() {
   } catch (e) {
     document.getElementById('statusLoad').innerText = 'Gagal load. Pastikan Sheet sudah di-publish!';
     console.error(e);
+  }
+}
+
+function panggilAntrian() {
+  const poli = document.getElementById('pilihPoli').value;
+  let filterPoli = '';
+  if (poli === 'Umum') filterPoli = 'Umum';
+  if (poli === 'Gigi') filterPoli = 'Gigi';
+  if (poli === 'KIA') filterPoli = 'KIA|KB|Anak';
+
+  const antrianMenunggu = semuaData.filter(d => 
+    new RegExp(filterPoli).test(d.poli) && d.status === 'menunggu'
+  );
+
+  if (antrianMenunggu.length > 0) {
+    const selanjutnya = antrianMenunggu;
+    alert(`Memanggil Antrian: ${selanjutnya.noAntrian} - ${selanjutnya.nama} \n\nCatatan: Untuk update status jadi "dipanggil" harus edit manual di Google Sheet ya sayang.`);
+  } else {
+    alert(`Antrian ${poli} sudah habis atau tidak ada yang menunggu!`);
   }
 }
 
@@ -158,6 +197,10 @@ function resetTampilan() {
     document.getElementById('dipanggilKIA').innerText = '-';
     document.getElementById('statusLoad').innerText = 'Tampilan direset. Klik Refresh untuk load data lagi.';
   }
+}
+
+function cetakLaporan() {
+  window.print();
 }
 
 loadData();
