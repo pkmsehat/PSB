@@ -168,14 +168,54 @@ if(!user || user.role.toLowerCase()!== 'masyarakat') {
 
 function hitungUsia(tglLahir) {
   if(!tglLahir) return '-';
-  const lahir = new Date(tglLahir);
-  const hariIni = new Date();
-  let usia = hariIni.getFullYear() - lahir.getFullYear();
-  const selisihBulan = hariIni.getMonth() - lahir.getMonth();
-  if (selisihBulan < 0 || (selisihBulan === 0 && hariIni.getDate() < lahir.getDate())) usia--;
-  return usia + ' Tahun';
-}
 
+  // Convert DD-MM-YYYY ke YYYY-MM-DD biar aman
+  let tgl = tglLahir;
+  if(tglLahir.includes('-')) {
+    const parts = tglLahir.split('-');
+    if(parts[0].length == 2) { // Format DD-MM-YYYY
+      tgl = `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+  }
+
+  const lahir = new Date(tgl);
+  if(isNaN(lahir)) return '0 Hari';
+
+  const hariIni = new Date();
+
+  // Kalo tanggal lahir di masa depan
+  if(lahir > hariIni) return '0 Hari';
+
+  let tahun = hariIni.getFullYear() - lahir.getFullYear();
+  let bulan = hariIni.getMonth() - lahir.getMonth();
+  let hari = hariIni.getDate() - lahir.getDate();
+
+  // Koreksi kalo hari minus
+  if (hari < 0) {
+    bulan--;
+    // Ambil jumlah hari di bulan sebelumnya
+    const bulanLalu = new Date(hariIni.getFullYear(), hariIni.getMonth(), 0);
+    hari += bulanLalu.getDate();
+  }
+
+  // Koreksi kalo bulan minus
+  if (bulan < 0) {
+    tahun--;
+    bulan += 12;
+  }
+
+  // Format output
+  let hasil = [];
+
+  if(tahun > 0) hasil.push(`${tahun} Tahun`);
+  if(bulan > 0) hasil.push(`${bulan} Bulan`);
+  if(hari > 0) hasil.push(`${hari} Hari`);
+
+  // Kalo baru lahir hari ini
+  if(hasil.length === 0) return '0 Hari';
+
+  return hasil.join(' ');
+}
 function formatTanggal(tgl) {
   if(!tgl) return '-';
   const date = new Date(tgl);
