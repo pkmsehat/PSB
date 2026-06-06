@@ -104,81 +104,93 @@
   </main>
 
 <script>
-const SHEET_CSV_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec'; // <- WAJIB GANTI INI BIAR GA GAGAL LOAD
-
-let semuaData = [];
+const API_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec'; // URL Web App kamu
+const ADMIN_NAMA = 'Admin Loket'; // Ganti nama admin
 
 async function loadData() {
   document.getElementById('statusLoad').innerText = 'Mengambil data...';
   try {
-    const res = await fetch(SHEET_CSV_URL);
-    const csv = await res.text();
-    const rows = csv.split('\n').slice(1);
-    semuaData = [];
+    // Pake API getAdminData, bukan CSV
+    const res = await fetch(`${API_URL}?action=getAdminData`);
+    const result = await res.json();
+    
+    if(result.status !== 'ok') throw new Error('API error');
 
+    const semua = result.antrian.concat(result.dipanggil ? [result.dipanggil] : []);
+    
+    // Pisahin per poli
     let data = { Umum: [], Gigi: [], KIA: [] };
     let dipanggil = { Umum: '-', Gigi: '-', KIA: '-' };
 
-    rows.forEach((row, index) => {
-      if (!row.trim()) return;
-      const cols = row.split(',');
-      const noAntrian = cols?.trim() || '';
-      const poli = cols?.trim() || '';
-      const status = cols?.trim().toLowerCase() || '';
-      const nama = cols?.trim() || '';
-
-      semuaData.push({ index, noAntrian, poli, status, nama });
-
+    semua.forEach(d => {
+      const poli = d.Poli || '';
+      const status = (d.Status || '').toLowerCase();
+      const no = d.No_Antrian || '';
+      
       if (poli.includes('Umum')) {
-        data.Umum.push({status, noAntrian});
-        if (status === 'dipanggil') dipanggil.Umum = noAntrian;
+        data.Umum.push({status, no});
+        if (status === 'dipanggil') dipanggil.Umum = no;
       }
       else if (poli.includes('Gigi')) {
-        data.Gigi.push({status, noAntrian});
-        if (status === 'dipanggil') dipanggil.Gigi = noAntrian;
+        data.Gigi.push({status, no});
+        if (status === 'dipanggil') dipanggil.Gigi = no;
       }
       else if (poli.includes('KIA') || poli.includes('KB') || poli.includes('Anak')) {
-        data.KIA.push({status, noAntrian});
-        if (status === 'dipanggil') dipanggil.KIA = noAntrian;
+        data.KIA.push({status, no});
+        if (status === 'dipanggil') dipanggil.KIA = no;
       }
     });
 
+    // Update card total
     document.getElementById('totalUmum').innerText = data.Umum.length;
     document.getElementById('totalGigi').innerText = data.Gigi.length;
     document.getElementById('totalKIA').innerText = data.KIA.length;
-    document.getElementById('totalSemua').innerText = data.Umum.length + data.Gigi.length + data.KIA.length;
+    document.getElementById('totalSemua').innerText = result.totalHariIni;
 
+    // Update menunggu
     document.getElementById('menungguUmum').innerText = data.Umum.filter(s => s.status === 'menunggu').length;
     document.getElementById('menungguGigi').innerText = data.Gigi.filter(s => s.status === 'menunggu').length;
     document.getElementById('menungguKIA').innerText = data.KIA.filter(s => s.status === 'menunggu').length;
 
+    // Update dipanggil
     document.getElementById('dipanggilUmum').innerText = dipanggil.Umum;
     document.getElementById('dipanggilGigi').innerText = dipanggil.Gigi;
     document.getElementById('dipanggilKIA').innerText = dipanggil.KIA;
 
     document.getElementById('statusLoad').innerText = 'Terakhir update: ' + new Date().toLocaleTimeString('id-ID');
   } catch (e) {
-    document.getElementById('statusLoad').innerText = 'Gagal load. Pastikan Sheet sudah di-publish!';
+    document.getElementById('statusLoad').innerText = 'Gagal load. Cek URL Web App!';
     console.error(e);
   }
 }
 
-function panggilAntrian() {
+// Tombol Panggil - sekarang beneran update Sheet
+async function panggilAntrian() {
   const poli = document.getElementById('pilihPoli').value;
-  let filterPoli = '';
-  if (poli === 'Umum') filterPoli = 'Umum';
-  if (poli === 'Gigi') filterPoli = 'Gigi';
-  if (poli === 'KIA') filterPoli = 'KIA|KB|Anak';
-
-  const antrianMenunggu = semuaData.filter(d => 
-    new RegExp(filterPoli).test(d.poli) && d.status === 'menunggu'
-  );
-
-  if (antrianMenunggu.length > 0) {
-    const selanjutnya = antrianMenunggu;
-    alert(Memanggil Antrian: ${selanjutnya.noAntrian} - ${selanjutnya.nama} \n\nCatatan: Untuk update status jadi "dipanggil" harus edit manual di Google Sheet ya sayang.);
-  } else {
-    alert(Antrian ${poli} sudah habis atau tidak ada yang menunggu!);
+  const btn = event.target;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memanggil...';
+  
+  try {
+    const form = new FormData();
+    form.append('action', 'panggilBerikutnya');
+    form.append('loket', poli === 'Umum' ? '1' : poli === 'Gigi' ? '2' : '3');
+    form.append('petugas', ADMIN_NAMA);
+    
+    const res = await fetch(API_URL, { method: 'POST', body: form });
+    const result = await res.json();
+    
+    if(result.status === 'ok') {
+      alert(`Berhasil panggil antrian ${poli}!`);
+      loadData(); // Refresh langsung
+    } else {
+      alert(result.message || 'Antrian habis!');
+    }
+  } catch(e) {
+    alert('Gagal panggil antrian');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-bullhorn"></i> Panggil Selanjutnya';
   }
 }
 
@@ -203,8 +215,9 @@ function cetakLaporan() {
   window.print();
 }
 
+// Load pertama kali + auto refresh tiap 5 detik biar realtime
 loadData();
-setInterval(loadData, 20000);
+setInterval(loadData, 5000); // 5 detik = realtime
 </script>
 </body>
 </html>
