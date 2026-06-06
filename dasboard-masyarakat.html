@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Masyarakat - Puskesmas Sehat Bersama</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0fdf4; }
+    .tab-active { background: #0d9488; color: white; }
+  </style>
+</head>
+<body>
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-2 font-bold text-teal-700">
+        <img src="logo.png" alt="Logo" class="w-10 h-10">
+        PUSKESMAS SEHAT BERSAMA
+      </a>
+      <div class="flex items-center gap-4">
+        <span id="namaUser" class="text-sm text-gray-600"></span>
+        <button onclick="logout()" class="bg-red-100 text-red-700 px-3 py-1 rounded-lg text-sm font-medium">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-4 md:p-6">
+    <!-- Tab Menu -->
+    <div class="flex gap-2 mb-6 bg-white p-2 rounded-xl shadow">
+      <button onclick="showTab('profil')" id="tab-profil" class="flex-1 py-2 rounded-lg font-medium tab-active">
+        <i class="fa-solid fa-user"></i> Data Diri
+      </button>
+      <button onclick="showTab('rekam')" id="tab-rekam" class="flex-1 py-2 rounded-lg font-medium text-gray-600">
+        <i class="fa-solid fa-notes-medical"></i> Rekam Medis
+      </button>
+      <button onclick="showTab('antrian')" id="tab-antrian" class="flex-1 py-2 rounded-lg font-medium text-gray-600">
+        <i class="fa-solid fa-ticket"></i> Antrian Online
+      </button>
+    </div>
+
+    <!-- Tab 1: Data Diri -->
+    <div id="content-profil" class="bg-white p-6 rounded-xl shadow">
+      <h2 class="text-xl font-bold text-teal-700 mb-4">Data Diri Pasien</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm text-gray-500">Nama Lengkap</label>
+          <p id="p-nama" class="font-medium text-gray-800"></p>
+        </div>
+        <div>
+          <label class="text-sm text-gray-500">NIK</label>
+          <p id="p-nik" class="font-medium text-gray-800"></p>
+        </div>
+        <div>
+          <label class="text-sm text-gray-500">No. HP</label>
+          <p id="p-hp" class="font-medium text-gray-800"></p>
+        </div>
+        <div>
+          <label class="text-sm text-gray-500">Tanggal Lahir</label>
+          <p id="p-lahir" class="font-medium text-gray-800"></p>
+        </div>
+        <div>
+          <label class="text-sm text-gray-500">Usia</label>
+          <p id="p-usia" class="font-medium text-gray-800"></p>
+        </div>
+        <div class="md:col-span-2">
+          <label class="text-sm text-gray-500">Alamat</label>
+          <p id="p-alamat" class="font-medium text-gray-800"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Rekam Medis -->
+    <div id="content-rekam" class="bg-white p-6 rounded-xl shadow hidden">
+      <h2 class="text-xl font-bold text-teal-700 mb-4">Riwayat Rekam Medis</h2>
+      <div id="listRekam" class="space-y-3">
+        <div class="text-center py-8 text-gray-500">
+          <i class="fa-solid fa-folder-open text-4xl mb-2"></i>
+          <p>Belum ada riwayat kunjungan</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Antrian Online -->
+    <div id="content-antrian" class="bg-white p-6 rounded-xl shadow hidden">
+      <h2 class="text-xl font-bold text-teal-700 mb-4">Ambil Antrian Online</h2>
+      <form id="antrianForm" class="max-w-md space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Poli *</label>
+          <select id="poli" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
+            <option value="">-- Pilih Poli --</option>
+            <option value="Poli Umum">Poli Umum</option>
+            <option value="Poli Gigi">Poli Gigi</option>
+            <option value="KIA/KB">KIA/KB</option>
+            <option value="Laboratorium">Laboratorium</option>
+          </select>
+        </div>
+        <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-lg transition">
+          <i class="fa-solid fa-hand-pointer"></i> Ambil Antrian Sekarang
+        </button>
+        <div id="hasilAntrian" class="hidden text-center p-4 bg-teal-50 rounded-lg border border-teal-200">
+          <p class="text-sm text-gray-600">Nomor Antrian Kamu:</p>
+          <p id="nomorAntrian" class="text-4xl font-bold text-teal-700 my-2"></p>
+          <p class="text-sm text-gray-600">Estimasi dipanggil: <span id="estimasi" class="font-bold"></span></p>
+          <a href="cek.html" class="inline-block mt-3 text-sm bg-white border border-teal-600 text-teal-600 px-4 py-2 rounded-lg hover:bg-teal-50">
+            Cek Status Antrian
+          </a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
+const user = JSON.parse(localStorage.getItem('userPuskesmas'));
+
+// Cek login + role
+if(!user || user.role.toLowerCase() !== 'masyarakat') {
+  alert('Silakan login dulu sebagai Masyarakat');
+  window.location.href = 'login.html';
+}
+
+// Fungsi hitung usia dari tgl lahir format YYYY-MM-DD
+function hitungUsia(tglLahir) {
+  if(!tglLahir) return '-';
+  const lahir = new Date(tglLahir);
+  const hariIni = new Date();
+  let usia = hariIni.getFullYear() - lahir.getFullYear();
+  const selisihBulan = hariIni.getMonth() - lahir.getMonth();
+  
+  if (selisihBulan < 0 || (selisihBulan === 0 && hariIni.getDate() < lahir.getDate())) {
+    usia--;
+  }
+  return usia + ' Tahun';
+}
+
+// Format tanggal jadi DD-MM-YYYY biar enak dibaca
+function formatTanggal(tgl) {
+  if(!tgl) return '-';
+  const date = new Date(tgl);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+}
+
+// Isi data diri
+document.getElementById('namaUser').textContent = 'Halo, ' + user.nama;
+document.getElementById('p-nama').textContent = user.nama || '-';
+document.getElementById('p-nik').textContent = user.nik || '-';
+document.getElementById('p-hp').textContent = user.hp || '-';
+document.getElementById('p-lahir').textContent = formatTanggal(user.tgl_lahir);
+document.getElementById('p-usia').textContent = hitungUsia(user.tgl_lahir);
+document.getElementById('p-alamat').textContent = user.alamat || '-';
+
+// Fungsi ganti tab
+function showTab(tab) {
+  ['profil', 'rekam', 'antrian'].forEach(t => {
+    document.getElementById('content-' + t).classList.add('hidden');
+    document.getElementById('tab-' + t).classList.remove('tab-active');
+    document.getElementById('tab-' + t).classList.add('text-gray-600');
+  });
+  document.getElementById('content-' + tab).classList.remove('hidden');
+  document.getElementById('tab-' + tab).classList.add('tab-active');
+  document.getElementById('tab-' + tab).classList.remove('text-gray-600');
+}
+
+function logout() {
+  localStorage.removeItem('userPuskesmas');
+  window.location.href = 'index.html';
+}
+
+// Ambil antrian
+document.getElementById('antrianForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengambil...';
+
+  const data = {
+    action: 'daftarAntrian',
+    nama: user.nama, 
+    nik: user.nik, 
+    hp: user.hp,
+    poli: document.getElementById('poli').value
+  };
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
+    const hasil = await res.json();
+    if(hasil.status == 'ok') {
+      document.getElementById('hasilAntrian').classList.remove('hidden');
+      document.getElementById('nomorAntrian').textContent = hasil.nomor;
+      document.getElementById('estimasi').textContent = hasil.estimasi;
+      btn.style.display = 'none';
+    } else {
+      alert('Gagal ambil antrian: ' + hasil.message);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-hand-pointer"></i> Ambil Antrian Sekarang';
+    }
+  } catch (err) {
+    alert('Error koneksi ke server');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-hand-pointer"></i> Ambil Antrian Sekarang';
+  }
+});
+
+// TODO: Load rekam medis dari Sheet pake NIK user.nik
+// async function loadRekamMedis() { ... }
+</script>
+</body>
+</html>
