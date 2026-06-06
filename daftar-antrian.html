@@ -88,7 +88,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYc
 
 // Cek udah login belum
 const user = JSON.parse(localStorage.getItem('userPuskesmas'));
-if(!user || user.role!== 'masyarakat') {
+if(!user || user.role.toLowerCase() !== 'masyarakat') {  // <- PAKE toLowerCase()
   alert('Silakan login dulu sebagai Masyarakat');
   window.location.href = 'login.html';
 }
