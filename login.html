@@ -144,13 +144,10 @@ document.getElementById('mobile-btn').addEventListener('click', function() {
   document.getElementById('nav-menu').classList.toggle('show');
 });
 
-// Show/hide Kode Admin field
 const roleAdmin = document.getElementById('roleAdmin');
 const kodeAdminField = document.getElementById('kodeAdminField');
 const kodeAdminInput = document.getElementById('kodeAdmin');
-const allRoleRadios = document.querySelectorAll('input[name="role"]');
-
-allRoleRadios.forEach(radio => {
+document.querySelectorAll('input[name="role"]').forEach(radio => {
   radio.addEventListener('change', function() {
     if (roleAdmin.checked) {
       kodeAdminField.classList.remove('hidden');
@@ -161,6 +158,48 @@ allRoleRadios.forEach(radio => {
       kodeAdminInput.value = '';
     }
   });
+});
+
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Login...';
+
+  const role = document.querySelector('input[name="role"]:checked').value;
+  const nik = document.getElementById('nik').value;
+  const password = document.getElementById('password').value;
+  const kodeAdmin = document.getElementById('kodeAdmin').value;
+
+  if (role === 'admin' && kodeAdmin!== 'PKM2026') {
+    alert('Kode Admin salah!');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login Sekarang';
+    return;
+  }
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'login', role, nik, password, kodeAdmin })
+    });
+    const hasil = await res.json();
+
+    if(hasil.status == 'ok') {
+      sessionStorage.setItem('userPuskesmas', JSON.stringify(hasil.user));
+      window.location.href = hasil.user.role.toLowerCase() == 'admin'? 'dashboard-admin.html' : 'dashboard-masyarakat.html';
+    } else {
+      alert('Login gagal: ' + hasil.message);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login Sekarang';
+    }
+  } catch (err) {
+    alert('Error koneksi: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login Sekarang';
+  }
+});
 });
 
 // Form submit - UDAH PAKE FORMDATA BIAR GA CORS
