@@ -8,7 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0fdf4; }
-    .tab-active { background: #0d9488; color: white; }
+   .tab-active { background: #0d9488; color: white; }
+    input:disabled { background: #f3f4f6; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -43,33 +44,78 @@
 
     <!-- Tab 1: Data Diri -->
     <div id="content-profil" class="bg-white p-6 rounded-xl shadow">
-      <h2 class="text-xl font-bold text-teal-700 mb-4">Data Diri Pasien</h2>
-      <div class="grid md:grid-cols-2 gap-4">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-teal-700">Data Diri Pasien</h2>
+        <button id="btnEdit" onclick="toggleEdit()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+          <i class="fa-solid fa-pen-to-square"></i> Edit Data
+        </button>
+        <button id="btnBatal" onclick="toggleEdit()" class="hidden bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
+          <i class="fa-solid fa-xmark"></i> Batal
+        </button>
+      </div>
+
+      <!-- Mode Lihat Data -->
+      <div id="viewMode" class="grid md:grid-cols-2 gap-4">
+        <div><label class="text-sm text-gray-500">Nama Lengkap</label><p id="v-nama" class="font-medium text-gray-800"></p></div>
+        <div><label class="text-sm text-gray-500">NIK</label><p id="v-nik" class="font-medium text-gray-800"></p></div>
+        <div><label class="text-sm text-gray-500">Tempat, Tanggal Lahir</label><p id="v-ttl" class="font-medium text-gray-800"></p></div>
+        <div><label class="text-sm text-gray-500">Usia</label><p id="v-usia" class="font-medium text-gray-800"></p></div>
+        <div><label class="text-sm text-gray-500">Nama Ayah</label><p id="v-ayah" class="font-medium text-gray-800"></p></div>
+        <div><label class="text-sm text-gray-500">Nama Ibu</label><p id="v-ibu" class="font-medium text-gray-800"></p></div>
+        <div><label class="text-sm text-gray-500">No. Handphone</label><p id="v-hp" class="font-medium text-gray-800"></p></div>
+        <div class="md:col-span-2"><label class="text-sm text-gray-500">Alamat</label><p id="v-alamat" class="font-medium text-gray-800"></p></div>
+      </div>
+
+      <!-- Mode Edit Data -->
+      <form id="editForm" class="hidden grid md:grid-cols-2 gap-4">
         <div>
-          <label class="text-sm text-gray-500">Nama Lengkap</label>
-          <p id="p-nama" class="font-medium text-gray-800"></p>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Panggilan *</label>
+          <select id="e-sapaan" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
+            <option value="Tn.">Tn.</option>
+            <option value="Ny.">Ny.</option>
+            <option value="Nn.">Nn.</option>
+            <option value="An.">An.</option>
+          </select>
         </div>
         <div>
-          <label class="text-sm text-gray-500">NIK</label>
-          <p id="p-nik" class="font-medium text-gray-800"></p>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap *</label>
+          <input type="text" id="e-nama" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
         </div>
         <div>
-          <label class="text-sm text-gray-500">No. HP</label>
-          <p id="p-hp" class="font-medium text-gray-800"></p>
+          <label class="block text-sm font-medium text-gray-700 mb-1">NIK *</label>
+          <input type="text" id="e-nik" maxlength="16" required disabled class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+          <p class="text-xs text-gray-500 mt-1">NIK tidak bisa diubah</p>
         </div>
         <div>
-          <label class="text-sm text-gray-500">Tanggal Lahir</label>
-          <p id="p-lahir" class="font-medium text-gray-800"></p>
+          <label class="block text-sm font-medium text-gray-700 mb-1">No. Handphone *</label>
+          <input type="tel" id="e-hp" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
         </div>
         <div>
-          <label class="text-sm text-gray-500">Usia</label>
-          <p id="p-usia" class="font-medium text-gray-800"></p>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir *</label>
+          <input type="text" id="e-tempat" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir *</label>
+          <input type="date" id="e-lahir" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nama Ayah</label>
+          <input type="text" id="e-ayah" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nama Ibu</label>
+          <input type="text" id="e-ibu" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500">
         </div>
         <div class="md:col-span-2">
-          <label class="text-sm text-gray-500">Alamat</label>
-          <p id="p-alamat" class="font-medium text-gray-800"></p>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Alamat Lengkap *</label>
+          <textarea id="e-alamat" rows="2" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500"></textarea>
         </div>
-      </div>
+        <div class="md:col-span-2">
+          <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-lg transition">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
+          </button>
+        </div>
+      </form>
     </div>
 
     <!-- Tab 2: Rekam Medis -->
@@ -104,9 +150,6 @@
           <p class="text-sm text-gray-600">Nomor Antrian Kamu:</p>
           <p id="nomorAntrian" class="text-4xl font-bold text-teal-700 my-2"></p>
           <p class="text-sm text-gray-600">Estimasi dipanggil: <span id="estimasi" class="font-bold"></span></p>
-          <a href="cek.html" class="inline-block mt-3 text-sm bg-white border border-teal-600 text-teal-600 px-4 py-2 rounded-lg hover:bg-teal-50">
-            Cek Status Antrian
-          </a>
         </div>
       </form>
     </div>
@@ -114,48 +157,64 @@
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
-const user = JSON.parse(localStorage.getItem('userPuskesmas'));
+let user = JSON.parse(localStorage.getItem('userPuskesmas'));
+let editMode = false;
 
-// Cek login + role
-if(!user || user.role.toLowerCase() !== 'masyarakat') {
+// Cek login
+if(!user || user.role.toLowerCase()!== 'masyarakat') {
   alert('Silakan login dulu sebagai Masyarakat');
   window.location.href = 'login.html';
 }
 
-// Fungsi hitung usia dari tgl lahir format YYYY-MM-DD
 function hitungUsia(tglLahir) {
   if(!tglLahir) return '-';
   const lahir = new Date(tglLahir);
   const hariIni = new Date();
   let usia = hariIni.getFullYear() - lahir.getFullYear();
   const selisihBulan = hariIni.getMonth() - lahir.getMonth();
-  
-  if (selisihBulan < 0 || (selisihBulan === 0 && hariIni.getDate() < lahir.getDate())) {
-    usia--;
-  }
+  if (selisihBulan < 0 || (selisihBulan === 0 && hariIni.getDate() < lahir.getDate())) usia--;
   return usia + ' Tahun';
 }
 
-// Format tanggal jadi DD-MM-YYYY biar enak dibaca
 function formatTanggal(tgl) {
   if(!tgl) return '-';
   const date = new Date(tgl);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
+  return `${String(date.getDate()).padStart(2,'0')}-${String(date.getMonth()+1).padStart(2,'0')}-${date.getFullYear()}`;
 }
 
-// Isi data diri
-document.getElementById('namaUser').textContent = 'Halo, ' + user.nama;
-document.getElementById('p-nama').textContent = user.nama || '-';
-document.getElementById('p-nik').textContent = user.nik || '-';
-document.getElementById('p-hp').textContent = user.hp || '-';
-document.getElementById('p-lahir').textContent = formatTanggal(user.tgl_lahir);
-document.getElementById('p-usia').textContent = hitungUsia(user.tgl_lahir);
-document.getElementById('p-alamat').textContent = user.alamat || '-';
+function loadDataUser() {
+  document.getElementById('namaUser').textContent = 'Halo, ' + (user.sapaan || '') + ' ' + user.nama;
+  
+  // Mode Lihat
+  document.getElementById('v-nama').textContent = `${user.sapaan || ''} ${user.nama}`.trim() || '-';
+  document.getElementById('v-nik').textContent = user.nik || '-';
+  document.getElementById('v-ttl').textContent = user.tempat_lahir && user.tgl_lahir? `${user.tempat_lahir}, ${formatTanggal(user.tgl_lahir)}` : '-';
+  document.getElementById('v-usia').textContent = hitungUsia(user.tgl_lahir);
+  document.getElementById('v-ayah').textContent = user.nama_ayah || '-';
+  document.getElementById('v-ibu').textContent = user.nama_ibu || '-';
+  document.getElementById('v-hp').textContent = user.hp || '-';
+  document.getElementById('v-alamat').textContent = user.alamat || '-';
 
-// Fungsi ganti tab
+  // Mode Edit
+  document.getElementById('e-sapaan').value = user.sapaan || 'An.';
+  document.getElementById('e-nama').value = user.nama || '';
+  document.getElementById('e-nik').value = user.nik || '';
+  document.getElementById('e-hp').value = user.hp || '';
+  document.getElementById('e-tempat').value = user.tempat_lahir || '';
+  document.getElementById('e-lahir').value = user.tgl_lahir || '';
+  document.getElementById('e-ayah').value = user.nama_ayah || '';
+  document.getElementById('e-ibu').value = user.nama_ibu || '';
+  document.getElementById('e-alamat').value = user.alamat || '';
+}
+
+function toggleEdit() {
+  editMode =!editMode;
+  document.getElementById('viewMode').classList.toggle('hidden', editMode);
+  document.getElementById('editForm').classList.toggle('hidden',!editMode);
+  document.getElementById('btnEdit').classList.toggle('hidden', editMode);
+  document.getElementById('btnBatal').classList.toggle('hidden',!editMode);
+}
+
 function showTab(tab) {
   ['profil', 'rekam', 'antrian'].forEach(t => {
     document.getElementById('content-' + t).classList.add('hidden');
@@ -172,6 +231,46 @@ function logout() {
   window.location.href = 'index.html';
 }
 
+// Simpan edit data
+document.getElementById('editForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+
+  const dataUpdate = {
+    action: 'updateProfil',
+    nik: user.nik,
+    sapaan: document.getElementById('e-sapaan').value,
+    nama: document.getElementById('e-nama').value,
+    hp: document.getElementById('e-hp').value,
+    tempat_lahir: document.getElementById('e-tempat').value,
+    tgl_lahir: document.getElementById('e-lahir').value,
+    nama_ayah: document.getElementById('e-ayah').value,
+    nama_ibu: document.getElementById('e-ibu').value,
+    alamat: document.getElementById('e-alamat').value
+  };
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(dataUpdate) });
+    const hasil = await res.json();
+    if(hasil.status == 'ok') {
+      alert('Data berhasil diupdate!');
+      // Update localStorage
+      user = {...user,...dataUpdate};
+      localStorage.setItem('userPuskesmas', JSON.stringify(user));
+      loadDataUser();
+      toggleEdit();
+    } else {
+      alert('Gagal update: ' + hasil.message);
+    }
+  } catch (err) {
+    alert('Error koneksi ke server');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan';
+});
+
 // Ambil antrian
 document.getElementById('antrianForm').addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -181,7 +280,7 @@ document.getElementById('antrianForm').addEventListener('submit', async function
 
   const data = {
     action: 'daftarAntrian',
-    nama: user.nama, 
+    nama: `${user.sapaan} ${user.nama}`, 
     nik: user.nik, 
     hp: user.hp,
     poli: document.getElementById('poli').value
@@ -207,8 +306,7 @@ document.getElementById('antrianForm').addEventListener('submit', async function
   }
 });
 
-// TODO: Load rekam medis dari Sheet pake NIK user.nik
-// async function loadRekamMedis() { ... }
+loadDataUser();
 </script>
 </body>
 </html>
