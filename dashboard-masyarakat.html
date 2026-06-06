@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Puskesmas Sehat Bersama</title>
+  <title>Dashboard Masyarakat - Puskesmas Sehat Bersama</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
@@ -45,11 +45,30 @@
     <div id="content-profil" class="bg-white p-6 rounded-xl shadow">
       <h2 class="text-xl font-bold text-teal-700 mb-4">Data Diri Pasien</h2>
       <div class="grid md:grid-cols-2 gap-4">
-        <div><label class="text-sm text-gray-500">Nama Lengkap</label><p id="p-nama" class="font-medium"></p></div>
-        <div><label class="text-sm text-gray-500">NIK</label><p id="p-nik" class="font-medium"></p></div>
-        <div><label class="text-sm text-gray-500">No. HP</label><p id="p-hp" class="font-medium"></p></div>
-        <div><label class="text-sm text-gray-500">Tanggal Lahir</label><p id="p-lahir" class="font-medium"></p></div>
-        <div class="md:col-span-2"><label class="text-sm text-gray-500">Alamat</label><p id="p-alamat" class="font-medium"></p></div>
+        <div>
+          <label class="text-sm text-gray-500">Nama Lengkap</label>
+          <p id="p-nama" class="font-medium text-gray-800"></p>
+        </div>
+        <div>
+          <label class="text-sm text-gray-500">NIK</label>
+          <p id="p-nik" class="font-medium text-gray-800"></p>
+        </div>
+        <div>
+          <label class="text-sm text-gray-500">No. HP</label>
+          <p id="p-hp" class="font-medium text-gray-800"></p>
+        </div>
+        <div>
+          <label class="text-sm text-gray-500">Tanggal Lahir</label>
+          <p id="p-lahir" class="font-medium text-gray-800"></p>
+        </div>
+        <div>
+          <label class="text-sm text-gray-500">Usia</label>
+          <p id="p-usia" class="font-medium text-gray-800"></p>
+        </div>
+        <div class="md:col-span-2">
+          <label class="text-sm text-gray-500">Alamat</label>
+          <p id="p-alamat" class="font-medium text-gray-800"></p>
+        </div>
       </div>
     </div>
 
@@ -57,7 +76,10 @@
     <div id="content-rekam" class="bg-white p-6 rounded-xl shadow hidden">
       <h2 class="text-xl font-bold text-teal-700 mb-4">Riwayat Rekam Medis</h2>
       <div id="listRekam" class="space-y-3">
-        <p class="text-gray-500 text-center py-8">Belum ada riwayat kunjungan</p>
+        <div class="text-center py-8 text-gray-500">
+          <i class="fa-solid fa-folder-open text-4xl mb-2"></i>
+          <p>Belum ada riwayat kunjungan</p>
+        </div>
       </div>
     </div>
 
@@ -75,14 +97,16 @@
             <option value="Laboratorium">Laboratorium</option>
           </select>
         </div>
-        <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-lg">
+        <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-lg transition">
           <i class="fa-solid fa-hand-pointer"></i> Ambil Antrian Sekarang
         </button>
-        <div id="hasilAntrian" class="hidden text-center p-4 bg-teal-50 rounded-lg">
+        <div id="hasilAntrian" class="hidden text-center p-4 bg-teal-50 rounded-lg border border-teal-200">
           <p class="text-sm text-gray-600">Nomor Antrian Kamu:</p>
           <p id="nomorAntrian" class="text-4xl font-bold text-teal-700 my-2"></p>
-          <p class="text-sm text-gray-600">Estimasi: <span id="estimasi" class="font-bold"></span></p>
-          <a href="cek.html" class="inline-block mt-3 text-sm bg-white border border-teal-600 text-teal-600 px-4 py-2 rounded-lg">Cek Status</a>
+          <p class="text-sm text-gray-600">Estimasi dipanggil: <span id="estimasi" class="font-bold"></span></p>
+          <a href="cek.html" class="inline-block mt-3 text-sm bg-white border border-teal-600 text-teal-600 px-4 py-2 rounded-lg hover:bg-teal-50">
+            Cek Status Antrian
+          </a>
         </div>
       </form>
     </div>
@@ -92,19 +116,46 @@
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
 const user = JSON.parse(localStorage.getItem('userPuskesmas'));
 
+// Cek login + role
 if(!user || user.role.toLowerCase() !== 'masyarakat') {
   alert('Silakan login dulu sebagai Masyarakat');
   window.location.href = 'login.html';
 }
 
+// Fungsi hitung usia dari tgl lahir format YYYY-MM-DD
+function hitungUsia(tglLahir) {
+  if(!tglLahir) return '-';
+  const lahir = new Date(tglLahir);
+  const hariIni = new Date();
+  let usia = hariIni.getFullYear() - lahir.getFullYear();
+  const selisihBulan = hariIni.getMonth() - lahir.getMonth();
+  
+  if (selisihBulan < 0 || (selisihBulan === 0 && hariIni.getDate() < lahir.getDate())) {
+    usia--;
+  }
+  return usia + ' Tahun';
+}
+
+// Format tanggal jadi DD-MM-YYYY biar enak dibaca
+function formatTanggal(tgl) {
+  if(!tgl) return '-';
+  const date = new Date(tgl);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+}
+
 // Isi data diri
 document.getElementById('namaUser').textContent = 'Halo, ' + user.nama;
-document.getElementById('p-nama').textContent = user.nama;
-document.getElementById('p-nik').textContent = user.nik;
-document.getElementById('p-hp').textContent = user.hp;
-document.getElementById('p-lahir').textContent = user.tgl_lahir;
-document.getElementById('p-alamat').textContent = user.alamat;
+document.getElementById('p-nama').textContent = user.nama || '-';
+document.getElementById('p-nik').textContent = user.nik || '-';
+document.getElementById('p-hp').textContent = user.hp || '-';
+document.getElementById('p-lahir').textContent = formatTanggal(user.tgl_lahir);
+document.getElementById('p-usia').textContent = hitungUsia(user.tgl_lahir);
+document.getElementById('p-alamat').textContent = user.alamat || '-';
 
+// Fungsi ganti tab
 function showTab(tab) {
   ['profil', 'rekam', 'antrian'].forEach(t => {
     document.getElementById('content-' + t).classList.add('hidden');
@@ -130,7 +181,9 @@ document.getElementById('antrianForm').addEventListener('submit', async function
 
   const data = {
     action: 'daftarAntrian',
-    nama: user.nama, nik: user.nik, hp: user.hp,
+    nama: user.nama, 
+    nik: user.nik, 
+    hp: user.hp,
     poli: document.getElementById('poli').value
   };
 
@@ -143,18 +196,19 @@ document.getElementById('antrianForm').addEventListener('submit', async function
       document.getElementById('estimasi').textContent = hasil.estimasi;
       btn.style.display = 'none';
     } else {
-      alert('Gagal: ' + hasil.message);
+      alert('Gagal ambil antrian: ' + hasil.message);
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-hand-pointer"></i> Ambil Antrian Sekarang';
     }
   } catch (err) {
-    alert('Error koneksi');
+    alert('Error koneksi ke server');
     btn.disabled = false;
     btn.innerHTML = '<i class="fa-solid fa-hand-pointer"></i> Ambil Antrian Sekarang';
   }
 });
 
-// TODO: Load rekam medis dari Sheet
+// TODO: Load rekam medis dari Sheet pake NIK user.nik
+// async function loadRekamMedis() { ... }
 </script>
 </body>
 </html>
