@@ -159,8 +159,7 @@
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
 
-// GANTI localStorage JADI sessionStorage BIAR SINKRON SAMA LOGIN
-let user = JSON.parse(sessionStorage.getItem('userPuskesmas'));
+let user = JSON.parse(localStorage.setItem('userPuskesmas', JSON.stringify(hasil.user));
 let editMode = false;
 
 // Cek login
