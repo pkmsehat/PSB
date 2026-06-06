@@ -163,7 +163,7 @@ allRoleRadios.forEach(radio => {
   });
 });
 
-// Form submit - LOGIN BENERAN KE APPS SCRIPT
+// Form submit - UDAH PAKE FORMDATA BIAR GA CORS
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   
@@ -174,34 +174,34 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
   const role = document.querySelector('input[name="role"]:checked').value;
   const nik = document.getElementById('nik').value;
   const password = document.getElementById('password').value;
+  const kodeAdmin = document.getElementById('kodeAdmin').value;
   
   // Validasi kode admin kalo pilih admin
-  if (role === 'admin' && kodeAdminInput.value !== 'PKM2026') {
+  if (role === 'admin' && kodeAdmin !== 'PKM2026') {
     alert('Kode Admin salah! Hubungi Kepala Puskesmas.');
     btn.disabled = false;
     btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login Sekarang';
     return;
   }
 
-  const data = {
-    action: 'login',
-    role: role,
-    nik: nik,
-    password: password
-  };
-
   try {
+    const formData = new FormData();
+    formData.append('action', 'login');
+    formData.append('role', role);
+    formData.append('nik', nik);
+    formData.append('password', password);
+    if(role === 'admin') formData.append('kodeAdmin', kodeAdmin);
+
     const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: formData
     });
+    
     const hasil = await res.json();
 
     if(hasil.status == 'ok') {
-      // SIMPAN DATA USER KE LOCALSTORAGE
-      localStorage.setItem('userPuskesmas', JSON.stringify(hasil.user));
+      sessionStorage.setItem('userPuskesmas', JSON.stringify(hasil.user));
       
-      // Redirect sesuai role
       if(hasil.user.role.toLowerCase() == 'admin') {
         window.location.href = 'dashboard-admin.html'; 
       } else {
@@ -213,7 +213,8 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
       btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login Sekarang';
     }
   } catch (err) {
-    alert('Error koneksi ke server');
+    alert('Error koneksi ke server. Pastikan Apps Script udah di-deploy ulang ya');
+    console.error(err);
     btn.disabled = false;
     btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login Sekarang';
   }
