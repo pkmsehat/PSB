@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Outfit', sans-serif; }
+    body { font-family: 'Outfit', sans-serif; cursor: none; } /* HIDE CURSOR BUAT TV */
   .glass {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(12px);
@@ -32,7 +32,6 @@
   <div class="glass rounded-3xl p-6 mb-6 shadow-2xl">
     <div class="flex items-center justify-between flex-wrap gap-4">
       <div class="flex items-center gap-4">
-        <!-- LOGO PUSKESMAS -->
         <div class="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl flex items-center justify-center shadow-lg">
           <i class="fa-solid fa-hospital text-3xl md:text-4xl text-teal-600"></i>
         </div>
@@ -50,8 +49,6 @@
 
   <!-- MAIN CONTENT -->
   <div class="grid lg:grid-cols-2 gap-6 mb-6">
-
-    <!-- SEDANG DIPANGGIL -->
     <div class="glass rounded-3xl p-6 md:p-8 shadow-2xl">
       <div class="flex items-center gap-3 mb-6">
         <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
@@ -59,7 +56,6 @@
         </div>
         <h2 class="text-xl md:text-2xl font-bold text-white">SEDANG DIPANGGIL</h2>
       </div>
-
       <div id="cardDipanggil" class="bg-gradient-to-br from-rose-500 to-pink-600 rounded-3xl p-8 md:p-12 text-center shadow-2xl glow-teal">
         <div id="nomorDipanggil" class="text-7xl md:text-9xl font-black text-white mb-4 tracking-tight">---</div>
         <div id="namaDipanggil" class="text-2xl md:text-3xl font-bold text-white mb-2">Menunggu panggilan...</div>
@@ -67,7 +63,6 @@
       </div>
     </div>
 
-    <!-- ANTRIAN BERIKUTNYA -->
     <div class="glass rounded-3xl p-6 md:p-8 shadow-2xl">
       <div class="flex items-center gap-3 mb-6">
         <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg">
@@ -75,7 +70,6 @@
         </div>
         <h2 class="text-xl md:text-2xl font-bold text-white">ANTRIAN BERIKUTNYA</h2>
       </div>
-
       <div id="listAntrian" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
         <p class="text-center text-teal-100 py-12">Memuat data antrian...</p>
       </div>
@@ -100,28 +94,15 @@
     </div>
   </div>
 
-  <!-- AUDIO UNLOCK OVERLAY -->
-  <div id="audioOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-    <div class="glass rounded-3xl p-8 md:p-12 text-center max-w-md mx-4">
-      <i class="fa-solid fa-volume-high text-6xl text-white mb-6"></i>
-      <h3 class="text-2xl font-bold text-white mb-3">Aktifkan Suara Panggilan</h3>
-      <p class="text-teal-100 mb-6">Klik tombol di bawah untuk mengaktifkan suara tingtong + pengumuman otomatis</p>
-      <button onclick="unlockAudio()" class="bg-gradient-to-r from-teal-500 to-emerald-600 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:scale-105 transition">
-        <i class="fa-solid fa-play mr-2"></i> Aktifkan Suara
-      </button>
-    </div>
-  </div>
-
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
 let nomorDipanggilTerakhir = '';
-let audioUnlocked = false;
 
-// PRELOAD SUARA TINGTONG - PAKE MP3 BIAR GA KE-BLOCK
+// PAKE AUDIO API BIAR LEBIH STABIL DARIPADA SPEECH SYNTHESIS
 const tingtongAudio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-doorbell-single-press-333.mp3');
-tingtongAudio.volume = 0.8;
+tingtongAudio.volume = 1;
 
-// UPDATE JAM REALTIME
+// UPDATE JAM
 function updateJam() {
   const now = new Date();
   document.getElementById('jamSekarang').textContent = now.toLocaleTimeString('id-ID', { hour12: false });
@@ -131,20 +112,6 @@ function updateJam() {
 }
 setInterval(updateJam, 1000);
 updateJam();
-
-// UNLOCK AUDIO - WAJIB KLIK SEKALI
-function unlockAudio() {
-  // 1. Unlock TTS
-  speechSynthesis.speak(new SpeechSynthesisUtterance(' '));
-  // 2. Unlock Audio MP3
-  tingtongAudio.play().then(() => {
-    tingtongAudio.pause();
-    tingtongAudio.currentTime = 0;
-  }).catch(e => console.log('Unlock audio:', e));
-
-  audioUnlocked = true;
-  document.getElementById('audioOverlay').style.display = 'none';
-}
 
 // LOAD DATA
 async function loadData() {
@@ -158,12 +125,11 @@ async function loadData() {
     if(hasil.status == 'ok') {
       document.getElementById('namaPkm').textContent = hasil.namaPkm || 'Puskesmas Sehat Bersama';
 
-      // CEK NOMOR BARU
+      // CEK NOMOR BARU - AUTO BUNYI TANPA KLIK
       if(hasil.dipanggil && hasil.dipanggil.No_Antrian!== nomorDipanggilTerakhir) {
         nomorDipanggilTerakhir = hasil.dipanggil.No_Antrian;
         panggilSuaraAntrian(hasil.dipanggil.No_Antrian, hasil.dipanggil.Poli, hasil.dipanggil.Nama);
 
-        // EFEK ZOOM
         const card = document.getElementById('cardDipanggil');
         card.classList.add('zoom-animate');
         setTimeout(() => card.classList.remove('zoom-animate'), 6000);
@@ -175,7 +141,7 @@ async function loadData() {
 
       const antrian = hasil.antrian || [];
       document.getElementById('listAntrian').innerHTML = antrian.length? antrian.map((a, i) => `
-        <div class="glass rounded-2xl p-4 ${i==0? 'border-2 border-yellow-400' : ''} transition hover:scale-102">
+        <div class="glass rounded-2xl p-4 ${i==0? 'border-2 border-yellow-400' : ''} transition">
           <div class="flex items-center justify-between gap-3">
             <div class="flex items-center gap-4">
               <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
@@ -200,41 +166,32 @@ async function loadData() {
   }
 }
 
-// SUARA PANGGIL + TINGTONG
+// SUARA PANGGIL - TINGTONG + TTS
 function panggilSuaraAntrian(nomorAntrian, namaPoli, namaPasien) {
-  if (!audioUnlocked ||!('speechSynthesis' in window)) return;
-
-  // 1. MAININ TINGTONG DULU
+  // 1. TINGTONG DULU
   tingtongAudio.currentTime = 0;
-  tingtongAudio.play().then(() => {
-    // 2. TUNGGU 1.5 DETIK BARU NGOMONG
-    setTimeout(() => {
-      speechSynthesis.cancel();
+  tingtongAudio.play().catch(e => console.log('Audio play error:', e));
 
-      const teks = `Perhatian. Nomor antrian ${nomorAntrian}, atas nama ${namaPasien}, silakan menuju ${namaPoli}`;
-      const utterance = new SpeechSynthesisUtterance(teks);
-      utterance.lang = 'id-ID';
-      utterance.rate = 0.8;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-
-      speechSynthesis.speak(utterance);
-      setTimeout(() => speechSynthesis.speak(utterance), 4000);
-      setTimeout(() => speechSynthesis.speak(utterance), 8000);
-    }, 1500);
-  }).catch(e => {
-    console.log('Tingtong ke-block, langsung ngomong aja:', e);
-    // Kalo MP3 ke-block, langsung TTS aja
+  // 2. NGOMONG SETELAH 2 DETIK
+  setTimeout(() => {
+    if (!('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
     const teks = `Perhatian. Nomor antrian ${nomorAntrian}, atas nama ${namaPasien}, silakan menuju ${namaPoli}`;
     const utterance = new SpeechSynthesisUtterance(teks);
     utterance.lang = 'id-ID';
     utterance.rate = 0.8;
+    utterance.volume = 1;
     speechSynthesis.speak(utterance);
-  });
+    setTimeout(() => speechSynthesis.speak(utterance), 4000);
+  }, 2000);
 }
 
+// JALANIN LANGSUNG TANPA KLIK
 loadData();
 setInterval(loadData, 5000);
+
+// RELOAD OTOMATIS TIAP 6 JAM BIAR GA MEMORY LEAK
+setTimeout(() => location.reload(), 21600000);
 </script>
 
 </body>
