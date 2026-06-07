@@ -217,31 +217,43 @@ function unlockAudio() {
   }, 1200);
 }
 
+// ====== INI YANG UDAH DIBENERIN ======
 async function loadData() {
   try {
-    const res = await fetch(`${APPS_SCRIPT_URL}?action=getPublic`, {
+    // FIX 1: Tambah?t= timestamp + cache no-store biar ga kena cache
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=getPublic&t=${Date.now()}`, {
       method: 'GET',
-      redirect: 'follow'
+      redirect: 'follow',
+      cache: 'no-store'
     });
     const hasil = await res.json();
 
     if(hasil.status == 'ok') {
       document.getElementById('namaPkm').textContent = hasil.namaPkm || 'PUSKESMAS SEHAT BERSAMA';
 
-      if(hasil.dipanggil && hasil.dipanggil.No_Antrian!== nomorDipanggilTerakhir) {
-        nomorDipanggilTerakhir = hasil.dipanggil.No_Antrian;
-        if(audioUnlocked &&!isPlayingQueue) {
-          panggilSuaraAntrian(hasil.dipanggil.No_Antrian, hasil.dipanggil.Poli, hasil.dipanggil.Nama);
+      // FIX 2: Cek ada dipanggil atau engga
+      if(hasil.dipanggil && hasil.dipanggil.No_Antrian) {
+        if(hasil.dipanggil.No_Antrian!== nomorDipanggilTerakhir) {
+          nomorDipanggilTerakhir = hasil.dipanggil.No_Antrian;
+          if(audioUnlocked &&!isPlayingQueue) {
+            panggilSuaraAntrian(hasil.dipanggil.No_Antrian, hasil.dipanggil.Poli, hasil.dipanggil.Nama);
+          }
+
+          const card = document.getElementById('cardDipanggil');
+          card.classList.add('zoom-animate');
+          setTimeout(() => card.classList.remove('zoom-animate'), 5000);
         }
 
-        const card = document.getElementById('cardDipanggil');
-        card.classList.add('zoom-animate');
-        setTimeout(() => card.classList.remove('zoom-animate'), 5000);
+        document.getElementById('nomorDipanggil').textContent = hasil.dipanggil.No_Antrian;
+        document.getElementById('namaDipanggil').textContent = hasil.dipanggil.Nama || '-';
+        document.getElementById('poliDipanggil').textContent = hasil.dipanggil.Poli || '-';
+      } else {
+        // FIX 3: Kalo ga ada yg dipanggil, reset semua
+        nomorDipanggilTerakhir = '';
+        document.getElementById('nomorDipanggil').textContent = '---';
+        document.getElementById('namaDipanggil').textContent = 'Menunggu panggilan...';
+        document.getElementById('poliDipanggil').textContent = '-';
       }
-
-      document.getElementById('nomorDipanggil').textContent = hasil.dipanggil? hasil.dipanggil.No_Antrian : '---';
-      document.getElementById('namaDipanggil').textContent = hasil.dipanggil? hasil.dipanggil.Nama : 'Menunggu panggilan...';
-      document.getElementById('poliDipanggil').textContent = hasil.dipanggil? hasil.dipanggil.Poli : '-';
 
       const antrian = hasil.antrian || [];
       // LIST ANTRIAN - HURUF GEDE, MUAT 5 ANTRIAN
@@ -270,6 +282,7 @@ async function loadData() {
     console.log('Error:', err);
   }
 }
+// ====== SAMPE SINI YANG DIBENERIN ======
 
 function panggilSuaraAntrian(nomorAntrian, namaPoli, namaPasien) {
   if (!audioUnlocked || isPlayingQueue) return;
