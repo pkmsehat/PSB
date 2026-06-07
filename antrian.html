@@ -95,7 +95,7 @@
       </div>
     </div>
 
-    <!-- FOOTER INFO -->
+    <!-- FOOTER INFO - FIX DIV -->
     <div class="glass-white rounded-xl p-2 shadow-lg">
       <div class="grid grid-cols-3 gap-4 text-center">
         <div>
@@ -218,9 +218,11 @@ function handleData(hasil) {
       const poliList = ['Poli Umum', 'Poli Gigi', 'KIA/KB'];
 
       poliList.forEach(poli => {
+        // FIX 1: PAKE [poli]
         const dipanggil = hasil.dipanggilPerPoli;
         const antrianBerikut = (hasil.antrianPerPoli || []).slice(0, 2);
 
+        // FIX 2: CEK SUARA PAKE [poli]
         if(dipanggil && dipanggil.No_Antrian && dipanggil.No_Antrian!== nomorDipanggilTerakhir){
           nomorDipanggilTerakhir = dipanggil.No_Antrian;
           if(audioUnlocked &&!isPlayingQueue) {
