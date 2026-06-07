@@ -8,117 +8,125 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Outfit', sans-serif; }
-   .glass {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+    body { font-family: 'Outfit', sans-serif; cursor: none; overflow: hidden; }
+  .glass {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
     }
-   .glow-teal {
-      box-shadow: 0 0 40px rgba(20, 184, 166, 0.4);
+  .glow-green {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
     }
     @keyframes zoomPulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      50% { transform: scale(1.02); }
     }
-   .zoom-animate {
-      animation: zoomPulse 2s ease-in-out infinite;
+  .zoom-animate {
+      animation: zoomPulse 1.5s ease-in-out infinite;
     }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
   </style>
 </head>
-<body class="bg-gradient-to-br from-teal-600 via-emerald-600 to-cyan-700 min-h-screen p-4 md:p-8">
+<body class="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 h-screen p-3 overflow-hidden">
 
-  <!-- HEADER - UDAH AKU BENERIN DIV-NYA -->
-  <div class="glass rounded-3xl p-6 mb-6 shadow-2xl">
-    <div class="flex items-center justify-between flex-wrap gap-4">
-      <div class="flex items-center gap-4">
-        <div class="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl flex items-center justify-center shadow-lg">
-          <i class="fa-solid fa-hospital text-3xl md:text-4xl text-teal-600"></i>
-        </div>
+  <!-- HEADER - PAKE LOGO.PNG -->
+  <div class="glass rounded-2xl p-3 mb-2 shadow-xl">
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <img src="logo.png" alt="Logo Puskesmas" class="w-11 h-11 rounded-xl shadow-md bg-white object-contain p-1">
         <div>
-          <h1 class="text-2xl md:text-4xl font-black text-white tracking-tight" id="namaPkm">Puskesmas Sehat Bersama</h1>
-          <p class="text-teal-100 text-sm md:text-base font-medium">Sistem Antrian Digital Real-time</p>
+          <h1 class="text-xl md:text-2xl font-black text-white tracking-tight" id="namaPkm">PUSKESMAS SEHAT BERSAMA</h1>
+          <p class="text-green-50 text-xs font-medium">Sistem Antrian Digital Real-time</p>
         </div>
-      </div>
       <div class="text-right">
-        <div class="text-4xl md:text-6xl font-black text-white tracking-wider" id="jamSekarang">00:00:00</div>
-        <div class="text-teal-100 text-sm md:text-base font-medium" id="tanggalSekarang">-</div>
+        <div class="text-2xl md:text-4xl font-black text-white tracking-wider" id="jamSekarang">00:00:00</div>
+        <div class="text-green-50 text-xs font-medium" id="tanggalSekarang">-</div>
       </div>
     </div>
   </div>
 
   <!-- MAIN CONTENT -->
-  <div class="grid lg:grid-cols-2 gap-6 mb-6">
+  <div class="grid grid-cols-5 gap-2 mb-2" style="height: calc(100vh - 165px);">
     <!-- SEDANG DIPANGGIL -->
-    <div class="glass rounded-3xl p-6 md:p-8 shadow-2xl">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
-          <i class="fa-solid fa-bell text-white text-xl animate-bounce"></i>
+    <div class="col-span-3 glass rounded-2xl p-3 shadow-xl flex flex-col">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-7 h-7 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-md">
+          <i class="fa-solid fa-bullhorn text-white text-xs"></i>
         </div>
-        <h2 class="text-xl md:text-2xl font-bold text-white">SEDANG DIPANGGIL</h2>
+        <h2 class="text-base font-bold text-white">SEDANG DIPANGGIL</h2>
       </div>
-
-      <div id="cardDipanggil" class="bg-gradient-to-br from-rose-500 to-pink-600 rounded-3xl p-8 md:p-12 text-center shadow-2xl glow-teal">
-        <div id="nomorDipanggil" class="text-7xl md:text-9xl font-black text-white mb-4 tracking-tight">---</div>
-        <div id="namaDipanggil" class="text-2xl md:text-3xl font-bold text-white mb-2">Menunggu panggilan...</div>
-        <div id="poliDipanggil" class="text-lg md:text-xl text-pink-100 font-medium">-</div>
+      <div id="cardDipanggil" class="bg-gradient-to-br from-emerald-600 to-green-700 rounded-2xl p-5 text-center shadow-xl glow-green flex-1 flex flex-col justify-center">
+        <div id="nomorDipanggil" class="text-5xl md:text-7xl font-black text-white mb-1 tracking-tight">---</div>
+        <div id="namaDipanggil" class="text-lg md:text-xl font-bold text-white mb-1">Menunggu panggilan...</div>
+        <div id="poliDipanggil" class="text-sm md:text-base text-green-100 font-medium">-</div>
       </div>
     </div>
 
     <!-- ANTRIAN BERIKUTNYA -->
-    <div class="glass rounded-3xl p-6 md:p-8 shadow-2xl">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg">
-          <i class="fa-solid fa-list-ol text-white text-xl"></i>
+    <div class="col-span-2 glass rounded-2xl p-3 shadow-xl flex flex-col">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-7 h-7 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
+          <i class="fa-solid fa-users text-white text-xs"></i>
         </div>
-        <h2 class="text-xl md:text-2xl font-bold text-white">ANTRIAN BERIKUTNYA</h2>
+        <h2 class="text-base font-bold text-white">ANTRIAN BERIKUTNYA</h2>
       </div>
-      <div id="listAntrian" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-        <p class="text-center text-teal-100 py-12">Memuat data antrian...</p>
+      <div id="listAntrian" class="space-y-1.5 overflow-y-auto flex-1 pr-1">
+        <p class="text-center text-green-50 py-6 text-xs">Memuat data...</p>
       </div>
     </div>
   </div>
 
   <!-- FOOTER INFO -->
-  <div class="glass rounded-3xl p-4 md:p-6 shadow-2xl">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+  <div class="glass rounded-2xl p-2 shadow-xl">
+    <div class="grid grid-cols-3 gap-4 text-center">
       <div>
-        <p class="text-teal-100 text-sm mb-1">Total Pasien Hari Ini</p>
-        <p class="text-3xl font-black text-white" id="totalHariIni">0</p>
+        <p class="text-green-50 text-xs mb-0.5">Total Pasien Hari Ini</p>
+        <p class="text-xl font-black text-white" id="totalHariIni">0</p>
       </div>
       <div>
-        <p class="text-teal-100 text-sm mb-1">Rata-rata Waktu Tunggu</p>
-        <p class="text-3xl font-black text-white" id="rataMenit">0 menit</p>
+        <p class="text-green-50 text-xs mb-0.5">Rata-rata Waktu Tunggu</p>
+        <p class="text-xl font-black text-white" id="rataMenit">0 menit</p>
       </div>
       <div>
-        <p class="text-teal-100 text-sm mb-1">Update Terakhir</p>
-        <p class="text-3xl font-black text-white" id="jamUpdate">--:--:--</p>
+        <p class="text-green-50 text-xs mb-0.5">Update Terakhir</p>
+        <p class="text-xl font-black text-white" id="jamUpdate">--:--:--</p>
       </div>
     </div>
   </div>
 
-  <!-- TOMBOL AKTIFKAN SUARA - MUNCUL KALO BELUM AKTIF -->
-  <button id="btnAudio" onclick="unlockAudio()" class="fixed bottom-6 right-6 bg-red-500 hover:bg-red-600 text-white p-4 rounded-full shadow-2xl z-50 animate-pulse">
-    <i class="fa-solid fa-volume-xmark text-2xl"></i>
-  </button>
+  <!-- OVERLAY AKTIFKAN SUARA -->
+  <div id="audioOverlay" class="fixed inset-0 bg-emerald-900/95 backdrop-blur-lg flex items-center justify-center z-50">
+    <div class="text-center max-w-2xl px-6">
+      <div class="w-28 h-28 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full flex items-center justify-center shadow-2xl mx-auto mb-6 animate-pulse">
+        <i class="fa-solid fa-music text-5xl text-white"></i>
+      </div>
+      <h3 class="text-3xl md:text-4xl font-black text-white mb-3">AKTIFKAN PENGUMUMAN SUARA</h3>
+      <p class="text-green-100 text-lg md:text-xl mb-8">Klik tombol di bawah untuk mengaktifkan suara panggilan otomatis</p>
+      <button onclick="unlockAudio()" class="bg-white text-emerald-600 px-10 py-5 rounded-2xl font-black text-xl md:text-2xl shadow-2xl hover:scale-105 transition transform">
+        <i class="fa-solid fa-circle-play mr-3"></i> KLIK UNTUK MULAI
+      </button>
+      <p class="text-green-200 text-sm mt-6">Hanya perlu 1x klik setiap pagi saat TV dinyalakan</p>
+    </div>
+  </div>
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
-let nomorDipanggilTerakhir = localStorage.getItem('nomorTerakhir') || '';
+let nomorDipanggilTerakhir = '';
 let audioUnlocked = localStorage.getItem('audioUnlocked') === 'true';
+let isPlayingQueue = false;
 
-// PRELOAD TINGTONG
-const tingtongAudio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-doorbell-single-press-333.mp3');
-tingtongAudio.volume = 0.9;
-
-// CEK STATUS AUDIO PAS LOAD
-if(audioUnlocked) {
-  document.getElementById('btnAudio').innerHTML = '<i class="fa-solid fa-volume-high text-2xl"></i>';
-  document.getElementById('btnAudio').classList.remove('bg-red-500', 'animate-pulse');
-  document.getElementById('btnAudio').classList.add('bg-teal-500');
+const today = new Date().toDateString();
+if(audioUnlocked && localStorage.getItem('audioDate') === today) {
+  document.getElementById('audioOverlay').style.display = 'none';
+} else {
+  localStorage.setItem('audioUnlocked', 'false');
+  audioUnlocked = false;
 }
 
-// UPDATE JAM
+const tingtongAudio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-doorbell-single-press-333.mp3');
+tingtongAudio.volume = 1;
+
 function updateJam() {
   const now = new Date();
   document.getElementById('jamSekarang').textContent = now.toLocaleTimeString('id-ID', { hour12: false });
@@ -129,25 +137,21 @@ function updateJam() {
 setInterval(updateJam, 1000);
 updateJam();
 
-// UNLOCK AUDIO
 function unlockAudio() {
   tingtongAudio.play().then(() => {
     tingtongAudio.pause();
     tingtongAudio.currentTime = 0;
 
-    speechSynthesis.speak(new SpeechSynthesisUtterance('Suara aktif'));
+    const test = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=${encodeURIComponent('Sistem suara aktif')}&tl=id`);
+    test.play();
 
     audioUnlocked = true;
     localStorage.setItem('audioUnlocked', 'true');
-
-    const btn = document.getElementById('btnAudio');
-    btn.innerHTML = '<i class="fa-solid fa-volume-high text-2xl"></i>';
-    btn.classList.remove('bg-red-500', 'animate-pulse');
-    btn.classList.add('bg-teal-500');
+    localStorage.setItem('audioDate', new Date().toDateString());
+    document.getElementById('audioOverlay').style.display = 'none';
   }).catch(e => alert('Klik lagi beb, browser nge-block: ' + e));
 }
 
-// LOAD DATA
 async function loadData() {
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getPublic`, {
@@ -157,21 +161,17 @@ async function loadData() {
     const hasil = await res.json();
 
     if(hasil.status == 'ok') {
-      document.getElementById('namaPkm').textContent = hasil.namaPkm || 'Puskesmas Sehat Bersama';
+      document.getElementById('namaPkm').textContent = hasil.namaPkm || 'PUSKESMAS SEHAT BERSAMA';
 
-      // CEK NOMOR BARU
-      if(hasil.dipanggil && hasil.dipanggil.No_Antrian!== nomorDipanggilTerakhir) {
+      if(hasil.dipanggil && hasil.dipanggil.No_Antrian !== nomorDipanggilTerakhir) {
         nomorDipanggilTerakhir = hasil.dipanggil.No_Antrian;
-        localStorage.setItem('nomorTerakhir', nomorDipanggilTerakhir);
-
-        // CUMA BUNYI KALO UDAH DI-UNLOCK
-        if(audioUnlocked) {
+        if(audioUnlocked && !isPlayingQueue) {
           panggilSuaraAntrian(hasil.dipanggil.No_Antrian, hasil.dipanggil.Poli, hasil.dipanggil.Nama);
         }
 
         const card = document.getElementById('cardDipanggil');
         card.classList.add('zoom-animate');
-        setTimeout(() => card.classList.remove('zoom-animate'), 6000);
+        setTimeout(() => card.classList.remove('zoom-animate'), 5000);
       }
 
       document.getElementById('nomorDipanggil').textContent = hasil.dipanggil? hasil.dipanggil.No_Antrian : '---';
@@ -180,21 +180,21 @@ async function loadData() {
 
       const antrian = hasil.antrian || [];
       document.getElementById('listAntrian').innerHTML = antrian.length? antrian.map((a, i) => `
-        <div class="glass rounded-2xl p-4 ${i==0? 'border-2 border-yellow-400' : ''} transition hover:scale-102">
-          <div class="flex items-center justify-between gap-3">
-            <div class="flex items-center gap-4">
-              <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                <span class="font-black text-2xl text-white">${i+1}</span>
+        <div class="glass rounded-xl p-2 ${i==0? 'border border-yellow-300' : ''}">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center">
+                <span class="font-black text-xs text-white">${i+1}</span>
               </div>
               <div>
-                <p class="font-black text-2xl text-white">${a.No_Antrian}</p>
-                <p class="text-sm text-teal-100">${a.Nama} - ${a.Poli}</p>
+                <p class="font-black text-base text-white leading-tight">${a.No_Antrian}</p>
+                <p class="text-xs text-green-50 leading-tight">${a.Nama}</p>
               </div>
             </div>
-            <span class="bg-yellow-400 text-yellow-900 px-4 py-2 rounded-xl text-xs font-black">MENUNGGU</span>
+            <span class="bg-amber-400 text-amber-900 px-2 py-0.5 rounded-md text-xs font-bold">${a.Poli}</span>
           </div>
         </div>
-      `).join('') : '<p class="text-center text-teal-100 py-12">Tidak ada antrian menunggu</p>';
+      `).join('') : '<p class="text-center text-green-50 py-6 text-xs">Tidak ada antrian</p>';
 
       document.getElementById('totalHariIni').textContent = hasil.totalHariIni;
       document.getElementById('rataMenit').textContent = hasil.rataMenit + ' menit';
@@ -205,27 +205,34 @@ async function loadData() {
   }
 }
 
-// SUARA PANGGIL + TINGTONG
 function panggilSuaraAntrian(nomorAntrian, namaPoli, namaPasien) {
-  if (!audioUnlocked) return;
+  if (!audioUnlocked || isPlayingQueue) return;
+  isPlayingQueue = true;
 
   tingtongAudio.currentTime = 0;
-  tingtongAudio.play().then(() => {
-    setTimeout(() => {
-      speechSynthesis.cancel();
-      const teks = `Perhatian. Nomor antrian ${nomorAntrian}, atas nama ${namaPasien}, silakan menuju ${namaPoli}`;
-      const utterance = new SpeechSynthesisUtterance(teks);
-      utterance.lang = 'id-ID';
-      utterance.rate = 0.8;
-      utterance.volume = 1;
-      speechSynthesis.speak(utterance);
-      setTimeout(() => speechSynthesis.speak(utterance), 4000);
-    }, 1500);
-  }).catch(e => console.log('Audio error:', e));
+  tingtongAudio.play().catch(e => console.log('Tingtong error:', e));
+
+  setTimeout(() => {
+    const teks = `Perhatian. Nomor antrian ${nomorAntrian}, atas nama ${namaPasien}, silakan menuju ${namaPoli}`;
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=${encodeURIComponent(teks)}&tl=id`;
+
+    const playSequence = (count) => {
+      if (count === 0) {
+        isPlayingQueue = false;
+        return;
+      }
+      const audio = new Audio(url);
+      audio.play().catch(e => console.log('TTS error:', e));
+      audio.onended = () => setTimeout(() => playSequence(count - 1), 1000);
+    };
+
+    playSequence(3);
+  }, 1800);
 }
 
 loadData();
 setInterval(loadData, 5000);
+setTimeout(() => location.reload(), 21600000);
 </script>
 
 </body>
