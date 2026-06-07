@@ -9,26 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Outfit', sans-serif; overflow: hidden; }
-    /* HAPUS cursor: none; BIAR BISA DIKLIK PAS DEBUG */
 .glass-white {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(20, 184, 166, 0.2);
     }
 .glass-teal {
-      background: rgba(20, 184, 166, 0.15);
+      background: rgba(20, 184, 166, 0.1);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(20, 184, 166, 0.25);
+      border: 1px solid rgba(20, 184, 166, 0.2);
     }
 .glow-teal {
-      box-shadow: 0 0 25px rgba(20, 184, 166, 0.4);
+      box-shadow: 0 0 30px rgba(20, 184, 166, 0.5);
     }
     @keyframes zoomPulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); }
+      50% { transform: scale(1.03); }
     }
 .zoom-animate {
-      animation: zoomPulse 1.5s ease-in-out infinite;
+      animation: zoomPulse 1.2s ease-in-out infinite;
     }
     @keyframes marquee {
       0% { transform: translateX(100%); }
@@ -82,13 +81,18 @@
 
     <!-- MAIN CONTENT -->
     <div class="glass-white rounded-xl p-3 shadow-lg flex flex-col mb-2" style="height: calc(100vh - 235px);">
-      <div class="flex items-center gap-2 mb-2">
-        <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-md">
-          <i class="fa-solid fa-bullhorn text-white"></i>
+      <!-- JUDUL CENTER -->
+      <div class="flex items-center justify-center gap-3 mb-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg">
+          <i class="fa-solid fa-bullhorn text-white text-xl"></i>
         </div>
-        <h2 class="text-xl font-black text-teal-700">SEDANG DIPANGGIL</h2>
+        <h2 class="text-2xl md:text-3xl font-black text-teal-700">SEDANG DIPANGGIL</h2>
       </div>
-      <div id="gridPoli" class="grid grid-cols-3 gap-3 flex-1"></div>
+
+      <!-- GRID 3 POLI BESAR -->
+      <div id="gridPoli" class="grid grid-cols-3 gap-4 flex-1">
+        <!-- DIISI JS -->
+      </div>
     </div>
 
     <!-- FOOTER INFO -->
@@ -114,7 +118,7 @@
   <div id="audioOverlay" class="fixed inset-0 bg-teal-900/95 backdrop-blur-lg flex items-center justify-center z-50">
     <div class="text-center max-w-2xl px-6">
       <div class="w-28 h-28 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-full flex items-center justify-center shadow-2xl mx-auto mb-6 animate-pulse">
-        <i class="fa-solid fa-music text-5xl text-white"></i>
+        <i class="fa-solid fa-volume-high text-5xl text-white"></i>
       </div>
       <h3 class="text-3xl md:text-4xl font-black text-white mb-3">AKTIFKAN PENGUMUMAN SUARA</h3>
       <p class="text-teal-100 text-lg md:text-xl mb-8">Klik tombol di bawah untuk mengaktifkan suara panggilan otomatis</p>
@@ -176,7 +180,6 @@ function playTingtong() {
   }
 }
 
-// PAKE addEventListener BIAR PASTI KETANGKEP
 document.getElementById('btnMulai').addEventListener('click', function() {
   playTingtong();
   setTimeout(() => {
@@ -191,7 +194,7 @@ document.getElementById('btnMulai').addEventListener('click', function() {
     localStorage.setItem('audioUnlocked', 'true');
     localStorage.setItem('audioDate', new Date().toDateString());
     document.getElementById('audioOverlay').style.display = 'none';
-    loadData(); // LOAD DATA SETELAH KLIK
+    loadData();
   }, 1200);
 });
 
@@ -201,7 +204,6 @@ function loadData() {
   document.head.appendChild(script);
   script.onload = () => document.head.removeChild(script);
   script.onerror = () => {
-    console.log('Gagal load data');
     document.getElementById('jamUpdate').textContent = 'Gagal Update';
   };
 }
@@ -227,35 +229,43 @@ function handleData(hasil) {
         }
 
         let htmlBerikut = antrianBerikut.map(a =>
-          `<span class="bg-teal-100 text-teal-700 px-2 py-1 rounded font-bold text-sm">${a.No_Antrian}</span>`
+          `<div class="bg-teal-50 border border-teal-200 rounded-lg py-2 px-3 text-center">
+            <span class="text-teal-700 font-black text-lg">${a.No_Antrian}</span>
+            <div class="text-teal-600 text-xs font-medium truncate">${a.Nama || '-'}</div>
+           </div>`
         ).join('');
-        if(antrianBerikut.length === 0) htmlBerikut = '<span class="text-teal-400 text-xs">Kosong</span>';
+        if(antrianBerikut.length === 0) {
+          htmlBerikut = '<div class="text-teal-400 text-sm py-4">Antrian Kosong</div>';
+        }
+        if(antrianBerikut.length === 1) {
+          htmlBerikut += '<div class="text-teal-400 text-sm py-4">-</div>';
+        }
 
         if(dipanggil && dipanggil.No_Antrian){
           gridDiv.innerHTML += `
             <div class="flex flex-col h-full">
-              <div class="bg-gradient-to-br from-teal-500 to-emerald-500 rounded-xl p-4 text-center shadow-xl glow-teal flex-1 flex flex-col justify-center zoom-animate mb-2">
-                <div class="text-sm font-bold text-teal-100 mb-1">${poli}</div>
-                <div class="text-6xl md:text-8xl font-black text-white mb-1 tracking-tight leading-none">${dipanggil.No_Antrian}</div>
-                <div class="text-xl md:text-2xl font-bold text-white">${dipanggil.Nama || '-'}</div>
+              <div class="bg-gradient-to-br from-teal-500 to-emerald-500 rounded-2xl p-6 text-center shadow-2xl glow-teal flex-1 flex flex-col justify-center zoom-animate mb-3">
+                <div class="text-lg font-bold text-teal-100 mb-2">${poli.toUpperCase()}</div>
+                <div class="text-7xl md:text-9xl font-black text-white mb-2 tracking-tight leading-none">${dipanggil.No_Antrian}</div>
+                <div class="text-2xl md:text-3xl font-bold text-white uppercase">${dipanggil.Nama || '-'}</div>
               </div>
-              <div class="glass-teal rounded-lg p-2">
-                <div class="text-xs font-bold text-teal-600 mb-1 text-center">Berikutnya:</div>
-                <div class="flex gap-1 justify-center">${htmlBerikut}</div>
+              <div class="glass-teal rounded-xl p-3">
+                <div class="text-sm font-black text-teal-700 mb-2 text-center">ANTRIAN BERIKUTNYA</div>
+                <div class="grid grid-cols-2 gap-2">${htmlBerikut}</div>
               </div>
             </div>
           `;
         } else {
           gridDiv.innerHTML += `
             <div class="flex flex-col h-full">
-              <div class="bg-gradient-to-br from-gray-400 to-gray-500 rounded-xl p-4 text-center shadow-xl flex-1 flex flex-col justify-center mb-2">
-                <div class="text-sm font-bold text-gray-100 mb-1">${poli}</div>
-                <div class="text-6xl md:text-8xl font-black text-white mb-1 tracking-tight leading-none">---</div>
-                <div class="text-xl md:text-2xl font-bold text-white">Kosong</div>
+              <div class="bg-gradient-to-br from-gray-400 to-gray-500 rounded-2xl p-6 text-center shadow-2xl flex-1 flex flex-col justify-center mb-3">
+                <div class="text-lg font-bold text-gray-100 mb-2">${poli.toUpperCase()}</div>
+                <div class="text-7xl md:text-9xl font-black text-white mb-2 tracking-tight leading-none">---</div>
+                <div class="text-2xl md:text-3xl font-bold text-white">KOSONG</div>
               </div>
-              <div class="glass-teal rounded-lg p-2">
-                <div class="text-xs font-bold text-teal-600 mb-1 text-center">Berikutnya:</div>
-                <div class="flex gap-1 justify-center">${htmlBerikut}</div>
+              <div class="glass-teal rounded-xl p-3">
+                <div class="text-sm font-black text-teal-700 mb-2 text-center">ANTRIAN BERIKUTNYA</div>
+                <div class="grid grid-cols-2 gap-2">${htmlBerikut}</div>
               </div>
             </div>
           `;
@@ -268,6 +278,7 @@ function handleData(hasil) {
     }
   } catch (err) {
     console.log('Error:', err);
+    document.getElementById('jamUpdate').textContent = 'Error';
   }
 }
 
@@ -298,7 +309,6 @@ function panggilSuaraAntrian(nomorAntrian, namaPoli, namaPasien) {
   }, 1500);
 }
 
-// JANGAN LOAD DATA SEBELUM KLIK, BIAR GA ERROR CORS
 setInterval(loadData, 5000);
 setTimeout(() => location.reload(), 21600000);
 </script>
