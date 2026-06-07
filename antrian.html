@@ -9,31 +9,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Outfit', sans-serif; cursor: none; overflow: hidden; }
-.glass-white {
+   .glass-white {
       background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(20, 184, 166, 0.2);
     }
-.glass-teal {
+   .glass-teal {
       background: rgba(20, 184, 166, 0.15);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(20, 184, 166, 0.25);
     }
-.glow-teal {
+   .glow-teal {
       box-shadow: 0 0 25px rgba(20, 184, 166, 0.4);
     }
     @keyframes zoomPulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.02); }
     }
-.zoom-animate {
+   .zoom-animate {
       animation: zoomPulse 1.5s ease-in-out infinite;
     }
     @keyframes marquee {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
     }
-.marquee {
+   .marquee {
       animation: marquee 45s linear infinite;
       white-space: nowrap;
       text-transform: uppercase;
@@ -44,7 +44,7 @@
 </head>
 <body class="bg-[#F0FDFA] h-screen overflow-hidden">
 
-  <!-- RUNNING TEXT - PELAN + KAPITAL + 30% LEBIH GEDE -->
+  <!-- RUNNING TEXT -->
   <div class="bg-gradient-to-r from-teal-600 to-emerald-600 py-2.5 overflow-hidden shadow-md">
     <div class="marquee text-white text-base font-bold px-4">
       <span class="mx-10">SELAMAT DATANG DI PUSKESMAS SEHAT BERSAMA</span>
@@ -62,18 +62,15 @@
   </div>
 
   <div class="p-2" style="height: calc(100vh - 50px);">
-    <!-- HEADER - NAMA PUSKESMAS + JAM 50% LEBIH GEDE, JAM DI KANAN -->
+    <!-- HEADER -->
     <div class="glass-white rounded-xl p-2.5 mb-2 shadow-lg">
       <div class="flex items-center justify-between gap-3">
         <div class="flex items-center gap-3">
           <img src="logo.png" alt="Logo Puskesmas" class="w-12 h-12 rounded-lg shadow-md bg-white object-contain p-1">
           <div>
-            <!-- 50% LEBIH GEDE -->
             <h1 class="text-2xl md:text-3xl font-black text-teal-700 tracking-tight" id="namaPkm">PUSKESMAS SEHAT BERSAMA</h1>
             <p class="text-teal-600 text-sm font-medium">Sistem Antrian Digital Real-time</p>
           </div>
-        </div>
-        <!-- JAM DI KANAN - 50% LEBIH GEDE -->
         <div class="text-right">
           <div class="text-3xl md:text-5xl font-black text-teal-700 tracking-wider" id="jamSekarang">00:00:00</div>
           <div class="text-teal-600 text-sm font-medium" id="tanggalSekarang">-</div>
@@ -83,39 +80,34 @@
 
     <!-- MAIN CONTENT -->
     <div class="grid grid-cols-5 gap-2 mb-2" style="height: calc(100vh - 235px);">
-      <!-- SEDANG DIPANGGIL - JUDUL 50% LEBIH GEDE -->
+      <!-- SEDANG DIPANGGIL PER POLI -->
       <div class="col-span-3 glass-white rounded-xl p-2 shadow-lg flex flex-col">
         <div class="flex items-center gap-2 mb-1.5">
           <div class="w-7 h-7 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-md">
             <i class="fa-solid fa-bullhorn text-white text-sm"></i>
           </div>
-          <!-- 50% LEBIH GEDE -->
           <h2 class="text-lg font-black text-teal-700">SEDANG DIPANGGIL</h2>
         </div>
-        <div id="cardDipanggil" class="bg-gradient-to-br from-teal-500 to-emerald-500 rounded-xl p-3 text-center shadow-xl glow-teal flex-1 flex flex-col justify-center">
-          <div id="nomorDipanggil" class="text-8xl md:text-[11rem] font-black text-white mb-0 tracking-tight leading-none">---</div>
-          <div id="namaDipanggil" class="text-3xl md:text-5xl font-bold text-white mb-1">Menunggu panggilan...</div>
-          <div id="poliDipanggil" class="text-2xl md:text-3xl text-teal-50 font-bold">-</div>
+        <div id="cardDipanggil" class="grid grid-cols-3 gap-2 flex-1">
+          <!-- DIISI JS -->
         </div>
       </div>
 
-      <!-- ANTRIAN BERIKUTNYA - JUDUL 50% LEBIH GEDE -->
+      <!-- ANTRIAN BERIKUTNYA PER POLI -->
       <div class="col-span-2 glass-white rounded-xl p-2 shadow-lg flex flex-col">
         <div class="flex items-center gap-2 mb-1.5">
           <div class="w-7 h-7 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
             <i class="fa-solid fa-users text-white text-sm"></i>
           </div>
-          <!-- 50% LEBIH GEDE -->
           <h2 class="text-lg font-black text-teal-700">ANTRIAN BERIKUTNYA</h2>
         </div>
-        <!-- DAFTAR ANTRIAN - HURUF GEDE MUAT 5 ANTRIAN -->
         <div id="listAntrian" class="space-y-1.5 overflow-y-auto flex-1 pr-1">
           <p class="text-center text-teal-600 py-4 text-base font-medium">Memuat data...</p>
         </div>
       </div>
     </div>
 
-    <!-- FOOTER INFO - 30% LEBIH GEDE -->
+    <!-- FOOTER INFO -->
     <div class="glass-white rounded-xl p-2 shadow-lg">
       <div class="grid grid-cols-3 gap-4 text-center">
         <div>
@@ -151,7 +143,7 @@
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
-let nomorDipanggilTerakhir = '';
+let nomorDipanggilTerakhir = {};
 let audioUnlocked = localStorage.getItem('audioUnlocked') === 'true';
 let isPlayingQueue = false;
 let synth = window.speechSynthesis;
@@ -187,29 +179,24 @@ function playTingtong() {
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const oscillator = audioCtx.createOscillator();
   const gainNode = audioCtx.createGain();
-
   oscillator.connect(gainNode);
   gainNode.connect(audioCtx.destination);
-
   oscillator.frequency.value = 800;
   oscillator.type = 'sine';
   gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
   gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
-
   oscillator.start(audioCtx.currentTime);
   oscillator.stop(audioCtx.currentTime + 1);
 }
 
 function unlockAudio() {
   playTingtong();
-
   setTimeout(() => {
     const test = new SpeechSynthesisUtterance('Sistem suara aktif');
     test.lang = 'id-ID';
     test.rate = 0.9;
     test.voice = voices.find(v => v.lang === 'id-ID') || voices[0];
     synth.speak(test);
-
     audioUnlocked = true;
     localStorage.setItem('audioUnlocked', 'true');
     localStorage.setItem('audioDate', new Date().toDateString());
@@ -217,10 +204,9 @@ function unlockAudio() {
   }, 1200);
 }
 
-// ====== INI YANG UDAH DIBENERIN ======
+// ================== INI YANG DIGANTI: LOAD DATA PER POLI ==================
 async function loadData() {
   try {
-    // FIX 1: Tambah?t= timestamp + cache no-store biar ga kena cache
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getPublic&t=${Date.now()}`, {
       method: 'GET',
       redirect: 'follow',
@@ -231,48 +217,62 @@ async function loadData() {
     if(hasil.status == 'ok') {
       document.getElementById('namaPkm').textContent = hasil.namaPkm || 'PUSKESMAS SEHAT BERSAMA';
 
-      // FIX 2: Cek ada dipanggil atau engga
-      if(hasil.dipanggil && hasil.dipanggil.No_Antrian) {
-        if(hasil.dipanggil.No_Antrian!== nomorDipanggilTerakhir) {
-          nomorDipanggilTerakhir = hasil.dipanggil.No_Antrian;
-          if(audioUnlocked &&!isPlayingQueue) {
-            panggilSuaraAntrian(hasil.dipanggil.No_Antrian, hasil.dipanggil.Poli, hasil.dipanggil.Nama);
-          }
+      // 1. RENDER SEDANG DIPANGGIL PER POLI
+      const dipanggilDiv = document.getElementById('cardDipanggil');
+      dipanggilDiv.innerHTML = '';
+      const poliList = ['Poli Umum', 'Poli Gigi', 'KIA/KB'];
 
-          const card = document.getElementById('cardDipanggil');
-          card.classList.add('zoom-animate');
-          setTimeout(() => card.classList.remove('zoom-animate'), 5000);
+      poliList.forEach(poli => {
+        const item = hasil.dipanggilPerPoli;
+
+        // Cek kalau ada panggilan baru di poli ini
+        if(item && item.No_Antrian && item.No_Antrian!== nomorDipanggilTerakhir){
+          nomorDipanggilTerakhir = item.No_Antrian;
+          if(audioUnlocked &&!isPlayingQueue) {
+            panggilSuaraAntrian(item.No_Antrian, item.Poli, item.Nama);
+          }
         }
 
-        document.getElementById('nomorDipanggil').textContent = hasil.dipanggil.No_Antrian;
-        document.getElementById('namaDipanggil').textContent = hasil.dipanggil.Nama || '-';
-        document.getElementById('poliDipanggil').textContent = hasil.dipanggil.Poli || '-';
-      } else {
-        // FIX 3: Kalo ga ada yg dipanggil, reset semua
-        nomorDipanggilTerakhir = '';
-        document.getElementById('nomorDipanggil').textContent = '---';
-        document.getElementById('namaDipanggil').textContent = 'Menunggu panggilan...';
-        document.getElementById('poliDipanggil').textContent = '-';
-      }
-
-      const antrian = hasil.antrian || [];
-      // LIST ANTRIAN - HURUF GEDE, MUAT 5 ANTRIAN
-      document.getElementById('listAntrian').innerHTML = antrian.length? antrian.map((a, i) => `
-        <div class="glass-teal rounded-lg p-2 ${i==0? 'border-2 border-amber-400' : ''}">
-          <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
-                <span class="font-black text-sm text-white">${i+1}</span>
-              </div>
-              <div>
-                <p class="font-black text-2xl text-teal-700 leading-tight">${a.No_Antrian}</p>
-                <p class="text-sm text-teal-600 leading-tight font-medium">${a.Nama}</p>
-              </div>
+        if(item && item.No_Antrian){
+          dipanggilDiv.innerHTML += `
+            <div class="bg-gradient-to-br from-teal-500 to-emerald-500 rounded-xl p-3 text-center shadow-xl glow-teal flex flex-col justify-center zoom-animate">
+              <div class="text-xs font-bold text-teal-100 mb-1">${poli}</div>
+              <div class="text-5xl md:text-7xl font-black text-white mb-0 tracking-tight leading-none">${item.No_Antrian}</div>
+              <div class="text-lg md:text-xl font-bold text-white">${item.Nama || '-'}</div>
             </div>
-            <span class="bg-amber-400 text-amber-900 px-3 py-1 rounded-lg text-sm font-bold">${a.Poli}</span>
+          `;
+        } else {
+          dipanggilDiv.innerHTML += `
+            <div class="bg-gradient-to-br from-gray-400 to-gray-500 rounded-xl p-3 text-center shadow-xl flex flex-col justify-center">
+              <div class="text-xs font-bold text-gray-100 mb-1">${poli}</div>
+              <div class="text-5xl md:text-7xl font-black text-white mb-0 tracking-tight leading-none">---</div>
+              <div class="text-lg md:text-xl font-bold text-white">Kosong</div>
+            </div>
+          `;
+        }
+      });
+
+      // 2. RENDER ANTRIAN BERIKUTNYA PER POLI
+      const antrianDiv = document.getElementById('listAntrian');
+      antrianDiv.innerHTML = '';
+
+      poliList.forEach(poli => {
+        const list = hasil.antrianPerPoli || [];
+        let listHtml = list.map((a, i) => `
+          <div class="flex items-center justify-between bg-teal-50 rounded-lg px-2 py-1">
+            <span class="font-bold text-teal-700">${i+1}. ${a.No_Antrian}</span>
+            <span class="text-xs text-teal-600">${a.Nama}</span>
           </div>
-        </div>
-      `).join('') : '<p class="text-center text-teal-600 py-4 text-base font-medium">Tidak ada antrian</p>';
+        `).join('');
+        if(list.length === 0) listHtml = '<span class="text-xs text-teal-500">Kosong</span>';
+
+        antrianDiv.innerHTML += `
+          <div class="glass-teal rounded-lg p-2">
+            <div class="font-black text-sm text-teal-700 mb-1">${poli}</div>
+            <div class="space-y-1">${listHtml}</div>
+          </div>
+        `;
+      });
 
       document.getElementById('totalHariIni').textContent = hasil.totalHariIni;
       document.getElementById('rataMenit').textContent = hasil.rataMenit + ' menit';
@@ -282,17 +282,13 @@ async function loadData() {
     console.log('Error:', err);
   }
 }
-// ====== SAMPE SINI YANG DIBENERIN ======
 
 function panggilSuaraAntrian(nomorAntrian, namaPoli, namaPasien) {
   if (!audioUnlocked || isPlayingQueue) return;
   isPlayingQueue = true;
-
   playTingtong();
-
   setTimeout(() => {
     const teks = `Perhatian. Nomor antrian ${nomorAntrian}, atas nama ${namaPasien}, silakan menuju ${namaPoli}`;
-
     let count = 3;
     const speakOnce = () => {
       if (count === 0) {
@@ -310,7 +306,6 @@ function panggilSuaraAntrian(nomorAntrian, namaPoli, namaPasien) {
       };
       synth.speak(utter);
     };
-
     speakOnce();
   }, 1500);
 }
