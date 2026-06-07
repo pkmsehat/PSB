@@ -207,26 +207,22 @@ async function loadData() {
     if(hasil.status == 'ok') {
       document.getElementById('totalHariIni').textContent = hasil.totalHariIni;
       
-      // Hitung per poli
-      const antrian = hasil.antrian || [];
-      const totalUmum = antrian.filter(a => a.Poli == 'Poli Umum').length;
-      const totalGigi = antrian.filter(a => a.Poli == 'Poli Gigi').length;
-      const totalKIA = antrian.filter(a => a.Poli == 'KIA/KB').length;
+      // Pake data per poli dari Apps Script yang udah dibenerin
+      document.getElementById('totalUmum').textContent = hasil.poliUmum.total;
+      document.getElementById('totalGigi').textContent = hasil.poliGigi.total;
+      document.getElementById('totalKIA').textContent = hasil.poliKIA.total;
       
-      document.getElementById('totalUmum').textContent = totalUmum;
-      document.getElementById('totalGigi').textContent = totalGigi;
-      document.getElementById('totalKIA').textContent = totalKIA;
+      document.getElementById('menungguUmum').textContent = hasil.poliUmum.menunggu;
+      document.getElementById('menungguGigi').textContent = hasil.poliGigi.menunggu;
+      document.getElementById('menungguKIA').textContent = hasil.poliKIA.menunggu;
       
-      document.getElementById('menungguUmum').textContent = totalUmum;
-      document.getElementById('menungguGigi').textContent = totalGigi;
-      document.getElementById('menungguKIA').textContent = totalKIA;
-      
-      // Yang dipanggil
-      document.getElementById('dipanggilUmum').textContent = hasil.dipanggil && hasil.dipanggil.Poli == 'Poli Umum'? hasil.dipanggil.No_Antrian : '-';
-      document.getElementById('dipanggilGigi').textContent = hasil.dipanggil && hasil.dipanggil.Poli == 'Poli Gigi'? hasil.dipanggil.No_Antrian : '-';
-      document.getElementById('dipanggilKIA').textContent = hasil.dipanggil && hasil.dipanggil.Poli == 'KIA/KB'? hasil.dipanggil.No_Antrian : '-';
+      // Yang dipanggil per poli
+      document.getElementById('dipanggilUmum').textContent = hasil.poliUmum.dipanggil? hasil.poliUmum.dipanggil.No_Antrian : '-';
+      document.getElementById('dipanggilGigi').textContent = hasil.poliGigi.dipanggil? hasil.poliGigi.dipanggil.No_Antrian : '-';
+      document.getElementById('dipanggilKIA').textContent = hasil.poliKIA.dipanggil? hasil.poliKIA.dipanggil.No_Antrian : '-';
       
       // Tabel antrian
+      const antrian = hasil.antrian || [];
       const tbody = document.getElementById('tabelAntrian');
       if(antrian.length == 0) {
         tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-400">Tidak ada antrian menunggu</td></tr>';
@@ -270,7 +266,7 @@ async function panggilSelanjutnya() {
     });
     const hasil = await res.json();
     if(hasil.status == 'ok') {
-      alert('Berhasil panggil antrian selanjutnya!');
+      alert('Berhasil panggil antrian: ' + hasil.nomor);
       loadData();
     } else {
       alert('Gagal: ' + hasil.message);
