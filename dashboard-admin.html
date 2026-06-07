@@ -203,7 +203,7 @@ async function loadData() {
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getAdminData`, {
       method: 'GET',
-      redirect: 'follow' // WAJIB INI BIAR GA CORS
+      redirect: 'follow'
     });
     
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -269,6 +269,9 @@ async function panggilSelanjutnya() {
     });
     const hasil = await res.json();
     if(hasil.status == 'ok') {
+      // PANGGIL SUARA + TINGTONG
+      panggilSuara(hasil.nomor, poli);
+      
       alert('Berhasil panggil antrian: ' + hasil.nomor);
       loadData();
     } else {
@@ -279,6 +282,29 @@ async function panggilSelanjutnya() {
   }
   btn.disabled = false;
   btn.innerHTML = '<i class="fa-solid fa-bullhorn"></i> Panggil Selanjutnya';
+}
+
+function panggilSuara(nomorAntrian, namaPoli) {
+  // Suara TINGTONG dulu
+  const tingtong = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
+  tingtong.volume = 0.8;
+  tingtong.play();
+  
+  // Delay 800ms baru ngomong
+  setTimeout(() => {
+    if (!('speechSynthesis' in window)) return;
+    
+    const teks = `Nomor antrian ${nomorAntrian}, silakan menuju ${namaPoli}`;
+    const utterance = new SpeechSynthesisUtterance(teks);
+    utterance.lang = 'id-ID';
+    utterance.rate = 0.85;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+    
+    // Panggil 2x biar jelas
+    speechSynthesis.speak(utterance);
+    setTimeout(() => speechSynthesis.speak(utterance), 3500);
+  }, 800);
 }
 
 function cetakLaporan() {
