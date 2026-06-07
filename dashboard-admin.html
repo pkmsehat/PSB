@@ -7,217 +7,309 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0fdf4; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 100%); }
+  .card-stat { transition: all 0.3s; border-left: 4px solid; }
+  .card-stat:hover { transform: translateY(-4px); box-shadow: 0 12px 24px #00000010; }
+  .dipanggil-card { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); }
+  .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
   </style>
 </head>
 <body>
-  <header class="bg-white shadow sticky top-0 z-50">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
+  <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-teal-100">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-3 font-bold text-teal-700">
+        <img src="logo.png" alt="Logo" class="w-10 h-10 rounded-full">
         <div>
-          <h1 class="font-bold text-teal-700">PUSKESMAS SEHAT BERSAMA</h1>
-          <p class="text-xs text-gray-500">Dashboard Admin - Live Data</p>
+          <div class="text-sm leading-tight">PUSKESMAS SEHAT BERSAMA</div>
+          <div class="text-xs text-teal-600">Dashboard Admin - Live Data</div>
         </div>
-      </div>
-      <a href="login.html" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
-        <i class="fa-solid fa-right-from-bracket"></i> Logout
       </a>
+      <div class="flex items-center gap-4">
+        <div class="text-right hidden sm:block">
+          <div class="text-xs text-gray-500">Admin bertugas</div>
+          <div id="namaAdmin" class="text-sm font-semibold text-gray-700"></div>
+        </div>
+        <button onclick="logout()" class="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-lg shadow-red-200 hover:shadow-red-300 transition">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="container mx-auto p-6">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold text-gray-800">Selamat Datang, Admin!</h2>
+  <main class="max-w-7xl mx-auto p-4 md:p-6">
+    <!-- Header Selamat Datang -->
+    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
+      <div>
+        <h1 id="salamAdmin" class="text-3xl font-bold text-gray-800">Selamat Datang, Admin!</h1>
+        <p class="text-sm text-gray-500 mt-1 flex items-center gap-2">
+          <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
+          Data update <span id="lastUpdate">-</span>
+        </p>
+      </div>
       <div class="flex gap-2">
-        <button onclick="loadData()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm">
+        <button onclick="loadData()" class="bg-gradient-to-r from-teal-600 to-teal-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-teal-200 hover:shadow-teal-300 transition">
           <i class="fa-solid fa-rotate"></i> Refresh
         </button>
-        <button onclick="resetTampilan()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm">
-          <i class="fa-solid fa-trash"></i> Reset Data
+        <button onclick="resetTampilan()" class="bg-gradient-to-r from-red-600 to-red-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-red-200 hover:shadow-red-300 transition">
+          <i class="fa-solid fa-trash"></i> Reset Tampilan
         </button>
       </div>
     </div>
 
-    <!-- Total Card -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-      <div class="bg-white p-5 rounded-xl shadow border-l-4 border-teal-600">
-        <h3 class="font-bold text-sm text-teal-700 mb-1">TOTAL HARI INI</h3>
-        <p class="text-3xl font-bold" id="totalSemua">0</p>
-        <p class="text-xs text-gray-500">Semua poli</p>
+    <!-- Card Statistik -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="card-stat bg-white p-5 rounded-2xl shadow-lg shadow-teal-100/50 border-teal-500">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-semibold text-teal-600 uppercase">TOTAL HARI INI</p>
+            <p id="totalHariIni" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+            <p class="text-xs text-gray-500 mt-1">Semua poli</p>
+          </div>
+          <div class="bg-teal-100 p-3 rounded-xl">
+            <i class="fa-solid fa-users text-teal-600 text-xl"></i>
+          </div>
+        </div>
       </div>
 
-      <div class="bg-white p-5 rounded-xl shadow">
-        <h3 class="font-bold text-sm text-teal-700 mb-1">POLI UMUM</h3>
-        <p class="text-2xl font-bold" id="totalUmum">0</p>
-        <p class="text-xs text-gray-500">Menunggu: <span id="menungguUmum">0</span></p>
+      <div class="card-stat bg-white p-5 rounded-2xl shadow-lg shadow-blue-100/50 border-blue-500">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-semibold text-blue-600 uppercase">POLI UMUM</p>
+            <p id="totalUmum" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+            <p class="text-xs text-gray-500 mt-1">Menunggu: <span id="menungguUmum" class="font-bold">0</span></p>
+          </div>
+          <div class="bg-blue-100 p-3 rounded-xl">
+            <i class="fa-solid fa-stethoscope text-blue-600 text-xl"></i>
+          </div>
+        </div>
       </div>
 
-      <div class="bg-white p-5 rounded-xl shadow">
-        <h3 class="font-bold text-sm text-blue-600 mb-1">POLI GIGI</h3>
-        <p class="text-2xl font-bold" id="totalGigi">0</p>
-        <p class="text-xs text-gray-500">Menunggu: <span id="menungguGigi">0</span></p>
+      <div class="card-stat bg-white p-5 rounded-2xl shadow-lg shadow-purple-100/50 border-purple-500">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-semibold text-purple-600 uppercase">POLI GIGI</p>
+            <p id="totalGigi" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+            <p class="text-xs text-gray-500 mt-1">Menunggu: <span id="menungguGigi" class="font-bold">0</span></p>
+          </div>
+          <div class="bg-purple-100 p-3 rounded-xl">
+            <i class="fa-solid fa-tooth text-purple-600 text-xl"></i>
+          </div>
+        </div>
       </div>
 
-      <div class="bg-white p-5 rounded-xl shadow">
-        <h3 class="font-bold text-sm text-pink-600 mb-1">KIA / ANAK</h3>
-        <p class="text-2xl font-bold" id="totalKIA">0</p>
-        <p class="text-xs text-gray-500">Menunggu: <span id="menungguKIA">0</span></p>
+      <div class="card-stat bg-white p-5 rounded-2xl shadow-lg shadow-pink-100/50 border-pink-500">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-semibold text-pink-600 uppercase">KIA / ANAK</p>
+            <p id="totalKIA" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+            <p class="text-xs text-gray-500 mt-1">Menunggu: <span id="menungguKIA" class="font-bold">0</span></p>
+          </div>
+          <div class="bg-pink-100 p-3 rounded-xl">
+            <i class="fa-solid fa-baby text-pink-600 text-xl"></i>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Antrian Sekarang -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div class="bg-teal-50 p-4 rounded-xl">
-        <p class="text-sm text-gray-600">Dipanggil Poli Umum</p>
-        <p class="text-2xl font-bold text-teal-700" id="dipanggilUmum">-</p>
+    <!-- Sedang Dipanggil -->
+    <div class="grid md:grid-cols-3 gap-4 mb-6">
+      <div class="dipanggil-card p-5 rounded-2xl border-2 border-green-200 shadow-lg shadow-green-100/50">
+        <div class="flex items-center gap-2 text-sm font-semibold text-green-700 mb-2">
+          <i class="fa-solid fa-bullhorn"></i> Dipanggil Poli Umum
+        </div>
+        <p id="dipanggilUmum" class="text-2xl font-black text-green-800">-</p>
       </div>
-      <div class="bg-blue-50 p-4 rounded-xl">
-        <p class="text-sm text-gray-600">Dipanggil Poli Gigi</p>
-        <p class="text-2xl font-bold text-blue-700" id="dipanggilGigi">-</p>
+      <div class="dipanggil-card p-5 rounded-2xl border-2 border-green-200 shadow-lg shadow-green-100/50">
+        <div class="flex items-center gap-2 text-sm font-semibold text-green-700 mb-2">
+          <i class="fa-solid fa-bullhorn"></i> Dipanggil Poli Gigi
+        </div>
+        <p id="dipanggilGigi" class="text-2xl font-black text-green-800">-</p>
       </div>
-      <div class="bg-pink-50 p-4 rounded-xl">
-        <p class="text-sm text-gray-600">Dipanggil KIA/Anak</p>
-        <p class="text-2xl font-bold text-pink-700" id="dipanggilKIA">-</p>
+      <div class="dipanggil-card p-5 rounded-2xl border-2 border-green-200 shadow-lg shadow-green-100/50">
+        <div class="flex items-center gap-2 text-sm font-semibold text-green-700 mb-2">
+          <i class="fa-solid fa-bullhorn"></i> Dipanggil KIA/Anak
+        </div>
+        <p id="dipanggilKIA" class="text-2xl font-black text-green-800">-</p>
       </div>
     </div>
 
-    <!-- MENU CEPAT UDAH BALIK SAYANGG -->
-    <div class="bg-white p-6 rounded-xl shadow mb-6">
-      <h3 class="font-bold text-lg mb-4">Menu Cepat</h3>
-      <div class="flex gap-3 flex-wrap mb-3">
-        <select id="pilihPoli" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-          <option value="Umum">Poli Umum</option>
-          <option value="Gigi">Poli Gigi</option>
-          <option value="KIA">KIA / Anak</option>
-        </select>
-        <button onclick="panggilAntrian()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm">
+    <!-- Menu Cepat -->
+    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl shadow-teal-100/30 border border-teal-50">
+      <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center gap-2">
+        <i class="fa-solid fa-bolt text-teal-600"></i> Menu Cepat
+      </h2>
+      <div class="flex flex-col sm:flex-row gap-3 items-end">
+        <div class="flex-1">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Poli</label>
+          <select id="poliPanggil" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white">
+            <option value="Poli Umum">🩺 Poli Umum</option>
+            <option value="Poli Gigi">🦷 Poli Gigi</option>
+            <option value="KIA/KB">🤱 KIA/KB</option>
+          </select>
+        </div>
+        <button onclick="panggilSelanjutnya()" class="bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-teal-200 transition">
           <i class="fa-solid fa-bullhorn"></i> Panggil Selanjutnya
         </button>
-        <button onclick="cetakLaporan()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
+        <button onclick="cetakLaporan()" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-blue-200 transition">
           <i class="fa-solid fa-print"></i> Cetak Laporan
         </button>
       </div>
-      <div id="statusLoad" class="text-sm text-gray-500">Terakhir update: -</div>
-      <p class="text-xs text-amber-600 mt-2"><i class="fa-solid fa-triangle-exclamation"></i> Reset hanya mengosongkan tampilan dashboard. Data di Google Sheet tidak terhapus.</p>
+      <div id="pesanError" class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700"></div>
+      <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl text-xs text-yellow-700 flex items-start gap-2">
+        <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
+        <span>Reset hanya mengosongkan tampilan dashboard. Data di Google Sheet tidak terhapus.</span>
+      </div>
+    </div>
+
+    <!-- List Antrian Menunggu -->
+    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl shadow-teal-100/30 border border-teal-50 mt-6">
+      <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center gap-2">
+        <i class="fa-solid fa-list text-teal-600"></i> Antrian Menunggu Hari Ini
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b-2 border-gray-200">
+              <th class="text-left py-3 px-2 text-gray-600 font-semibold">No</th>
+              <th class="text-left py-3 px-2 text-gray-600 font-semibold">Nama</th>
+              <th class="text-left py-3 px-2 text-gray-600 font-semibold">Poli</th>
+              <th class="text-left py-3 px-2 text-gray-600 font-semibold">Jam Daftar</th>
+              <th class="text-left py-3 px-2 text-gray-600 font-semibold">Status</th>
+            </tr>
+          </thead>
+          <tbody id="tabelAntrian">
+            <tr><td colspan="5" class="text-center py-8 text-gray-400">Loading data...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </main>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec'; // URL Web App kamu
-const ADMIN_NAMA = 'Admin Loket'; // Ganti nama admin
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
+let user = JSON.parse(localStorage.getItem('userPuskesmas'));
+
+if(!user || user.role.toLowerCase()!== 'admin') {
+  alert('Silakan login dulu sebagai Admin');
+  window.location.href = 'login.html';
+}
+
+document.getElementById('namaAdmin').textContent = user.nama;
+document.getElementById('salamAdmin').textContent = `Selamat Datang, ${user.sapaan || ''} ${user.nama}!`;
 
 async function loadData() {
-  document.getElementById('statusLoad').innerText = 'Mengambil data...';
+  document.getElementById('pesanError').classList.add('hidden');
   try {
-    // Pake API getAdminData, bukan CSV
-    const res = await fetch(`${API_URL}?action=getAdminData`);
-    const result = await res.json();
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=getAdminData`);
+    const hasil = await res.json();
     
-    if(result.status !== 'ok') throw new Error('API error');
-
-    const semua = result.antrian.concat(result.dipanggil ? [result.dipanggil] : []);
-    
-    // Pisahin per poli
-    let data = { Umum: [], Gigi: [], KIA: [] };
-    let dipanggil = { Umum: '-', Gigi: '-', KIA: '-' };
-
-    semua.forEach(d => {
-      const poli = d.Poli || '';
-      const status = (d.Status || '').toLowerCase();
-      const no = d.No_Antrian || '';
+    if(hasil.status == 'ok') {
+      document.getElementById('totalHariIni').textContent = hasil.totalHariIni;
       
-      if (poli.includes('Umum')) {
-        data.Umum.push({status, no});
-        if (status === 'dipanggil') dipanggil.Umum = no;
+      // Hitung per poli
+      const antrian = hasil.antrian || [];
+      const totalUmum = antrian.filter(a => a.Poli == 'Poli Umum').length;
+      const totalGigi = antrian.filter(a => a.Poli == 'Poli Gigi').length;
+      const totalKIA = antrian.filter(a => a.Poli == 'KIA/KB').length;
+      
+      document.getElementById('totalUmum').textContent = totalUmum;
+      document.getElementById('totalGigi').textContent = totalGigi;
+      document.getElementById('totalKIA').textContent = totalKIA;
+      
+      document.getElementById('menungguUmum').textContent = totalUmum;
+      document.getElementById('menungguGigi').textContent = totalGigi;
+      document.getElementById('menungguKIA').textContent = totalKIA;
+      
+      // Yang dipanggil
+      document.getElementById('dipanggilUmum').textContent = hasil.dipanggil && hasil.dipanggil.Poli == 'Poli Umum'? hasil.dipanggil.No_Antrian : '-';
+      document.getElementById('dipanggilGigi').textContent = hasil.dipanggil && hasil.dipanggil.Poli == 'Poli Gigi'? hasil.dipanggil.No_Antrian : '-';
+      document.getElementById('dipanggilKIA').textContent = hasil.dipanggil && hasil.dipanggil.Poli == 'KIA/KB'? hasil.dipanggil.No_Antrian : '-';
+      
+      // Tabel antrian
+      const tbody = document.getElementById('tabelAntrian');
+      if(antrian.length == 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-400">Tidak ada antrian menunggu</td></tr>';
+      } else {
+        tbody.innerHTML = antrian.slice(0, 10).map(a => `
+          <tr class="border-b border-gray-100 hover:bg-gray-50">
+            <td class="py-3 px-2 font-bold text-teal-600">${a.No_Antrian}</td>
+            <td class="py-3 px-2">${a.Nama}</td>
+            <td class="py-3 px-2"><span class="bg-gray-100 px-2 py-1 rounded-lg text-xs">${a.Poli}</span></td>
+            <td class="py-3 px-2 text-gray-500">${new Date(a.Timestamp).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}</td>
+            <td class="py-3 px-2"><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-lg text-xs font-semibold">Menunggu</span></td>
+          </tr>
+        `).join('');
       }
-      else if (poli.includes('Gigi')) {
-        data.Gigi.push({status, no});
-        if (status === 'dipanggil') dipanggil.Gigi = no;
-      }
-      else if (poli.includes('KIA') || poli.includes('KB') || poli.includes('Anak')) {
-        data.KIA.push({status, no});
-        if (status === 'dipanggil') dipanggil.KIA = no;
-      }
-    });
-
-    // Update card total
-    document.getElementById('totalUmum').innerText = data.Umum.length;
-    document.getElementById('totalGigi').innerText = data.Gigi.length;
-    document.getElementById('totalKIA').innerText = data.KIA.length;
-    document.getElementById('totalSemua').innerText = result.totalHariIni;
-
-    // Update menunggu
-    document.getElementById('menungguUmum').innerText = data.Umum.filter(s => s.status === 'menunggu').length;
-    document.getElementById('menungguGigi').innerText = data.Gigi.filter(s => s.status === 'menunggu').length;
-    document.getElementById('menungguKIA').innerText = data.KIA.filter(s => s.status === 'menunggu').length;
-
-    // Update dipanggil
-    document.getElementById('dipanggilUmum').innerText = dipanggil.Umum;
-    document.getElementById('dipanggilGigi').innerText = dipanggil.Gigi;
-    document.getElementById('dipanggilKIA').innerText = dipanggil.KIA;
-
-    document.getElementById('statusLoad').innerText = 'Terakhir update: ' + new Date().toLocaleTimeString('id-ID');
-  } catch (e) {
-    document.getElementById('statusLoad').innerText = 'Gagal load. Cek URL Web App!';
-    console.error(e);
+      
+      document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('id-ID');
+    } else {
+      throw new Error(hasil.message || 'Gagal load data');
+    }
+  } catch (err) {
+    document.getElementById('pesanError').textContent = 'Gagal load: ' + err.message + '. Cek URL Web App!';
+    document.getElementById('pesanError').classList.remove('hidden');
   }
 }
 
-// Tombol Panggil - sekarang beneran update Sheet
-async function panggilAntrian() {
-  const poli = document.getElementById('pilihPoli').value;
+async function panggilSelanjutnya() {
+  const poli = document.getElementById('poliPanggil').value;
   const btn = event.target;
   btn.disabled = true;
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memanggil...';
   
   try {
-    const form = new FormData();
-    form.append('action', 'panggilBerikutnya');
-    form.append('loket', poli === 'Umum' ? '1' : poli === 'Gigi' ? '2' : '3');
-    form.append('petugas', ADMIN_NAMA);
-    
-    const res = await fetch(API_URL, { method: 'POST', body: form });
-    const result = await res.json();
-    
-    if(result.status === 'ok') {
-      alert(`Berhasil panggil antrian ${poli}!`);
-      loadData(); // Refresh langsung
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'panggilBerikutnya',
+        loket: poli,
+        petugas: user.nama
+      })
+    });
+    const hasil = await res.json();
+    if(hasil.status == 'ok') {
+      alert('Berhasil panggil antrian selanjutnya!');
+      loadData();
     } else {
-      alert(result.message || 'Antrian habis!');
+      alert('Gagal: ' + hasil.message);
     }
-  } catch(e) {
-    alert('Gagal panggil antrian');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fa-solid fa-bullhorn"></i> Panggil Selanjutnya';
+  } catch (err) {
+    alert('Error: ' + err.message);
   }
-}
-
-function resetTampilan() {
-  const yakin = confirm('Yakin mau hapus tampilan data? \n\nKlik OK untuk HAPUS, atau Cancel untuk KEMBALI.');
-  if (yakin) {
-    document.getElementById('totalUmum').innerText = 0;
-    document.getElementById('totalGigi').innerText = 0;
-    document.getElementById('totalKIA').innerText = 0;
-    document.getElementById('totalSemua').innerText = 0;
-    document.getElementById('menungguUmum').innerText = 0;
-    document.getElementById('menungguGigi').innerText = 0;
-    document.getElementById('menungguKIA').innerText = 0;
-    document.getElementById('dipanggilUmum').innerText = '-';
-    document.getElementById('dipanggilGigi').innerText = '-';
-    document.getElementById('dipanggilKIA').innerText = '-';
-    document.getElementById('statusLoad').innerText = 'Tampilan direset. Klik Refresh untuk load data lagi.';
-  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-bullhorn"></i> Panggil Selanjutnya';
 }
 
 function cetakLaporan() {
   window.print();
 }
 
-// Load pertama kali + auto refresh tiap 5 detik biar realtime
+function resetTampilan() {
+  if(confirm('Reset tampilan dashboard? Data di Sheet tidak akan terhapus.')) {
+    document.getElementById('totalHariIni').textContent = '0';
+    document.getElementById('totalUmum').textContent = '0';
+    document.getElementById('totalGigi').textContent = '0';
+    document.getElementById('totalKIA').textContent = '0';
+    document.getElementById('menungguUmum').textContent = '0';
+    document.getElementById('menungguGigi').textContent = '0';
+    document.getElementById('menungguKIA').textContent = '0';
+    document.getElementById('dipanggilUmum').textContent = '-';
+    document.getElementById('dipanggilGigi').textContent = '-';
+    document.getElementById('dipanggilKIA').textContent = '-';
+    document.getElementById('tabelAntrian').innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-400">Tampilan direset</td></tr>';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('userPuskesmas');
+  window.location.href = 'index.html';
+}
+
+// Auto load data pas buka + refresh tiap 30 detik
 loadData();
-setInterval(loadData, 5000); // 5 detik = realtime
+setInterval(loadData, 30000);
 </script>
 </body>
 </html>
