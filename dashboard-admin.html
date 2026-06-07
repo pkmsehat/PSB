@@ -201,13 +201,17 @@ document.getElementById('salamAdmin').textContent = `Selamat Datang, ${user.sapa
 async function loadData() {
   document.getElementById('pesanError').classList.add('hidden');
   try {
-    const res = await fetch(`${APPS_SCRIPT_URL}?action=getAdminData`);
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=getAdminData`, {
+      method: 'GET',
+      redirect: 'follow' // WAJIB INI BIAR GA CORS
+    });
+    
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const hasil = await res.json();
     
     if(hasil.status == 'ok') {
       document.getElementById('totalHariIni').textContent = hasil.totalHariIni;
       
-      // Pake data per poli dari Apps Script yang udah dibenerin
       document.getElementById('totalUmum').textContent = hasil.poliUmum.total;
       document.getElementById('totalGigi').textContent = hasil.poliGigi.total;
       document.getElementById('totalKIA').textContent = hasil.poliKIA.total;
@@ -216,16 +220,14 @@ async function loadData() {
       document.getElementById('menungguGigi').textContent = hasil.poliGigi.menunggu;
       document.getElementById('menungguKIA').textContent = hasil.poliKIA.menunggu;
       
-      // Yang dipanggil per poli
       document.getElementById('dipanggilUmum').textContent = hasil.poliUmum.dipanggil? hasil.poliUmum.dipanggil.No_Antrian : '-';
       document.getElementById('dipanggilGigi').textContent = hasil.poliGigi.dipanggil? hasil.poliGigi.dipanggil.No_Antrian : '-';
       document.getElementById('dipanggilKIA').textContent = hasil.poliKIA.dipanggil? hasil.poliKIA.dipanggil.No_Antrian : '-';
       
-      // Tabel antrian
       const antrian = hasil.antrian || [];
       const tbody = document.getElementById('tabelAntrian');
       if(antrian.length == 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-400">Tidak ada antrian menunggu</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-400">Tidak ada antrian menunggu hari ini</td></tr>';
       } else {
         tbody.innerHTML = antrian.slice(0, 10).map(a => `
           <tr class="border-b border-gray-100 hover:bg-gray-50">
@@ -240,10 +242,11 @@ async function loadData() {
       
       document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('id-ID');
     } else {
-      throw new Error(hasil.message || 'Gagal load data');
+      throw new Error(hasil.message || 'Data kosong dari server');
     }
   } catch (err) {
-    document.getElementById('pesanError').textContent = 'Gagal load: ' + err.message + '. Cek URL Web App!';
+    console.log('Error detail:', err);
+    document.getElementById('pesanError').textContent = `Gagal load: ${err.message}. Deploy ulang Apps Script pilih Anyone`;
     document.getElementById('pesanError').classList.remove('hidden');
   }
 }
