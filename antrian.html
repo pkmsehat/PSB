@@ -129,8 +129,9 @@
   </div>
 
 <script>
+<script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
-let nomorDipanggilTerakhir = {}; // OBJECT PER POLI
+let nomorDipanggilTerakhir = {};
 let audioUnlocked = localStorage.getItem('audioUnlocked') === 'true';
 let isPlayingQueue = false;
 let synth = window.speechSynthesis;
@@ -191,16 +192,20 @@ function unlockAudio() {
   }, 1200);
 }
 
-// ================== LOAD DATA VERSI FINAL - FIX BUG ==================
-async function loadData() {
-  try {
-    const res = await fetch(`${APPS_SCRIPT_URL}?action=getPublic&t=${Date.now()}`, {
-      method: 'GET',
-      redirect: 'follow',
-      cache: 'no-store'
-    });
-    const hasil = await res.json();
+// ================== LOAD DATA VIA JSONP BIAR LOLOS CORS ==================
+function loadData() {
+  const script = document.createElement('script');
+  script.src = `${APPS_SCRIPT_URL}?action=getPublic&callback=handleData&t=${Date.now()}`;
+  document.head.appendChild(script);
+  script.onload = () => document.head.removeChild(script);
+  script.onerror = () => {
+    console.log('Gagal load data');
+    document.getElementById('jamUpdate').textContent = 'Gagal Update';
+  };
+}
 
+function handleData(hasil) {
+  try {
     if(hasil.status == 'ok') {
       document.getElementById('namaPkm').textContent = hasil.namaPkm || 'PUSKESMAS SEHAT BERSAMA';
 
@@ -212,7 +217,6 @@ async function loadData() {
         const dipanggil = hasil.dipanggilPerPoli;
         const antrianBerikut = (hasil.antrianPerPoli || []).slice(0, 2);
 
-        // FIX FATAL: PAKE BUAT CEK PER POLI
         if(dipanggil && dipanggil.No_Antrian && dipanggil.No_Antrian!== nomorDipanggilTerakhir){
           nomorDipanggilTerakhir = dipanggil.No_Antrian;
           if(audioUnlocked &&!isPlayingQueue) {
@@ -296,6 +300,5 @@ loadData();
 setInterval(loadData, 5000);
 setTimeout(() => location.reload(), 21600000);
 </script>
-
 </body>
 </html>
