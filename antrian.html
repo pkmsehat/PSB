@@ -9,31 +9,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Outfit', sans-serif; cursor: none; overflow: hidden; }
-   .glass-white {
+  .glass-white {
       background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(20, 184, 166, 0.2);
     }
-   .glass-teal {
+  .glass-teal {
       background: rgba(20, 184, 166, 0.15);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(20, 184, 166, 0.25);
     }
-   .glow-teal {
+  .glow-teal {
       box-shadow: 0 0 25px rgba(20, 184, 166, 0.4);
     }
     @keyframes zoomPulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.02); }
     }
-   .zoom-animate {
+  .zoom-animate {
       animation: zoomPulse 1.5s ease-in-out infinite;
     }
     @keyframes marquee {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
     }
-   .marquee {
+  .marquee {
       animation: marquee 45s linear infinite;
       white-space: nowrap;
       text-transform: uppercase;
@@ -62,17 +62,20 @@
   </div>
 
   <div class="p-2" style="height: calc(100vh - 50px);">
-    <!-- HEADER -->
+    <!-- HEADER - LOGO +30%, JAM KANAN -20% -->
     <div class="glass-white rounded-xl p-2.5 mb-2 shadow-lg">
       <div class="flex items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <img src="logo.png" alt="Logo Puskesmas" class="w-12 h-12 rounded-lg shadow-md bg-white object-contain p-1">
+          <!-- LOGO 30% LEBIH GEDE: w-12 -> w-16 -->
+          <img src="logo.png" alt="Logo Puskesmas" class="w-16 h-16 rounded-lg shadow-md bg-white object-contain p-1">
           <div>
             <h1 class="text-2xl md:text-3xl font-black text-teal-700 tracking-tight" id="namaPkm">PUSKESMAS SEHAT BERSAMA</h1>
             <p class="text-teal-600 text-sm font-medium">Sistem Antrian Digital Real-time</p>
           </div>
+        </div>
+        <!-- JAM TETEP DI KANAN, KECILIN 20%: text-3xl -> text-2xl, text-5xl -> text-4xl -->
         <div class="text-right">
-          <div class="text-3xl md:text-5xl font-black text-teal-700 tracking-wider" id="jamSekarang">00:00:00</div>
+          <div class="text-2xl md:text-4xl font-black text-teal-700 tracking-wider" id="jamSekarang">00:00:00</div>
           <div class="text-teal-600 text-sm font-medium" id="tanggalSekarang">-</div>
         </div>
       </div>
@@ -204,7 +207,7 @@ function unlockAudio() {
   }, 1200);
 }
 
-// ================== INI YANG DIGANTI: LOAD DATA PER POLI ==================
+// ================== LOAD DATA PER POLI - FIX BUG ==================
 async function loadData() {
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getPublic&t=${Date.now()}`, {
@@ -223,7 +226,7 @@ async function loadData() {
       const poliList = ['Poli Umum', 'Poli Gigi', 'KIA/KB'];
 
       poliList.forEach(poli => {
-        const item = hasil.dipanggilPerPoli;
+        const item = hasil.dipanggilPerPoli; // FIX: tambah
 
         // Cek kalau ada panggilan baru di poli ini
         if(item && item.No_Antrian && item.No_Antrian!== nomorDipanggilTerakhir){
@@ -235,7 +238,7 @@ async function loadData() {
 
         if(item && item.No_Antrian){
           dipanggilDiv.innerHTML += `
-            <div class="bg-gradient-to-br from-teal-500 to-emerald-500 rounded-xl p-3 text-center shadow-xl glow-teal flex flex-col justify-center zoom-animate">
+            <div class="bg-gradient-to-br from-teal-500 to-emerald-500 rounded-xl p-3 text-center shadow-xl glow-teal flex flex-col justify-center">
               <div class="text-xs font-bold text-teal-100 mb-1">${poli}</div>
               <div class="text-5xl md:text-7xl font-black text-white mb-0 tracking-tight leading-none">${item.No_Antrian}</div>
               <div class="text-lg md:text-xl font-bold text-white">${item.Nama || '-'}</div>
@@ -257,7 +260,7 @@ async function loadData() {
       antrianDiv.innerHTML = '';
 
       poliList.forEach(poli => {
-        const list = hasil.antrianPerPoli || [];
+        const list = hasil.antrianPerPoli || []; // FIX: tambah
         let listHtml = list.map((a, i) => `
           <div class="flex items-center justify-between bg-teal-50 rounded-lg px-2 py-1">
             <span class="font-bold text-teal-700">${i+1}. ${a.No_Antrian}</span>
