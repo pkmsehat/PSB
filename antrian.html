@@ -9,88 +9,114 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Outfit', sans-serif; cursor: none; overflow: hidden; }
-  .glass {
+ .glass {
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.18);
     }
-  .glow-green {
+ .glow-green {
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
     }
     @keyframes zoomPulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.02); }
     }
-  .zoom-animate {
+ .zoom-animate {
       animation: zoomPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+ .marquee {
+      animation: marquee 30s linear infinite;
+      white-space: nowrap;
     }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
   </style>
 </head>
-<body class="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 h-screen p-3 overflow-hidden">
+<body class="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 h-screen overflow-hidden">
 
-  <!-- HEADER - PAKE LOGO.PNG -->
-  <div class="glass rounded-2xl p-3 mb-2 shadow-xl">
-    <div class="flex items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <img src="logo.png" alt="Logo Puskesmas" class="w-11 h-11 rounded-xl shadow-md bg-white object-contain p-1">
+  <!-- RUNNING TEXT BAR ATAS - KAYA WEBSITE PSB -->
+  <div class="bg-gradient-to-r from-emerald-700 to-green-700 py-1.5 overflow-hidden shadow-md">
+    <div class="marquee text-white text-xs font-medium px-4">
+      <span class="mx-6">Selamat Datang di Puskesmas Sehat Bersama</span>
+      <span class="mx-6">•</span>
+      <span class="mx-6">Pendaftaran Online Buka 24 Jam</span>
+      <span class="mx-6">•</span>
+      <span class="mx-6">Jam Pelayanan 07:30 - 14:00 WIB</span>
+      <span class="mx-6">•</span>
+      <span class="mx-6">Layanan Cepat, Mudah, & Transparan untuk Anda</span>
+      <span class="mx-6">•</span>
+      <span class="mx-6">Harap Jaga Ketenangan Selama Menunggu Antrian</span>
+      <span class="mx-6">•</span>
+      <span class="mx-6">Gunakan Masker dan Jaga Jarak</span>
+    </div>
+  </div>
+
+  <div class="p-3" style="height: calc(100vh - 36px);">
+    <!-- HEADER -->
+    <div class="glass rounded-2xl p-3 mb-2 shadow-xl">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="Logo Puskesmas" class="w-11 h-11 rounded-xl shadow-md bg-white object-contain p-1">
+          <div>
+            <h1 class="text-xl md:text-2xl font-black text-white tracking-tight" id="namaPkm">PUSKESMAS SEHAT BERSAMA</h1>
+            <p class="text-green-50 text-xs font-medium">Sistem Antrian Digital Real-time</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-2xl md:text-4xl font-black text-white tracking-wider" id="jamSekarang">00:00:00</div>
+          <div class="text-green-50 text-xs font-medium" id="tanggalSekarang">-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="grid grid-cols-5 gap-2 mb-2" style="height: calc(100vh - 200px);">
+      <div class="col-span-3 glass rounded-2xl p-3 shadow-xl flex flex-col">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-md">
+            <i class="fa-solid fa-bullhorn text-white text-xs"></i>
+          </div>
+          <h2 class="text-base font-bold text-white">SEDANG DIPANGGIL</h2>
+        </div>
+        <div id="cardDipanggil" class="bg-gradient-to-br from-emerald-600 to-green-700 rounded-2xl p-5 text-center shadow-xl glow-green flex-1 flex flex-col justify-center">
+          <div id="nomorDipanggil" class="text-5xl md:text-7xl font-black text-white mb-1 tracking-tight">---</div>
+          <div id="namaDipanggil" class="text-lg md:text-xl font-bold text-white mb-1">Menunggu panggilan...</div>
+          <div id="poliDipanggil" class="text-sm md:text-base text-green-100 font-medium">-</div>
+        </div>
+      </div>
+
+      <div class="col-span-2 glass rounded-2xl p-3 shadow-xl flex flex-col">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
+            <i class="fa-solid fa-users text-white text-xs"></i>
+          </div>
+          <h2 class="text-base font-bold text-white">ANTRIAN BERIKUTNYA</h2>
+        </div>
+        <div id="listAntrian" class="space-y-1.5 overflow-y-auto flex-1 pr-1">
+          <p class="text-center text-green-50 py-6 text-xs">Memuat data...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER INFO -->
+    <div class="glass rounded-2xl p-2 shadow-xl">
+      <div class="grid grid-cols-3 gap-4 text-center">
         <div>
-          <h1 class="text-xl md:text-2xl font-black text-white tracking-tight" id="namaPkm">PUSKESMAS SEHAT BERSAMA</h1>
-          <p class="text-green-50 text-xs font-medium">Sistem Antrian Digital Real-time</p>
+          <p class="text-green-50 text-xs mb-0.5">Total Pasien Hari Ini</p>
+          <p class="text-xl font-black text-white" id="totalHariIni">0</p>
         </div>
-      <div class="text-right">
-        <div class="text-2xl md:text-4xl font-black text-white tracking-wider" id="jamSekarang">00:00:00</div>
-        <div class="text-green-50 text-xs font-medium" id="tanggalSekarang">-</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MAIN CONTENT -->
-  <div class="grid grid-cols-5 gap-2 mb-2" style="height: calc(100vh - 165px);">
-    <!-- SEDANG DIPANGGIL -->
-    <div class="col-span-3 glass rounded-2xl p-3 shadow-xl flex flex-col">
-      <div class="flex items-center gap-2 mb-2">
-        <div class="w-7 h-7 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-md">
-          <i class="fa-solid fa-bullhorn text-white text-xs"></i>
+        <div>
+          <p class="text-green-50 text-xs mb-0.5">Rata-rata Waktu Tunggu</p>
+          <p class="text-xl font-black text-white" id="rataMenit">0 menit</p>
         </div>
-        <h2 class="text-base font-bold text-white">SEDANG DIPANGGIL</h2>
-      </div>
-      <div id="cardDipanggil" class="bg-gradient-to-br from-emerald-600 to-green-700 rounded-2xl p-5 text-center shadow-xl glow-green flex-1 flex flex-col justify-center">
-        <div id="nomorDipanggil" class="text-5xl md:text-7xl font-black text-white mb-1 tracking-tight">---</div>
-        <div id="namaDipanggil" class="text-lg md:text-xl font-bold text-white mb-1">Menunggu panggilan...</div>
-        <div id="poliDipanggil" class="text-sm md:text-base text-green-100 font-medium">-</div>
-      </div>
-    </div>
-
-    <!-- ANTRIAN BERIKUTNYA -->
-    <div class="col-span-2 glass rounded-2xl p-3 shadow-xl flex flex-col">
-      <div class="flex items-center gap-2 mb-2">
-        <div class="w-7 h-7 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
-          <i class="fa-solid fa-users text-white text-xs"></i>
+        <div>
+          <p class="text-green-50 text-xs mb-0.5">Update Terakhir</p>
+          <p class="text-xl font-black text-white" id="jamUpdate">--:--:--</p>
         </div>
-        <h2 class="text-base font-bold text-white">ANTRIAN BERIKUTNYA</h2>
-      </div>
-      <div id="listAntrian" class="space-y-1.5 overflow-y-auto flex-1 pr-1">
-        <p class="text-center text-green-50 py-6 text-xs">Memuat data...</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER INFO -->
-  <div class="glass rounded-2xl p-2 shadow-xl">
-    <div class="grid grid-cols-3 gap-4 text-center">
-      <div>
-        <p class="text-green-50 text-xs mb-0.5">Total Pasien Hari Ini</p>
-        <p class="text-xl font-black text-white" id="totalHariIni">0</p>
-      </div>
-      <div>
-        <p class="text-green-50 text-xs mb-0.5">Rata-rata Waktu Tunggu</p>
-        <p class="text-xl font-black text-white" id="rataMenit">0 menit</p>
-      </div>
-      <div>
-        <p class="text-green-50 text-xs mb-0.5">Update Terakhir</p>
-        <p class="text-xl font-black text-white" id="jamUpdate">--:--:--</p>
       </div>
     </div>
   </div>
@@ -115,6 +141,16 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYc
 let nomorDipanggilTerakhir = '';
 let audioUnlocked = localStorage.getItem('audioUnlocked') === 'true';
 let isPlayingQueue = false;
+let synth = window.speechSynthesis;
+let voices = [];
+
+function loadVoices() {
+  voices = synth.getVoices();
+}
+loadVoices();
+if (synth.onvoiceschanged!== undefined) {
+  synth.onvoiceschanged = loadVoices;
+}
 
 const today = new Date().toDateString();
 if(audioUnlocked && localStorage.getItem('audioDate') === today) {
@@ -123,9 +159,6 @@ if(audioUnlocked && localStorage.getItem('audioDate') === today) {
   localStorage.setItem('audioUnlocked', 'false');
   audioUnlocked = false;
 }
-
-const tingtongAudio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-doorbell-single-press-333.mp3');
-tingtongAudio.volume = 1;
 
 function updateJam() {
   const now = new Date();
@@ -137,19 +170,38 @@ function updateJam() {
 setInterval(updateJam, 1000);
 updateJam();
 
-function unlockAudio() {
-  tingtongAudio.play().then(() => {
-    tingtongAudio.pause();
-    tingtongAudio.currentTime = 0;
+function playTingtong() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
 
-    const test = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=${encodeURIComponent('Sistem suara aktif')}&tl=id`);
-    test.play();
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  oscillator.frequency.value = 800;
+  oscillator.type = 'sine';
+  gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
+
+  oscillator.start(audioCtx.currentTime);
+  oscillator.stop(audioCtx.currentTime + 1);
+}
+
+function unlockAudio() {
+  playTingtong();
+
+  setTimeout(() => {
+    const test = new SpeechSynthesisUtterance('Sistem suara aktif');
+    test.lang = 'id-ID';
+    test.rate = 0.9;
+    test.voice = voices.find(v => v.lang === 'id-ID') || voices[0];
+    synth.speak(test);
 
     audioUnlocked = true;
     localStorage.setItem('audioUnlocked', 'true');
     localStorage.setItem('audioDate', new Date().toDateString());
     document.getElementById('audioOverlay').style.display = 'none';
-  }).catch(e => alert('Klik lagi beb, browser nge-block: ' + e));
+  }, 1200);
 }
 
 async function loadData() {
@@ -163,9 +215,9 @@ async function loadData() {
     if(hasil.status == 'ok') {
       document.getElementById('namaPkm').textContent = hasil.namaPkm || 'PUSKESMAS SEHAT BERSAMA';
 
-      if(hasil.dipanggil && hasil.dipanggil.No_Antrian !== nomorDipanggilTerakhir) {
+      if(hasil.dipanggil && hasil.dipanggil.No_Antrian!== nomorDipanggilTerakhir) {
         nomorDipanggilTerakhir = hasil.dipanggil.No_Antrian;
-        if(audioUnlocked && !isPlayingQueue) {
+        if(audioUnlocked &&!isPlayingQueue) {
           panggilSuaraAntrian(hasil.dipanggil.No_Antrian, hasil.dipanggil.Poli, hasil.dipanggil.Nama);
         }
 
@@ -209,25 +261,31 @@ function panggilSuaraAntrian(nomorAntrian, namaPoli, namaPasien) {
   if (!audioUnlocked || isPlayingQueue) return;
   isPlayingQueue = true;
 
-  tingtongAudio.currentTime = 0;
-  tingtongAudio.play().catch(e => console.log('Tingtong error:', e));
+  playTingtong();
 
   setTimeout(() => {
     const teks = `Perhatian. Nomor antrian ${nomorAntrian}, atas nama ${namaPasien}, silakan menuju ${namaPoli}`;
-    const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=${encodeURIComponent(teks)}&tl=id`;
 
-    const playSequence = (count) => {
+    let count = 3;
+    const speakOnce = () => {
       if (count === 0) {
         isPlayingQueue = false;
         return;
       }
-      const audio = new Audio(url);
-      audio.play().catch(e => console.log('TTS error:', e));
-      audio.onended = () => setTimeout(() => playSequence(count - 1), 1000);
+      const utter = new SpeechSynthesisUtterance(teks);
+      utter.lang = 'id-ID';
+      utter.rate = 0.85;
+      utter.pitch = 1;
+      utter.voice = voices.find(v => v.lang === 'id-ID') || voices[0];
+      utter.onend = () => {
+        count--;
+        setTimeout(speakOnce, 800);
+      };
+      synth.speak(utter);
     };
 
-    playSequence(3);
-  }, 1800);
+    speakOnce();
+  }, 1500);
 }
 
 loadData();
