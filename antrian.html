@@ -130,7 +130,7 @@
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
-let nomorDipanggilTerakhir = {};
+let nomorDipanggilTerakhir = {}; // OBJECT PER POLI
 let audioUnlocked = localStorage.getItem('audioUnlocked') === 'true';
 let isPlayingQueue = false;
 let synth = window.speechSynthesis;
@@ -191,7 +191,7 @@ function unlockAudio() {
   }, 1200);
 }
 
-// ================== LOAD DATA VERSI BARU: DIPANGGIL + 2 BERIKUTNYA ==================
+// ================== LOAD DATA VERSI FINAL - FIX ==================
 async function loadData() {
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getPublic&t=${Date.now()}`, {
@@ -209,10 +209,11 @@ async function loadData() {
       const poliList = ['Poli Umum', 'Poli Gigi', 'KIA/KB'];
 
       poliList.forEach(poli => {
+        // FIX UTAMA: TAMBAH BUAT AMBIL PER POLI
         const dipanggil = hasil.dipanggilPerPoli;
         const antrianBerikut = (hasil.antrianPerPoli || []).slice(0, 2);
 
-        // Cek suara per poli
+        // FIX SUARA PER POLI
         if(dipanggil && dipanggil.No_Antrian && dipanggil.No_Antrian!== nomorDipanggilTerakhir){
           nomorDipanggilTerakhir = dipanggil.No_Antrian;
           if(audioUnlocked &&!isPlayingQueue) {
