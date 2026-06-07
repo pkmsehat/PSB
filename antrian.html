@@ -9,13 +9,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Outfit', sans-serif; cursor: none; overflow: hidden; }
-.glass {
-      background: rgba(255, 255, 255, 0.12);
+.glass-white {
+      background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(20, 184, 166, 0.2);
     }
-.glow-green {
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
+.glass-teal {
+      background: rgba(20, 184, 166, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(20, 184, 166, 0.25);
+    }
+.glow-teal {
+      box-shadow: 0 0 25px rgba(20, 184, 166, 0.4);
     }
     @keyframes zoomPulse {
       0%, 100% { transform: scale(1); }
@@ -29,112 +34,118 @@
       100% { transform: translateX(-100%); }
     }
 .marquee {
-      animation: marquee 25s linear infinite;
+      animation: marquee 45s linear infinite;
       white-space: nowrap;
+      text-transform: uppercase;
     }
     ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: rgba(20,184,166,0.4); border-radius: 10px; }
   </style>
 </head>
-<body class="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 h-screen overflow-hidden">
+<body class="bg-[#F0FDFA] h-screen overflow-hidden">
 
-  <!-- RUNNING TEXT - HURUF DIBESARIN -->
-  <div class="bg-gradient-to-r from-emerald-700 to-green-700 py-2 overflow-hidden shadow-md">
-    <div class="marquee text-white text-sm font-bold px-4">
-      <span class="mx-8">Selamat Datang di Puskesmas Sehat Bersama</span>
-      <span class="mx-8">•</span>
-      <span class="mx-8">Pendaftaran Online Buka 24 Jam</span>
-      <span class="mx-8">•</span>
-      <span class="mx-8">Jam Pelayanan 07:30 - 14:00 WIB</span>
-      <span class="mx-8">•</span>
-      <span class="mx-8">Layanan Cepat, Mudah, & Transparan untuk Anda</span>
-      <span class="mx-8">•</span>
-      <span class="mx-8">Harap Jaga Ketenangan Selama Menunggu Antrian</span>
-      <span class="mx-8">•</span>
-      <span class="mx-8">Gunakan Masker dan Jaga Jarak</span>
+  <!-- RUNNING TEXT - PELAN + KAPITAL + 30% LEBIH GEDE -->
+  <div class="bg-gradient-to-r from-teal-600 to-emerald-600 py-2.5 overflow-hidden shadow-md">
+    <div class="marquee text-white text-base font-bold px-4">
+      <span class="mx-10">SELAMAT DATANG DI PUSKESMAS SEHAT BERSAMA</span>
+      <span class="mx-10">•</span>
+      <span class="mx-10">PENDAFTARAN ONLINE BUKA 24 JAM</span>
+      <span class="mx-10">•</span>
+      <span class="mx-10">JAM PELAYANAN 07:30 - 14:00 WIB</span>
+      <span class="mx-10">•</span>
+      <span class="mx-10">LAYANAN CEPAT, MUDAH, & TRANSPARAN UNTUK ANDA</span>
+      <span class="mx-10">•</span>
+      <span class="mx-10">HARAP JAGA KETENANGAN SELAMA MENUNGGU ANTRIAN</span>
+      <span class="mx-10">•</span>
+      <span class="mx-10">GUNAKAN MASKER DAN JAGA JARAK</span>
     </div>
   </div>
 
-  <div class="p-2" style="height: calc(100vh - 44px);">
-    <!-- HEADER - DIKECILIN -->
-    <div class="glass rounded-xl p-2 mb-2 shadow-xl">
+  <div class="p-2" style="height: calc(100vh - 50px);">
+    <!-- HEADER - NAMA PUSKESMAS + JAM 50% LEBIH GEDE, JAM DI KANAN -->
+    <div class="glass-white rounded-xl p-2.5 mb-2 shadow-lg">
       <div class="flex items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <img src="logo.png" alt="Logo Puskesmas" class="w-10 h-10 rounded-lg shadow-md bg-white object-contain p-0.5">
+          <img src="logo.png" alt="Logo Puskesmas" class="w-12 h-12 rounded-lg shadow-md bg-white object-contain p-1">
           <div>
-            <h1 class="text-lg md:text-xl font-black text-white tracking-tight" id="namaPkm">PUSKESMAS SEHAT BERSAMA</h1>
-            <p class="text-green-50 text-xs font-medium">Sistem Antrian Digital Real-time</p>
+            <!-- 50% LEBIH GEDE -->
+            <h1 class="text-2xl md:text-3xl font-black text-teal-700 tracking-tight" id="namaPkm">PUSKESMAS SEHAT BERSAMA</h1>
+            <p class="text-teal-600 text-sm font-medium">Sistem Antrian Digital Real-time</p>
           </div>
+        </div>
+        <!-- JAM DI KANAN - 50% LEBIH GEDE -->
         <div class="text-right">
-          <div class="text-xl md:text-3xl font-black text-white tracking-wider" id="jamSekarang">00:00:00</div>
-          <div class="text-green-50 text-xs font-medium" id="tanggalSekarang">-</div>
+          <div class="text-3xl md:text-5xl font-black text-teal-700 tracking-wider" id="jamSekarang">00:00:00</div>
+          <div class="text-teal-600 text-sm font-medium" id="tanggalSekarang">-</div>
         </div>
       </div>
     </div>
 
-    <!-- MAIN CONTENT - TINGGI DIKURANGIN, HURUF DIBESARIN -->
-    <div class="grid grid-cols-5 gap-2 mb-2" style="height: calc(100vh - 220px);">
-      <!-- SEDANG DIPANGGIL - LEBIH PENDEK HURUF JUMBO -->
-      <div class="col-span-3 glass rounded-xl p-2 shadow-xl flex flex-col">
-        <div class="flex items-center gap-2 mb-1">
-          <div class="w-6 h-6 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-md">
-            <i class="fa-solid fa-bullhorn text-white text-xs"></i>
+    <!-- MAIN CONTENT -->
+    <div class="grid grid-cols-5 gap-2 mb-2" style="height: calc(100vh - 235px);">
+      <!-- SEDANG DIPANGGIL - JUDUL 50% LEBIH GEDE -->
+      <div class="col-span-3 glass-white rounded-xl p-2 shadow-lg flex flex-col">
+        <div class="flex items-center gap-2 mb-1.5">
+          <div class="w-7 h-7 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-md">
+            <i class="fa-solid fa-bullhorn text-white text-sm"></i>
           </div>
-          <h2 class="text-sm font-bold text-white">SEDANG DIPANGGIL</h2>
+          <!-- 50% LEBIH GEDE -->
+          <h2 class="text-lg font-black text-teal-700">SEDANG DIPANGGIL</h2>
         </div>
-        <div id="cardDipanggil" class="bg-gradient-to-br from-emerald-600 to-green-700 rounded-xl p-3 text-center shadow-xl glow-green flex-1 flex flex-col justify-center">
-          <!-- HURUF JUMBO BANGET -->
-          <div id="nomorDipanggil" class="text-7xl md:text-9xl font-black text-white mb-0 tracking-tight leading-none">---</div>
-          <div id="namaDipanggil" class="text-2xl md:text-4xl font-bold text-white mb-1">Menunggu panggilan...</div>
-          <div id="poliDipanggil" class="text-xl md:text-2xl text-green-100 font-bold">-</div>
+        <div id="cardDipanggil" class="bg-gradient-to-br from-teal-500 to-emerald-500 rounded-xl p-3 text-center shadow-xl glow-teal flex-1 flex flex-col justify-center">
+          <div id="nomorDipanggil" class="text-8xl md:text-[11rem] font-black text-white mb-0 tracking-tight leading-none">---</div>
+          <div id="namaDipanggil" class="text-3xl md:text-5xl font-bold text-white mb-1">Menunggu panggilan...</div>
+          <div id="poliDipanggil" class="text-2xl md:text-3xl text-teal-50 font-bold">-</div>
         </div>
       </div>
 
-      <!-- ANTRIAN BERIKUTNYA - LEBIH PENDEK HURUF BESAR -->
-      <div class="col-span-2 glass rounded-xl p-2 shadow-xl flex flex-col">
-        <div class="flex items-center gap-2 mb-1">
-          <div class="w-6 h-6 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
-            <i class="fa-solid fa-users text-white text-xs"></i>
+      <!-- ANTRIAN BERIKUTNYA - JUDUL 50% LEBIH GEDE -->
+      <div class="col-span-2 glass-white rounded-xl p-2 shadow-lg flex flex-col">
+        <div class="flex items-center gap-2 mb-1.5">
+          <div class="w-7 h-7 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center shadow-md">
+            <i class="fa-solid fa-users text-white text-sm"></i>
           </div>
-          <h2 class="text-sm font-bold text-white">ANTRIAN BERIKUTNYA</h2>
+          <!-- 50% LEBIH GEDE -->
+          <h2 class="text-lg font-black text-teal-700">ANTRIAN BERIKUTNYA</h2>
         </div>
-        <div id="listAntrian" class="space-y-1 overflow-y-auto flex-1 pr-1">
-          <p class="text-center text-green-50 py-4 text-sm">Memuat data...</p>
+        <!-- DAFTAR ANTRIAN - HURUF GEDE MUAT 5 ANTRIAN -->
+        <div id="listAntrian" class="space-y-1.5 overflow-y-auto flex-1 pr-1">
+          <p class="text-center text-teal-600 py-4 text-base font-medium">Memuat data...</p>
         </div>
       </div>
     </div>
 
-    <!-- FOOTER INFO - DIKECILIN -->
-    <div class="glass rounded-xl p-1.5 shadow-xl">
+    <!-- FOOTER INFO - 30% LEBIH GEDE -->
+    <div class="glass-white rounded-xl p-2 shadow-lg">
       <div class="grid grid-cols-3 gap-4 text-center">
         <div>
-          <p class="text-green-50 text-xs mb-0">Total Pasien Hari Ini</p>
-          <p class="text-lg font-black text-white" id="totalHariIni">0</p>
+          <p class="text-teal-600 text-sm font-medium mb-0.5">Total Pasien Hari Ini</p>
+          <p class="text-2xl font-black text-teal-700" id="totalHariIni">0</p>
         </div>
         <div>
-          <p class="text-green-50 text-xs mb-0">Rata-rata Waktu Tunggu</p>
-          <p class="text-lg font-black text-white" id="rataMenit">0 menit</p>
+          <p class="text-teal-600 text-sm font-medium mb-0.5">Rata-rata Waktu Tunggu</p>
+          <p class="text-2xl font-black text-teal-700" id="rataMenit">0 menit</p>
         </div>
         <div>
-          <p class="text-green-50 text-xs mb-0">Update Terakhir</p>
-          <p class="text-lg font-black text-white" id="jamUpdate">--:--:--</p>
+          <p class="text-teal-600 text-sm font-medium mb-0.5">Update Terakhir</p>
+          <p class="text-2xl font-black text-teal-700" id="jamUpdate">--:--:--</p>
         </div>
       </div>
     </div>
   </div>
 
   <!-- OVERLAY AKTIFKAN SUARA -->
-  <div id="audioOverlay" class="fixed inset-0 bg-emerald-900/95 backdrop-blur-lg flex items-center justify-center z-50">
+  <div id="audioOverlay" class="fixed inset-0 bg-teal-900/95 backdrop-blur-lg flex items-center justify-center z-50">
     <div class="text-center max-w-2xl px-6">
-      <div class="w-28 h-28 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full flex items-center justify-center shadow-2xl mx-auto mb-6 animate-pulse">
+      <div class="w-28 h-28 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-full flex items-center justify-center shadow-2xl mx-auto mb-6 animate-pulse">
         <i class="fa-solid fa-music text-5xl text-white"></i>
       </div>
       <h3 class="text-3xl md:text-4xl font-black text-white mb-3">AKTIFKAN PENGUMUMAN SUARA</h3>
-      <p class="text-green-100 text-lg md:text-xl mb-8">Klik tombol di bawah untuk mengaktifkan suara panggilan otomatis</p>
-      <button onclick="unlockAudio()" class="bg-white text-emerald-600 px-10 py-5 rounded-2xl font-black text-xl md:text-2xl shadow-2xl hover:scale-105 transition transform">
+      <p class="text-teal-100 text-lg md:text-xl mb-8">Klik tombol di bawah untuk mengaktifkan suara panggilan otomatis</p>
+      <button onclick="unlockAudio()" class="bg-white text-teal-600 px-10 py-5 rounded-2xl font-black text-xl md:text-2xl shadow-2xl hover:scale-105 transition transform">
         <i class="fa-solid fa-circle-play mr-3"></i> KLIK UNTUK MULAI
       </button>
-      <p class="text-green-200 text-sm mt-6">Hanya perlu 1x klik setiap pagi saat TV dinyalakan</p>
+      <p class="text-teal-200 text-sm mt-6">Hanya perlu 1x klik setiap pagi saat TV dinyalakan</p>
     </div>
   </div>
 
@@ -233,22 +244,23 @@ async function loadData() {
       document.getElementById('poliDipanggil').textContent = hasil.dipanggil? hasil.dipanggil.Poli : '-';
 
       const antrian = hasil.antrian || [];
+      // LIST ANTRIAN - HURUF GEDE, MUAT 5 ANTRIAN
       document.getElementById('listAntrian').innerHTML = antrian.length? antrian.map((a, i) => `
-        <div class="glass rounded-lg p-1.5 ${i==0? 'border border-yellow-300' : ''}">
+        <div class="glass-teal rounded-lg p-2 ${i==0? 'border-2 border-amber-400' : ''}">
           <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <div class="w-6 h-6 bg-white/20 rounded-md flex items-center justify-center">
-                <span class="font-black text-xs text-white">${i+1}</span>
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
+                <span class="font-black text-sm text-white">${i+1}</span>
               </div>
               <div>
-                <p class="font-black text-lg text-white leading-tight">${a.No_Antrian}</p>
-                <p class="text-xs text-green-50 leading-tight">${a.Nama}</p>
+                <p class="font-black text-2xl text-teal-700 leading-tight">${a.No_Antrian}</p>
+                <p class="text-sm text-teal-600 leading-tight font-medium">${a.Nama}</p>
               </div>
             </div>
-            <span class="bg-amber-400 text-amber-900 px-2 py-0.5 rounded-md text-xs font-bold">${a.Poli}</span>
+            <span class="bg-amber-400 text-amber-900 px-3 py-1 rounded-lg text-sm font-bold">${a.Poli}</span>
           </div>
         </div>
-      `).join('') : '<p class="text-center text-green-50 py-4 text-sm">Tidak ada antrian</p>';
+      `).join('') : '<p class="text-center text-teal-600 py-4 text-base font-medium">Tidak ada antrian</p>';
 
       document.getElementById('totalHariIni').textContent = hasil.totalHariIni;
       document.getElementById('rataMenit').textContent = hasil.rataMenit + ' menit';
