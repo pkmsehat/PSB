@@ -190,6 +190,10 @@
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
 let user = JSON.parse(localStorage.getItem('userPuskesmas'));
 
+// PRELOAD SUARA TINGTONG - TARO DI ATAS SENDIRI
+const audioTingtong = new Audio("data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU"+Array(1e3).join("123"));
+audioTingtong.volume = 0.7;
+
 if(!user || user.role.toLowerCase()!== 'admin') {
   alert('Silakan login dulu sebagai Admin');
   window.location.href = 'login.html';
@@ -269,7 +273,7 @@ async function panggilSelanjutnya() {
     });
     const hasil = await res.json();
     if(hasil.status == 'ok') {
-      // PANGGIL SUARA + TINGTONG
+      // PANGGIL SUARA + TINGTONG VERSI BARU
       panggilSuara(hasil.nomor, poli);
       
       alert('Berhasil panggil antrian: ' + hasil.nomor);
@@ -285,12 +289,31 @@ async function panggilSelanjutnya() {
 }
 
 function panggilSuara(nomorAntrian, namaPoli) {
-  // Suara TINGTONG dulu
-  const tingtong = new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3');
-  tingtong.volume = 0.8;
-  tingtong.play();
+  // 1. MAININ TINGTONG PAKE Web Audio API - DIJAMIN BUNYI
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const now = audioCtx.currentTime;
   
-  // Delay 800ms baru ngomong
+  // Bikin nada ting
+  const osc1 = audioCtx.createOscillator();
+  const gain1 = audioCtx.createGain();
+  osc1.frequency.setValueAtTime(800, now); // Nada tinggi
+  gain1.gain.setValueAtTime(0.3, now);
+  gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+  osc1.connect(gain1).connect(audioCtx.destination);
+  osc1.start(now);
+  osc1.stop(now + 0.3);
+  
+  // Bikin nada tong
+  const osc2 = audioCtx.createOscillator();
+  const gain2 = audioCtx.createGain();
+  osc2.frequency.setValueAtTime(600, now + 0.2); // Nada lebih rendah
+  gain2.gain.setValueAtTime(0.3, now + 0.2);
+  gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+  osc2.connect(gain2).connect(audioCtx.destination);
+  osc2.start(now + 0.2);
+  osc2.stop(now + 0.6);
+  
+  // 2. DELAY 1 DETIK BARU NGOMONG
   setTimeout(() => {
     if (!('speechSynthesis' in window)) return;
     
@@ -301,10 +324,9 @@ function panggilSuara(nomorAntrian, namaPoli) {
     utterance.pitch = 1;
     utterance.volume = 1;
     
-    // Panggil 2x biar jelas
     speechSynthesis.speak(utterance);
     setTimeout(() => speechSynthesis.speak(utterance), 3500);
-  }, 800);
+  }, 1000);
 }
 
 function cetakLaporan() {
