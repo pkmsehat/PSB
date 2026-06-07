@@ -8,32 +8,33 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Outfit', sans-serif; cursor: none; overflow: hidden; }
- .glass-white {
+    body { font-family: 'Outfit', sans-serif; overflow: hidden; }
+    /* HAPUS cursor: none; BIAR BISA DIKLIK PAS DEBUG */
+.glass-white {
       background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(20, 184, 166, 0.2);
     }
- .glass-teal {
+.glass-teal {
       background: rgba(20, 184, 166, 0.15);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(20, 184, 166, 0.25);
     }
- .glow-teal {
+.glow-teal {
       box-shadow: 0 0 25px rgba(20, 184, 166, 0.4);
     }
     @keyframes zoomPulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.02); }
     }
- .zoom-animate {
+.zoom-animate {
       animation: zoomPulse 1.5s ease-in-out infinite;
     }
     @keyframes marquee {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
     }
- .marquee {
+.marquee {
       animation: marquee 45s linear infinite;
       white-space: nowrap;
       text-transform: uppercase;
@@ -62,7 +63,7 @@
   </div>
 
   <div class="p-2" style="height: calc(100vh - 50px);">
-    <!-- HEADER - LOGO +30%, JAM KANAN -20% -->
+    <!-- HEADER -->
     <div class="glass-white rounded-xl p-2.5 mb-2 shadow-lg">
       <div class="flex items-center justify-between gap-3">
         <div class="flex items-center gap-3">
@@ -79,7 +80,7 @@
       </div>
     </div>
 
-    <!-- MAIN CONTENT - FOKUS PANGGILAN + 2 BERIKUTNYA -->
+    <!-- MAIN CONTENT -->
     <div class="glass-white rounded-xl p-3 shadow-lg flex flex-col mb-2" style="height: calc(100vh - 235px);">
       <div class="flex items-center gap-2 mb-2">
         <div class="w-8 h-8 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-md">
@@ -87,11 +88,7 @@
         </div>
         <h2 class="text-xl font-black text-teal-700">SEDANG DIPANGGIL</h2>
       </div>
-
-      <!-- GRID 3 KOLOM: DIPANGGIL + 2 ANTRIAN BERIKUTNYA -->
-      <div id="gridPoli" class="grid grid-cols-3 gap-3 flex-1">
-        <!-- DIISI JS -->
-      </div>
+      <div id="gridPoli" class="grid grid-cols-3 gap-3 flex-1"></div>
     </div>
 
     <!-- FOOTER INFO -->
@@ -121,14 +118,13 @@
       </div>
       <h3 class="text-3xl md:text-4xl font-black text-white mb-3">AKTIFKAN PENGUMUMAN SUARA</h3>
       <p class="text-teal-100 text-lg md:text-xl mb-8">Klik tombol di bawah untuk mengaktifkan suara panggilan otomatis</p>
-      <button onclick="unlockAudio()" class="bg-white text-teal-600 px-10 py-5 rounded-2xl font-black text-xl md:text-2xl shadow-2xl hover:scale-105 transition transform">
+      <button id="btnMulai" class="bg-white text-teal-600 px-10 py-5 rounded-2xl font-black text-xl md:text-2xl shadow-2xl hover:scale-105 transition transform cursor-pointer">
         <i class="fa-solid fa-circle-play mr-3"></i> KLIK UNTUK MULAI
       </button>
       <p class="text-teal-200 text-sm mt-6">Hanya perlu 1x klik setiap pagi saat TV dinyalakan</p>
     </div>
   </div>
 
-<script>
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytiOmk3hIj-hYcNqNg4dUTUk24ZAg-oJlRbyZI_XK8-f1ocHBCtBjTEucyfSLtCNzDAg/exec';
 let nomorDipanggilTerakhir = {};
@@ -140,17 +136,16 @@ let voices = [];
 function loadVoices() {
   voices = synth.getVoices();
 }
-loadVoices();
-if (synth.onvoiceschanged!== undefined) {
-  synth.onvoiceschanged = loadVoices;
+if (synth) {
+  loadVoices();
+  if (synth.onvoiceschanged!== undefined) {
+    synth.onvoiceschanged = loadVoices;
+  }
 }
 
 const today = new Date().toDateString();
 if(audioUnlocked && localStorage.getItem('audioDate') === today) {
   document.getElementById('audioOverlay').style.display = 'none';
-} else {
-  localStorage.setItem('audioUnlocked', 'false');
-  audioUnlocked = false;
 }
 
 function updateJam() {
@@ -164,35 +159,42 @@ setInterval(updateJam, 1000);
 updateJam();
 
 function playTingtong() {
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const oscillator = audioCtx.createOscillator();
-  const gainNode = audioCtx.createGain();
-  oscillator.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-  oscillator.frequency.value = 800;
-  oscillator.type = 'sine';
-  gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
-  oscillator.start(audioCtx.currentTime);
-  oscillator.stop(audioCtx.currentTime + 1);
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    oscillator.frequency.value = 800;
+    oscillator.type = 'sine';
+    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(audioCtx.currentTime + 1);
+  } catch(e) {
+    console.log('Audio error:', e);
+  }
 }
 
-function unlockAudio() {
+// PAKE addEventListener BIAR PASTI KETANGKEP
+document.getElementById('btnMulai').addEventListener('click', function() {
   playTingtong();
   setTimeout(() => {
-    const test = new SpeechSynthesisUtterance('Sistem suara aktif');
-    test.lang = 'id-ID';
-    test.rate = 0.9;
-    test.voice = voices.find(v => v.lang === 'id-ID') || voices[0];
-    synth.speak(test);
+    if (synth) {
+      const test = new SpeechSynthesisUtterance('Sistem suara aktif');
+      test.lang = 'id-ID';
+      test.rate = 0.9;
+      test.voice = voices.find(v => v.lang === 'id-ID') || voices[0];
+      synth.speak(test);
+    }
     audioUnlocked = true;
     localStorage.setItem('audioUnlocked', 'true');
     localStorage.setItem('audioDate', new Date().toDateString());
     document.getElementById('audioOverlay').style.display = 'none';
+    loadData(); // LOAD DATA SETELAH KLIK
   }, 1200);
-}
+});
 
-// ================== LOAD DATA VIA JSONP BIAR LOLOS CORS ==================
 function loadData() {
   const script = document.createElement('script');
   script.src = `${APPS_SCRIPT_URL}?action=getPublic&callback=handleData&t=${Date.now()}`;
@@ -296,9 +298,10 @@ function panggilSuaraAntrian(nomorAntrian, namaPoli, namaPasien) {
   }, 1500);
 }
 
-loadData();
+// JANGAN LOAD DATA SEBELUM KLIK, BIAR GA ERROR CORS
 setInterval(loadData, 5000);
 setTimeout(() => location.reload(), 21600000);
 </script>
+
 </body>
 </html>
