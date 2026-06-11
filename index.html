@@ -297,32 +297,111 @@
     </div>
   </section>
 
-  <!-- HUBUNGI KAMI BARU -->
-  <section id="hubungi-kami" class="contact-section">
-    <div class="container" data-aos="fade-up">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold mb-2">Hubungi Kami</h2>
-        <p class="text-teal-100">Kami siap membantu Anda dengan sepenuh hati</p>
+  <style>
+  /* HUBUNGI KAMI - UPDATE WARNA ICON */
+  .contact-section { 
+    background: linear-gradient(135deg, #047857, #065f46); 
+    padding: 60px 0; 
+    color: white; 
+  }
+  .contact-grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px; 
+    text-align: center; 
+  }
+  .contact-item { 
+    transition: 0.3s; 
+    padding: 25px; 
+    border-radius: 16px; 
+    background: #ffffff0d;
+    backdrop-filter: blur(10px);
+  }
+  .contact-item:hover { 
+    background: #ffffff1a; 
+    transform: translateY(-8px); 
+    box-shadow: 0 10px 30px #0003;
+  }
+  .contact-icon { 
+    font-size: 3rem; 
+    margin-bottom: 15px; 
+    display: inline-block; 
+    transition: 0.3s; 
+  }
+  .contact-item:hover .contact-icon { 
+    transform: scale(1.2) rotate(10deg); 
+  }
+  
+  /* WARNA ICON BRAND */
+  .icon-email { 
+    color: #EA4335; 
+    filter: drop-shadow(0 0 8px #EA433580);
+  }
+  .icon-phone { 
+    color: #25D366; 
+    filter: drop-shadow(0 0 8px #25D36680);
+  }
+  .icon-ig { 
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 8px #E1306C80);
+  }
+  
+  .contact-item h3 { 
+    font-size: 1.2rem; 
+    margin-bottom: 8px; 
+    font-weight: 600; 
+  }
+  .contact-item a { 
+    color: #d1fae5; 
+    text-decoration: none; 
+    transition: 0.2s; 
+    font-weight: 500;
+  }
+  .contact-item a:hover { 
+    color: white; 
+    text-decoration: underline; 
+  }
+
+  @media (max-width: 768px) {
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<!-- HUBUNGI KAMI - UPDATE HTML -->
+<section id="hubungi-kami" class="contact-section">
+  <div class="container" data-aos="fade-up">
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold mb-2">Hubungi Kami</h2>
+      <p class="text-teal-100">Kami siap membantu Anda dengan sepenuh hati</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-item" data-aos="zoom-in" data-aos-delay="100">
+        <div class="contact-icon icon-email">
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <h3>Email</h3>
+        <a href="mailto:sehatbersamapuskesmas@gmail.com">sehatbersamapuskesmas@gmail.com</a>
       </div>
-      <div class="contact-grid">
-        <div class="contact-item" data-aos="zoom-in" data-aos-delay="100">
-          <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
-          <h3>Email</h3>
-          <a href="mailto:sehatbersamapuskesmas@gmail.com">sehatbersamapuskesmas@gmail.com</a>
+      <div class="contact-item" data-aos="zoom-in" data-aos-delay="200">
+        <div class="contact-icon icon-phone">
+          <i class="fa-solid fa-phone"></i>
         </div>
-        <div class="contact-item" data-aos="zoom-in" data-aos-delay="200">
-          <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
-          <h3>Telepon</h3>
-          <a href="tel:02112345678">021-12345678</a>
+        <h3>Telepon</h3>
+        <a href="tel:02112345678">021-12345678</a>
+      </div>
+      <div class="contact-item" data-aos="zoom-in" data-aos-delay="300">
+        <div class="contact-icon icon-ig">
+          <i class="fa-brands fa-instagram"></i>
         </div>
-        <div class="contact-item" data-aos="zoom-in" data-aos-delay="300">
-          <div class="contact-icon"><i class="fa-brands fa-instagram"></i></div>
-          <h3>Instagram</h3>
-          <a href="https://instagram.com/PuskesmasSehatBersama" target="_blank">@Puskesmas Sehat Bersama</a>
-        </div>
+        <h3>Instagram</h3>
+        <a href="https://instagram.com/PuskesmasSehatBersama" target="_blank">@PuskesmasSehatBersama</a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <footer>
     <div class="container">
